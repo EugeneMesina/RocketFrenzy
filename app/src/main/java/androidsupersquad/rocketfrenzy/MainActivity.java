@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 //        final Button Begin = (Button) findViewById(R.id.button);
 
