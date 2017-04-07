@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidsupersquad.rocketfrenzy.R;
-import androidsupersquad.rocketfrenzy.dummy.DummyContent.DummyItem;
+import androidsupersquad.rocketfrenzy.Fragments.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 

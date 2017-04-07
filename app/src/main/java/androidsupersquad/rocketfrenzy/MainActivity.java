@@ -2,16 +2,18 @@ package androidsupersquad.rocketfrenzy;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
+//import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
@@ -31,17 +33,21 @@ import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener {
 
     private MapView mapView;
     private MapboxMap map;
-    private FloatingActionButton floatingActionButton;
+    //private com.getbase.floatingactionbutton.FloatingActionsMenu menu;
+    private android.support.design.widget.FloatingActionButton menu[];
+    private android.support.design.widget.FloatingActionButton floatingActionButton;
     private LocationEngine locationEngine;
     private LocationEngineListener locationEngineListener;
     private PermissionsManager permissionsManager;
     private ArrayList<Marker> alMarkerGT;
     private Marker marker;
+    //private FragmentTransaction fragments;
 
 
     @Override
@@ -113,7 +119,70 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 //
 //            }
 //        });
-        floatingActionButton = (FloatingActionButton) findViewById(R.id.location_toggle_fab);
+        /*FloatingActionButton fabTemp = new FloatingActionButton(getBaseContext());
+        fabTemp.setTitle("Action C");
+
+        fabTemp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 Toast.makeText(MainActivity.this, "button pressed", Toast.LENGTH_LONG);
+            }
+        });
+        /*menu = (com.getbase.floatingactionbutton.FloatingActionsMenu) findViewById(R.id.multiple_actions);
+        menu.addButton(fabTemp);*/
+
+
+
+        menu = new android.support.design.widget.FloatingActionButton[5];
+        menu[0] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_base);
+        menu[0].setVisibility(View.VISIBLE);
+        menu[1] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_1);
+        menu[2] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_2);
+        menu[3] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_3);
+        menu[4] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_4);
+        menu[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for(int ii = 1; ii < 5; ii++) {
+                    if (menu[ii].getVisibility() == View.INVISIBLE)
+                        menu[ii].setVisibility(View.VISIBLE);
+                    else
+                        menu[ii].setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+        final Intent toProfile = new Intent(MainActivity.this, androidsupersquad.rocketfrenzy.Fragments.ProfileFragment.class);
+        menu[1].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "TODO: Go to profile", Toast.LENGTH_LONG).show();
+                //startActivity(toProfile);
+            }
+        });
+        menu[2].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "TODO: Go to inventory", Toast.LENGTH_LONG).show();
+                //startActivity(toProfile);
+            }
+        });
+        menu[3].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "TODO: Go to shop", Toast.LENGTH_LONG).show();
+                //startActivity(toProfile);
+            }
+        });
+        menu[4].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "TODO: Go to Daily Tasks", Toast.LENGTH_LONG).show();
+
+                //startActivity(toProfile);
+            }
+        });
+
+        floatingActionButton = (android.support.design.widget.FloatingActionButton) findViewById(R.id.location_toggle_fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

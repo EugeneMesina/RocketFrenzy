@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidsupersquad.rocketfrenzy.R;
-import androidsupersquad.rocketfrenzy.dummy.DummyContent;
-import androidsupersquad.rocketfrenzy.dummy.DummyContent.DummyItem;
+import androidsupersquad.rocketfrenzy.Fragments.dummy.DummyContent;
+import androidsupersquad.rocketfrenzy.Fragments.dummy.DummyContent.DummyItem;
 
 /**
  * A fragment representing a list of Items.
