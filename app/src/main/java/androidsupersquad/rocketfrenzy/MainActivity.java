@@ -10,7 +10,10 @@ import android.support.annotation.NonNull;
 //import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -31,6 +34,8 @@ import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
+import androidsupersquad.rocketfrenzy.MiniGame.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
@@ -48,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private ArrayList<Marker> alMarkerGT;
     private Marker marker;
     //private FragmentTransaction fragments;
+    private boolean isMenuOpen = true;
+    private float stdY[] = new float[5];
 
 
     @Override
@@ -133,22 +140,41 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
 
 
-        menu = new android.support.design.widget.FloatingActionButton[5];
+        menu = new android.support.design.widget.FloatingActionButton[6];
         menu[0] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_base);
         menu[0].setVisibility(View.VISIBLE);
         menu[1] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_1);
         menu[2] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_2);
         menu[3] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_3);
         menu[4] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_4);
+        menu[5] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_5);
+        /* Stores current positions */
+        /*int temp[] = new int[2];
+        for(int ii = 0; ii < 5; ii++) {
+            menu[ii].getLocationInWindow(temp);
+            stdY[ii] = temp[1];
+            Log.d("Y_VALS", "Current y val: " + stdY[ii]);
+        }*/
+
+
         menu[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Inside menu[0] onClick", Toast.LENGTH_SHORT).show();
+                if(isMenuOpen) {
+                    Toast.makeText(MainActivity.this, "isMenuOpen is true", Toast.LENGTH_SHORT).show();
+                    closeMenu();
+                } else {
+                    Toast.makeText(MainActivity.this, "isMenuOpen is false", Toast.LENGTH_SHORT).show();
+                    openMenu();
+                }
+                /*menu[1].setTranslationY(stdY[0]);
                 for(int ii = 1; ii < 5; ii++) {
                     if (menu[ii].getVisibility() == View.INVISIBLE)
                         menu[ii].setVisibility(View.VISIBLE);
                     else
                         menu[ii].setVisibility(View.INVISIBLE);
-                }
+                }*/
             }
         });
         final Intent toProfile = new Intent(MainActivity.this, androidsupersquad.rocketfrenzy.Fragments.ProfileFragment.class);
@@ -179,6 +205,13 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 Toast.makeText(MainActivity.this, "TODO: Go to Daily Tasks", Toast.LENGTH_LONG).show();
 
                 //startActivity(toProfile);
+            }
+        });
+        menu[5].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent x = new Intent(MainActivity.this, ShakeMiniGame.class);
+                startActivity(x);
             }
         });
 
@@ -331,6 +364,32 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
+    private void openMenu() {
+        isMenuOpen = true;
+        //for(int ii = 1; ii < 5; ii++) {
+//            menu[1].animate().translationY(200);
+//            menu[2].animate().translationY(350);
+//            menu[3].animate().translationY(500);
+//            menu[4].animate().translationY(700);
+            //Animation anim = new TranslateAnimation()
+            //menu[ii].setVisibility(View.VISIBLE);
+        //}
+                for(int ii = 1; ii < 6; ii++)
+                menu[ii].animate().translationY(0);
+    }
+
+    private void closeMenu() {
+        isMenuOpen = false;
+//        for(int ii = 1; ii < 5; ii++)
+//            menu[ii].animate().translationY(0);
+
+        int offSet = -225;
+        menu[1].animate().translationY(offSet-0);
+        menu[2].animate().translationY(offSet-150);
+        menu[3].animate().translationY(offSet-300);
+        menu[4].animate().translationY(offSet-450);
+        menu[5].animate().translationY(offSet-600);
+    }
 
     @Override
     public void onClick(View view) {
