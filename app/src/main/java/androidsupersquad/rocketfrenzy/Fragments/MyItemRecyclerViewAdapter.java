@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidsupersquad.rocketfrenzy.R;
-import androidsupersquad.rocketfrenzy.dummy.DummyContent.DummyItem;
+import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent.DummyItem;
 
 import java.util.List;
 
@@ -28,10 +28,10 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_item, parent, false);
         return new ViewHolder(view);
     }
+
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {

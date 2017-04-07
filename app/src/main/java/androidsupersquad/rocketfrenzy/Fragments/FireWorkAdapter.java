@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidsupersquad.rocketfrenzy.Fragments.RocketsFragment.OnListFragmentInteractionListener;
-import androidsupersquad.rocketfrenzy.Fragments.dummy.DummyContent.DummyItem;
+import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent.DummyItem;
 
 import java.util.List;
 

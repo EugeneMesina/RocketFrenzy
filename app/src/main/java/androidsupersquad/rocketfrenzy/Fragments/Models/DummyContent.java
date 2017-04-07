@@ -1,4 +1,4 @@
-package androidsupersquad.rocketfrenzy.Fragments.dummy;
+package androidsupersquad.rocketfrenzy.Fragments.Models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
