@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">RocketMap</string>
     <string name="access_token">pk.eyJ1IjoiamluY2hyb25pYyIsImEiOiJjajEzdnV2NmgwMXRiMnFvZ3ZycnlkN2J6In0.UKO1l5sj30phBz_7bxJtkQ</string>
     <string name="button">Begin</string>
     <string name="begin">Begin</string>
@@ -7,4 +6,7 @@
     <string name="title_activity_shake_mini_game">ShakeMiniGame</string>
     <string name="shake">SHAKE</string>
     <string name="ready">READY</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
