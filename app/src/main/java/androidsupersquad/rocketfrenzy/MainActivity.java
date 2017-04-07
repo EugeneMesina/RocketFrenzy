@@ -2,6 +2,8 @@ package androidsupersquad.rocketfrenzy;
 
 
 import android.Manifest;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -9,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 //import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -52,7 +55,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private PermissionsManager permissionsManager;
     private ArrayList<Marker> alMarkerGT;
     private Marker marker;
-    //private FragmentTransaction fragments;
+    private FragmentManager fragmentManager = getFragmentManager();
+    private FragmentTransaction transaction;
     private boolean isMenuOpen = true;
     private float stdY[] = new float[5];
 
@@ -126,23 +130,9 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 //
 //            }
 //        });
-        /*FloatingActionButton fabTemp = new FloatingActionButton(getBaseContext());
-        fabTemp.setTitle("Action C");
-
-        fabTemp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 Toast.makeText(MainActivity.this, "button pressed", Toast.LENGTH_LONG);
-            }
-        });
-        /*menu = (com.getbase.floatingactionbutton.FloatingActionsMenu) findViewById(R.id.multiple_actions);
-        menu.addButton(fabTemp);*/
-
-
 
         menu = new android.support.design.widget.FloatingActionButton[6];
         menu[0] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_base);
-        menu[0].setVisibility(View.VISIBLE);
         menu[1] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_1);
         menu[2] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_2);
         menu[3] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_3);
@@ -156,25 +146,27 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             Log.d("Y_VALS", "Current y val: " + stdY[ii]);
         }*/
 
+        /*
+        FROM STACKOVERFLOW
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.container,YOUR_FRAGMENT_NAME,YOUR_FRAGMENT_STRING_TAG);
+        transaction.addToBackStack(null);
+        transaction.commit();
+        */
 
+        transaction = fragmentManager.beginTransaction();
         menu[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Inside menu[0] onClick", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Inside menu[0] onClick", Toast.LENGTH_SHORT).show();
                 if(isMenuOpen) {
-                    Toast.makeText(MainActivity.this, "isMenuOpen is true", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "isMenuOpen is true", Toast.LENGTH_SHORT).show();
                     closeMenu();
                 } else {
-                    Toast.makeText(MainActivity.this, "isMenuOpen is false", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "isMenuOpen is false", Toast.LENGTH_SHORT).show();
                     openMenu();
                 }
-                /*menu[1].setTranslationY(stdY[0]);
-                for(int ii = 1; ii < 5; ii++) {
-                    if (menu[ii].getVisibility() == View.INVISIBLE)
-                        menu[ii].setVisibility(View.VISIBLE);
-                    else
-                        menu[ii].setVisibility(View.INVISIBLE);
-                }*/
             }
         });
         final Intent toProfile = new Intent(MainActivity.this, androidsupersquad.rocketfrenzy.Fragments.ProfileFragment.class);
@@ -182,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             @Override
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "TODO: Go to profile", Toast.LENGTH_LONG).show();
+
                 //startActivity(toProfile);
             }
         });
