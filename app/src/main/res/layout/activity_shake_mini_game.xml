@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/SGView"
-    tools:context="androidsupersquad.rocketfrenzy.ShakeMiniGame">
+    tools:context="androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame">
 
     <ProgressBar
         android:id="@+id/progressBar"
