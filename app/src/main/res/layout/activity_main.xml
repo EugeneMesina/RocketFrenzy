@@ -7,7 +7,81 @@
     android:layout_height="match_parent"
     tools:context="androidsupersquad.rocketfrenzy.MainActivity">
 
-    <android.support.design.widget.FloatingActionButton
+    <RelativeLayout
+        android:id="@+id/inner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/temp_menu_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:paddingRight="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
+            android:visibility="visible"
+            app:backgroundTint="@color/white"
+            app:srcCompat="@drawable/ic_my_location_24dp"
+            tools:ignore="VectorDrawableCompat" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/temp_menu_1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_above="@+id/temp_menu_base"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="70dp"
+            android:layout_marginRight="16dp"
+            app:backgroundTint="@color/white"
+            android:visibility="visible"
+            app:srcCompat="@drawable/ic_my_location_24dp"
+            tools:ignore="VectorDrawableCompat" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/temp_menu_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/temp_menu_1"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="124dp"
+            android:layout_marginRight="16dp"
+            android:visibility="invisible"
+            app:backgroundTint="@color/white"
+            app:srcCompat="@drawable/ic_my_location_24dp"
+            tools:ignore="VectorDrawableCompat" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/temp_menu_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/temp_menu_2"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="178dp"
+            android:layout_marginRight="16dp"
+            android:visibility="invisible"
+            app:backgroundTint="@color/white"
+            app:srcCompat="@drawable/ic_my_location_24dp"
+            tools:ignore="VectorDrawableCompat" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/temp_menu_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/temp_menu_3"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="232dp"
+            android:layout_marginRight="16dp"
+            app:backgroundTint="@color/white"
+            app:srcCompat="@drawable/ic_my_location_24dp"
+            tools:ignore="VectorDrawableCompat"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+    <!-- BACKUP
+        <android.support.design.widget.FloatingActionButton
         android:id="@+id/temp_menu_base"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,14 +94,14 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/temp_menu_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_above="@+id/temp_menu_base"
         android:layout_gravity="end|bottom"
         android:layout_marginBottom="70dp"
         android:layout_marginRight="16dp"
         app:backgroundTint="@color/white"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:srcCompat="@drawable/ic_my_location_24dp"
         tools:ignore="VectorDrawableCompat" />
 
@@ -69,6 +143,7 @@
         app:srcCompat="@drawable/ic_my_location_24dp"
         tools:ignore="VectorDrawableCompat"
         android:visibility="invisible" />
+    -->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/location_toggle_fab"
