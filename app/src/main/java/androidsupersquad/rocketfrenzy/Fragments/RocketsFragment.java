@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import androidsupersquad.rocketfrenzy.R;
 import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent;
-import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent.DummyItem;
+import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent.ShopItems;
 
 /**
  * A fragment representing a list of Items.
@@ -103,6 +103,6 @@ public class RocketsFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(ShopItems item);
     }
 }

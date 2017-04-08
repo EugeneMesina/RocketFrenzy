@@ -10,9 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import androidsupersquad.rocketfrenzy.R;
 import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent;
-import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent.DummyItem;
+import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 
 /**
  * A fragment representing a list of Items.
@@ -27,7 +29,7 @@ public class ShopFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-
+    private List<ShopItems> Items;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -68,7 +70,7 @@ public class ShopFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(Items, mListener));
         }
         return view;
     }
@@ -103,6 +105,6 @@ public class ShopFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(ShopItems item);
     }
 }

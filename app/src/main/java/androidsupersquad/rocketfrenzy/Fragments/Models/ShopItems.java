@@ -25,8 +25,37 @@ public class ShopItems implements Serializable
         this.ItemDescription=Description;
         this.ItemCost=ItemCost;
     }
+    public String getItemName() {
+        return ItemName;
+    }
 
+    public void setItemName(String itemName) {
+        ItemName = itemName;
+    }
 
+    public String getItemImage() {
+        return ItemImage;
+    }
+
+    public void setItemImage(String itemImage) {
+        ItemImage = itemImage;
+    }
+
+    public String getItemDescription() {
+        return ItemDescription;
+    }
+
+    public void setItemDescription(String itemDescription) {
+        ItemDescription = itemDescription;
+    }
+
+    public float getItemCost() {
+        return ItemCost;
+    }
+
+    public void setItemCost(float itemCost) {
+        ItemCost = itemCost;
+    }
 }
 
 
