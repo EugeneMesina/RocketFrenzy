@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
@@ -6,5 +6,6 @@
     <dimen name="std_fab_size">60dp</dimen>
     <dimen name="mini_fab_size">30dp</dimen>
     <dimen name="space_fab_item">12dp</dimen>
+    <dimen name="design_fab_image_size" tools:override="true">36dp</dimen>
     <dimen name="std_41">41dp</dimen>
 </resources>

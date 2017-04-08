@@ -2,8 +2,6 @@ package androidsupersquad.rocketfrenzy;
 
 
 import android.Manifest;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -12,14 +10,18 @@ import android.support.annotation.NonNull;
 //import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
+import android.support.design.widget.FloatingActionButton;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
@@ -37,28 +39,29 @@ import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
+import androidsupersquad.rocketfrenzy.Fragments.ProfileFragment;
 import androidsupersquad.rocketfrenzy.MiniGame.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener {
 
     private MapView mapView;
     private MapboxMap map;
     //private com.getbase.floatingactionbutton.FloatingActionsMenu menu;
-    private android.support.design.widget.FloatingActionButton menu[];
-    private android.support.design.widget.FloatingActionButton floatingActionButton;
+    private FloatingActionButton menu[];
+    private FloatingActionButton floatingActionButton, fab_cancel;
     private LocationEngine locationEngine;
     private LocationEngineListener locationEngineListener;
     private PermissionsManager permissionsManager;
     private ArrayList<Marker> alMarkerGT;
     private Marker marker;
-    private FragmentManager fragmentManager = getFragmentManager();
+    private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
     private boolean isMenuOpen = true;
     private float stdY[] = new float[5];
+    private FrameLayout fragmentHolder;
 
 
     @Override
@@ -130,32 +133,38 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 //
 //            }
 //        });
+        
+        /* Buttons for Floating Action Button Menu */
+        menu = new FloatingActionButton[6];
+        menu[0] = (FloatingActionButton) findViewById(R.id.temp_menu_base);
+        menu[1] = (FloatingActionButton) findViewById(R.id.temp_menu_1);
+        menu[2] = (FloatingActionButton) findViewById(R.id.temp_menu_2);
+        menu[3] = (FloatingActionButton) findViewById(R.id.temp_menu_3);
+        menu[4] = (FloatingActionButton) findViewById(R.id.temp_menu_4);
+        menu[5] = (FloatingActionButton) findViewById(R.id.temp_menu_5);
 
-        menu = new android.support.design.widget.FloatingActionButton[6];
-        menu[0] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_base);
-        menu[1] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_1);
-        menu[2] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_2);
-        menu[3] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_3);
-        menu[4] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_4);
-        menu[5] = (android.support.design.widget.FloatingActionButton) findViewById(R.id.temp_menu_5);
-        /* Stores current positions */
-        /*int temp[] = new int[2];
-        for(int ii = 0; ii < 5; ii++) {
-            menu[ii].getLocationInWindow(temp);
-            stdY[ii] = temp[1];
-            Log.d("Y_VALS", "Current y val: " + stdY[ii]);
-        }*/
-
-        /*
-        FROM STACKOVERFLOW
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.container,YOUR_FRAGMENT_NAME,YOUR_FRAGMENT_STRING_TAG);
-        transaction.addToBackStack(null);
-        transaction.commit();
-        */
-
-        transaction = fragmentManager.beginTransaction();
+        fragmentHolder = (FrameLayout) findViewById(R.id.fragmentHolder);
+        fragmentManager = getSupportFragmentManager();
+        transaction = getSupportFragmentManager().beginTransaction();
+        fab_cancel = (FloatingActionButton) findViewById(R.id.fab_cancel);
+        fab_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragmentHolder.animate().alpha(0F);
+                fragmentHolder.setClickable(false);
+                transaction = getSupportFragmentManager().beginTransaction();
+                Log.d("CURRENT FRAGMENT", "FRAGMENT: " + getCurrentFragment().getTag());
+                transaction.remove(getCurrentFragment());
+                transaction.commit();
+                fragmentManager.popBackStack();
+                fragmentManager.executePendingTransactions();
+                //fragmentManager.popBackStack();
+                //fragmentManager.popBackStackImmediate();
+                Log.d("POPPED FROM BACKSTACK", "BACKSTACK COUNT: " + fragmentManager.getBackStackEntryCount());
+                //transaction.detach(getSupportFragmentManager().findFragmentByTag("PROFILE"));
+                //fragmentHolder.setVisibility(View.GONE);
+            }
+        });
         menu[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,9 +182,26 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         menu[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "TODO: Go to profile", Toast.LENGTH_LONG).show();
-
-                //startActivity(toProfile);
+                //Close Menu
+                closeMenu();
+                //Reinstantiate transaction
+                transaction = getSupportFragmentManager().beginTransaction();
+                //Set holder to visible even though alpha = 0
+                fragmentHolder.setVisibility(View.VISIBLE);
+                //Fade in when loading frame
+                fragmentHolder.animate().alpha(1F);
+                //Only the current panel is clickable
+                fragmentHolder.setClickable(true);
+                //Adds Profile Fragment
+                transaction.add(R.id.fragmentHolder, new ProfileFragment(), Integer.toString(getFragmentCount()));
+                //Adds Profile Fragment ID to backStack
+                transaction.addToBackStack(Integer.toString(getFragmentCount()));
+                //Finish Changes
+                transaction.commit();
+                //Execute commits
+                fragmentManager.executePendingTransactions();
+                //transaction.commit();
+                //Log.d("ADDED TO BACKSTACK", "BACKSTACK COUNT: " + fragmentManager.getBackStackEntryCount());
             }
         });
         menu[2].setOnClickListener(new View.OnClickListener() {
@@ -208,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             }
         });
 
-        floatingActionButton = (android.support.design.widget.FloatingActionButton) findViewById(R.id.location_toggle_fab);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.location_toggle_fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,6 +244,18 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 }
             }
         });
+    }
+
+    protected int getFragmentCount() {
+        return getSupportFragmentManager().getBackStackEntryCount();
+    }
+
+    private Fragment getFragmentAt(int i) {
+        return (getFragmentCount() > 0) ? getSupportFragmentManager().findFragmentByTag(Integer.toString(i)) : null;
+    }
+
+    protected Fragment getCurrentFragment() {
+        return getFragmentAt(getFragmentCount() - 1);
     }
 
     @Override
@@ -356,32 +394,24 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             finish();
         }
     }
-
+    /* Opens menu */
     private void openMenu() {
         isMenuOpen = true;
-        //for(int ii = 1; ii < 5; ii++) {
-//            menu[1].animate().translationY(200);
-//            menu[2].animate().translationY(350);
-//            menu[3].animate().translationY(500);
-//            menu[4].animate().translationY(700);
-            //Animation anim = new TranslateAnimation()
-            //menu[ii].setVisibility(View.VISIBLE);
-        //}
-                for(int ii = 1; ii < 6; ii++)
+            for(int ii = 1; ii < 6; ii++)
                 menu[ii].animate().translationY(0);
     }
-
+    /* Closes menu */
     private void closeMenu() {
         isMenuOpen = false;
-//        for(int ii = 1; ii < 5; ii++)
-//            menu[ii].animate().translationY(0);
-
-        int offSet = -225;
+        int offSet = -225, constantVal = 150, sum = -constantVal;
+        for(int ii = 1; ii < 6; ii++)
+            menu[ii].animate().translationY(offSet - (sum += constantVal));
+        /*
         menu[1].animate().translationY(offSet-0);
         menu[2].animate().translationY(offSet-150);
         menu[3].animate().translationY(offSet-300);
         menu[4].animate().translationY(offSet-450);
-        menu[5].animate().translationY(offSet-600);
+        menu[5].animate().translationY(offSet-600);*/
     }
 
     @Override

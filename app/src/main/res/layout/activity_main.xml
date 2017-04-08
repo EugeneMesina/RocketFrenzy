@@ -72,15 +72,7 @@
         android:visibility="invisible" />
     -->
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/location_toggle_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|bottom"
-        android:layout_margin="16dp"
-        app:backgroundTint="@color/colorAccent"
-        app:srcCompat="@drawable/ic_my_location_24dp"
-        tools:ignore="VectorDrawableCompat" />
+
 
 
     <!--<com.getbase.floatingactionbutton.FloatingActionsMenu
@@ -122,11 +114,28 @@
 
     </com.mapbox.mapboxsdk.maps.MapView>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/location_toggle_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            app:backgroundTint="@color/colorAccent"
+            app:srcCompat="@drawable/ic_my_location_24dp"
+            tools:ignore="VectorDrawableCompat" />
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/inner"
         android:layout_width="@dimen/std_fab_size"
         android:layout_height="match_parent"
-        android:layout_gravity="end">
+        android:layout_gravity="end"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/temp_menu_1"
@@ -269,5 +278,25 @@
             tools:ignore="VectorDrawableCompat" />
     </RelativeLayout>
     -->
+    <FrameLayout
+        android:id="@+id/fragmentHolder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:background="@color/white_pressed"
+        android:visibility="gone"
+        android:alpha="0">
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_margin="16dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:srcCompat="@drawable/cancel_w"
+            tools:ignore="VectorDrawableCompat" />
+
+
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>
