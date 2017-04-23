@@ -1,6 +1,7 @@
 package androidsupersquad.rocketfrenzy.Fragments.Models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Lazer on 4/7/2017.
@@ -9,7 +10,7 @@ import java.io.Serializable;
 public class ShopItems implements Serializable
 {
         //The image file name
-        private String ItemImage;
+        private int ItemImage;
         private String ItemName;
         private String ItemDescription;
         private float ItemCost;
@@ -19,13 +20,14 @@ public class ShopItems implements Serializable
          * @param image of Spirit
          * @param Description of Spirit
          */
-    public ShopItems(String Name, String image,String Description, float ItemCost){
+    public ShopItems(String Name, int image,String Description, float ItemCost){
         this.ItemImage=image;
         this.ItemName=Name;
         this.ItemDescription=Description;
         this.ItemCost=ItemCost;
     }
-    public String getItemName() {
+    public String getItemName()
+    {
         return ItemName;
     }
 
@@ -33,11 +35,11 @@ public class ShopItems implements Serializable
         ItemName = itemName;
     }
 
-    public String getItemImage() {
+    public int getItemImage() {
         return ItemImage;
     }
 
-    public void setItemImage(String itemImage) {
+    public void setItemImage(int itemImage) {
         ItemImage = itemImage;
     }
 

@@ -1,112 +1,84 @@
 package androidsupersquad.rocketfrenzy.Fragments;
 
-import android.content.Context;
+
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import androidsupersquad.rocketfrenzy.R;
-import androidsupersquad.rocketfrenzy.Fragments.dummy.DummyContent;
-import androidsupersquad.rocketfrenzy.Fragments.dummy.DummyContent.DummyItem;
-import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent;
 import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
+import androidsupersquad.rocketfrenzy.R;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
+
 public class ShopFragment extends Fragment {
-
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
     private List<ShopItems> Items;
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public ShopFragment() {
-    }
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static ShopFragment newInstance(int columnCount) {
+    public ShopFragment() {
+        Items = new ArrayList<ShopItems>();
+        Items.add(new ShopItems("Bleach",R.drawable.bleach,"Killer Substance",10000));
+        Items.add(new ShopItems("Bleach1",R.drawable.bleach,"Killer Substance",10000));
+        Items.add(new ShopItems("Bleach2",R.drawable.bleach,"Killer Substance",10000));
+        Items.add(new ShopItems("Bleach3",R.drawable.bleach,"Killer Substance",10000));
+        Items.add(new ShopItems("Bleach4",R.drawable.bleach,"Killer Substance",10000));
+        Items.add(new ShopItems("Bleach5",R.drawable.bleach,"Killer Substance",10000));
+        Items.add(new ShopItems("Bleach6",R.drawable.bleach,"Killer Substance",10000));
+        Items.add(new ShopItems("Bleach7",R.drawable.bleach,"Killer Substance",10000));
+        Items.add(new ShopItems("Bleach8",R.drawable.bleach,"Killer Substance",10000));
+        Items.add(new ShopItems("Bleach9",R.drawable.bleach,"Killer Substance",10000));
+    }
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment ShopFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static ShopFragment newInstance(String param1, String param2) {
         ShopFragment fragment = new ShopFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        ShopAdapter adapter = new ShopAdapter(this.getContext(),R.layout.shop_row,Items);
+        ListView current = (ListView) getActivity().findViewById(R.id.ShopList);
+        current.setAdapter(adapter);
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(Items, mListener));
-        }
-        return view;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_shop, container, false);
     }
 
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        }/* else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }*/
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(ShopItems item);
-    }
 }
