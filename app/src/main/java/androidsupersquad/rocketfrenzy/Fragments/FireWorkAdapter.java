@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidsupersquad.rocketfrenzy.R;
 import androidsupersquad.rocketfrenzy.Fragments.RocketsFragment.OnListFragmentInteractionListener;
 import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent.ShopItems;
 

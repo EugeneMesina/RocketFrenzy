@@ -13,19 +13,21 @@ import android.widget.TextView;
 import androidsupersquad.rocketfrenzy.R;
 
 public class ProfileFragment extends Fragment {
+
     private OnFragmentInteractionListener mListener;
-    public void onCreate(Bundle savedInstanceState)
-    {
+    private TextView mTextView1;
+
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
-    {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         TextView userName = (TextView) view.findViewById(R.id.UserName);
         Typeface myCustomFont = Typeface.createFromAsset(view.getContext().getAssets(),"fonts/TwoLines.ttf");
@@ -33,6 +35,11 @@ public class ProfileFragment extends Fragment {
         //TODO: Set USERNAME from DataBase
         userName.setText("Android Super Squad");
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        mTextView1 = (TextView) view.findViewById(R.id.profile_textview_1);
     }
 
     public interface OnFragmentInteractionListener {

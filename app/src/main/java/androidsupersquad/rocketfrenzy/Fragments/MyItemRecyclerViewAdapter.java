@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidsupersquad.rocketfrenzy.R;
+import androidsupersquad.rocketfrenzy.Fragments.dummy.DummyContent.DummyItem;
 import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 
 import java.util.List;
