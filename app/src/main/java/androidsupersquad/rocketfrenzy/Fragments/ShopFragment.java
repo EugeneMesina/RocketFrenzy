@@ -1,36 +1,30 @@
 package androidsupersquad.rocketfrenzy.Fragments;
-
-
-
+import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
+import androidsupersquad.rocketfrenzy.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
+import android.widget.ExpandableListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
-import androidsupersquad.rocketfrenzy.R;
-
-
+/**
+ *  This is the Shop Menu where it will display to the user
+ *  different shop items they can buy
+ *  Created by Lazer
+ */
 public class ShopFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    //Data Structure to hold all shop items
     private List<ShopItems> Items;
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    /**
+     * Fragment Constructor that creates all the items in the shop
+     */
     public ShopFragment() {
+        //Create new ArrayList to hold existing items or add items
         Items = new ArrayList<ShopItems>();
-        Items.add(new ShopItems("Bleach",R.drawable.bleach,"Killer Substance",10000));
+        Items.add(new ShopItems("Bleach ",R.drawable.bleach,"Killer Substance",10000));
         Items.add(new ShopItems("Bleach1",R.drawable.bleach,"Killer Substance",10000));
         Items.add(new ShopItems("Bleach2",R.drawable.bleach,"Killer Substance",10000));
         Items.add(new ShopItems("Bleach3",R.drawable.bleach,"Killer Substance",10000));
@@ -41,44 +35,32 @@ public class ShopFragment extends Fragment {
         Items.add(new ShopItems("Bleach8",R.drawable.bleach,"Killer Substance",10000));
         Items.add(new ShopItems("Bleach9",R.drawable.bleach,"Killer Substance",10000));
     }
+
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ShopFragment.
+     * Sets teh Expandable List View Adapter with specific
+     * Group Layout
+     * Child Layout
+     * @param savedInstanceState
      */
-    // TODO: Rename and change types and number of parameters
-    public static ShopFragment newInstance(String param1, String param2) {
-        ShopFragment fragment = new ShopFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        ShopAdapter adapter = new ShopAdapter(this.getContext(),R.layout.shop_row,Items);
-        ListView current = (ListView) getActivity().findViewById(R.id.ShopList);
-        current.setAdapter(adapter);
-    }
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        //get Expandable List View
+        ExpandableListView listView = (ExpandableListView) getActivity().findViewById(R.id.ShopList);
+        //Set it's adapter to the custom Adapter
+        listView.setAdapter(new ShopExpandableAdapter(getActivity().getBaseContext(),Items));
     }
 
+    /**
+     * Inflates the fragment with the specific layout in the resource file
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_shop, container, false);
     }
-
-
 }
