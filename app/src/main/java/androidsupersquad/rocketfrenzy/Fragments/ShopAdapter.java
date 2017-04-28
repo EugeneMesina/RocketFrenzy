@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +37,8 @@ public class ShopAdapter extends ArrayAdapter<ShopItems> {
         textView.setText(currentItem.getItemName());
         ImageView imageView = (ImageView) row.findViewById(R.id.ItemImage);
         imageView.setBackgroundResource(currentItem.getItemImage());
+        Button buyButton = (Button) row.findViewById(R.id.BuyButton);
+        buyButton.setText(((Float)currentItem.getItemCost()).toString());
 
         return row;
     }

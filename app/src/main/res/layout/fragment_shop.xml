@@ -5,7 +5,7 @@
     tools:context="androidsupersquad.rocketfrenzy.Fragments.ShopFragment">
 
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/ShopList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

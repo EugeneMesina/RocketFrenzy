@@ -15,10 +15,10 @@ public class ShopItems implements Serializable
         private String ItemDescription;
         private float ItemCost;
         /**
-         * Constructs the spirit
-         * @param Name of Spirit
-         * @param image of Spirit
-         * @param Description of Spirit
+         * Constructs the Shop Item
+         * @param Name of Shop Item
+         * @param image of Shop Item
+         * @param Description of Shop Item
          */
     public ShopItems(String Name, int image,String Description, float ItemCost){
         this.ItemImage=image;

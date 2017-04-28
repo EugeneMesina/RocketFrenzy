@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class ShopFragment extends Fragment {
 
     public ShopFragment() {
         Items = new ArrayList<ShopItems>();
-        Items.add(new ShopItems("Bleach",R.drawable.bleach,"Killer Substance",10000));
+        Items.add(new ShopItems("Bleach ",R.drawable.bleach,"Killer Substance",10000));
         Items.add(new ShopItems("Bleach1",R.drawable.bleach,"Killer Substance",10000));
         Items.add(new ShopItems("Bleach2",R.drawable.bleach,"Killer Substance",10000));
         Items.add(new ShopItems("Bleach3",R.drawable.bleach,"Killer Substance",10000));
@@ -61,8 +62,10 @@ public class ShopFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         ShopAdapter adapter = new ShopAdapter(this.getContext(),R.layout.shop_row,Items);
-        ListView current = (ListView) getActivity().findViewById(R.id.ShopList);
-        current.setAdapter(adapter);
+        ExpandableListView listView = (ExpandableListView) getActivity().findViewById(R.id.ShopList);
+        listView.setAdapter(new ShopExpandableAdapter(getActivity().getBaseContext(),Items));
+       // ListView current = (ListView) getActivity().findViewById(R.id.ShopList);
+        //current.setAdapter(adapter);
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,4 @@ public class ShopFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_shop, container, false);
     }
-
-
 }
