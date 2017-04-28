@@ -1,18 +1,18 @@
 package androidsupersquad.rocketfrenzy.Fragments.Models;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-
 /**
+ * These are items in the shop
  * Created by Lazer on 4/7/2017.
  */
-
 public class ShopItems implements Serializable
 {
         //The image file name
         private int ItemImage;
+        //The shop item name
         private String ItemName;
+        //The shop item Description
         private String ItemDescription;
+        //The shop item Cost
         private float ItemCost;
         /**
          * Constructs the Shop Item
@@ -26,37 +26,15 @@ public class ShopItems implements Serializable
         this.ItemDescription=Description;
         this.ItemCost=ItemCost;
     }
-    public String getItemName()
-    {
-        return ItemName;
-    }
-
-    public void setItemName(String itemName) {
-        ItemName = itemName;
-    }
-
+    public String getItemName(){return ItemName; }
     public int getItemImage() {
         return ItemImage;
     }
-
-    public void setItemImage(int itemImage) {
-        ItemImage = itemImage;
-    }
-
     public String getItemDescription() {
         return ItemDescription;
     }
-
-    public void setItemDescription(String itemDescription) {
-        ItemDescription = itemDescription;
-    }
-
     public float getItemCost() {
         return ItemCost;
-    }
-
-    public void setItemCost(float itemCost) {
-        ItemCost = itemCost;
     }
 }
 
