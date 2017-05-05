@@ -537,6 +537,22 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     }
 
     @Override
+    public void onBackPressed() {
+       Log.d("FRAGMENT", "" + fragmentHolder.isClickable());
+        if(fragmentHolder.isClickable()) {
+            fragmentHolder.animate().alpha(0F);
+            fragmentHolder.setClickable(false);
+            transaction = getSupportFragmentManager().beginTransaction();
+            Log.d("CURRENT FRAGMENT", "FRAGMENT: " + getCurrentFragment().getTag());
+            transaction.remove(getCurrentFragment());
+            transaction.commit();
+            fragmentManager.popBackStack();
+            fragmentManager.executePendingTransactions();
+            Log.d("POPPED FROM BACKSTACK", "BACKSTACK COUNT: " + fragmentManager.getBackStackEntryCount());
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         //do things
     }
