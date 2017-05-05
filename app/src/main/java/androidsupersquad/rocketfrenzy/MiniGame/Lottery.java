@@ -1,4 +1,4 @@
-package androidsupersquad.rocketfrenzy;
+package androidsupersquad.rocketfrenzy.MiniGame;
 
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -11,7 +11,9 @@ import android.widget.Toast;
 
 import java.util.Random;
 
-public class lottery extends AppCompatActivity {
+import androidsupersquad.rocketfrenzy.R;
+
+public class Lottery extends AppCompatActivity {
     ImageButton rocket;
     ImageView slot1,slot2,slot3;
     Random random;

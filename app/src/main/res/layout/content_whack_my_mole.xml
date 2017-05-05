@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="androidsupersquad.rocketfrenzy.WhackMyMole"
+    tools:context="androidsupersquad.rocketfrenzy.MiniGame.WhackMyMole"
     tools:showIn="@layout/activity_whack_my_mole">
 
     <ImageButton
