@@ -2,14 +2,17 @@ package androidsupersquad.rocketfrenzy;
 
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 //import android.support.design.widget.FloatingActionButton;
@@ -42,7 +45,8 @@ import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
-import androidsupersquad.rocketfrenzy.DataBase.LocationsDB;
+import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
+import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.DailyTaskFragment;
 import androidsupersquad.rocketfrenzy.Fragments.KamikaziFragment;
 import androidsupersquad.rocketfrenzy.Fragments.ProfileFragment;
@@ -52,6 +56,7 @@ import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener, SensorEventListener {
 
@@ -75,19 +80,36 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private Sensor mPedometer;
     private SensorManager sensorManager;
 
+    private RocketDB rocketDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 //        final Button Begin = (Button) findViewById(R.id.button);
 
+        rocketDB = new RocketDB(this);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mPedometer = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         sensorManager.registerListener(MainActivity.this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
+        Log.d("SENT", "START");
+        try {
+            ContentValues values = new ContentValues();
+            values.put(RocketDB.USER_NAME_COLUMN, "USERNAME");
+            values.put(RocketDB.COIN_AMOUNT_COLUMN, 6);
+            values.put(RocketDB.BLEACH_AMOUNT_COLUMN, 10);
+            Log.d("SENT", "CORRECTLY");
+            getContentResolver().insert(RocketContentProvider.CONTENT_URI, values);
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+            Log.d("SENT", "INCORRECTLY");
+        }
 
-
-
+        PlayerQueryTask query = new PlayerQueryTask();
+        query.execute();
+//                insertTask.execute(contentValues);
         //Begin.setOnClickListener(this);
 
         // Mapbox access token is configured here. This needs to be called either in your application
@@ -586,6 +608,36 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
+    }
+
+    private class PlayerQueryTask extends AsyncTask<ContentValues, Void, Void> {
+
+        @Override
+        protected Void doInBackground(ContentValues... contentValues) {
+            Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
+            int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
+            int coin = cursor.getColumnIndex(RocketDB.COIN_AMOUNT_COLUMN);
+            int bleach = cursor.getColumnIndex(RocketDB.BLEACH_AMOUNT_COLUMN);
+            cursor.moveToFirst();
+            Log.d("DATABASE_INFO", "Username: " + cursor.getString(username) + "\nCoin amount: " + cursor.getInt(coin) + "\nBleach amount: " + cursor.getInt(bleach));
+            return null;
+        }
+    }
+
+    private class PlayerInsertTask extends AsyncTask<ContentValues, Void, Void> {
+        @Override
+        protected Void doInBackground(ContentValues... contentValues) {
+            getContentResolver().insert(RocketContentProvider.CONTENT_URI, contentValues[0]);
+            return null;
+        }
+    }
+
+    private class PlayerDeleteTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            getContentResolver().delete(RocketContentProvider.CONTENT_URI, null, null);
+            return null;
+        }
     }
 
 //    @Override
