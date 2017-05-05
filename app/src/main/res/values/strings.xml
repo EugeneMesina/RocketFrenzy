@@ -6,4 +6,5 @@
     <string name="title_activity_shake_mini_game">ShakeMiniGame</string>
     <string name="shake">SHAKE</string>
     <string name="ready">READY</string>
+    <string name="title_activity_whack_my_mole">WhackMyMole</string>
 </resources>
