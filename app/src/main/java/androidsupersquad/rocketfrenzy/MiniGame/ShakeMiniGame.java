@@ -1,4 +1,4 @@
-package androidsupersquad.rocketfrenzy;
+package androidsupersquad.rocketfrenzy.MiniGame;
 
 import android.graphics.Typeface;
 import android.hardware.Sensor;
@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidsupersquad.rocketfrenzy.R;
 
 
 public class ShakeMiniGame extends AppCompatActivity implements SensorEventListener {
