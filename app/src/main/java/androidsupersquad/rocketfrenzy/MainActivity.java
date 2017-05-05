@@ -3,7 +3,12 @@ package androidsupersquad.rocketfrenzy;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -48,7 +53,7 @@ import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener, SensorEventListener {
 
     private MapView mapView;
     private MapboxMap map;
@@ -67,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private FrameLayout fragmentHolder;
     private Fragment[] menuScreens;
 
+    private Sensor mPedometer;
+    private SensorManager sensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -74,8 +81,13 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         super.onCreate(savedInstanceState);
 //        final Button Begin = (Button) findViewById(R.id.button);
 
-        LocationsDB db = new LocationsDB(getBaseContext());
-        db.
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mPedometer = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+
+        sensorManager.registerListener(MainActivity.this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
+
+
+
         //Begin.setOnClickListener(this);
 
         // Mapbox access token is configured here. This needs to be called either in your application
@@ -554,6 +566,26 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     @Override
     public void onClick(View view) {
         //do things
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        float steps;
+        if(sensorEvent.sensor.getType()==Sensor.TYPE_STEP_COUNTER)
+        {
+            steps = sensorEvent.values[0];
+            System.out.print("WOW"  + steps);
+            Log.d("step",Float.toString(steps));
+            if(steps%20==0){
+                Toast.makeText(MainActivity.this,"Stepped",Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 
 //    @Override
