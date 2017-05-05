@@ -1,6 +1,7 @@
 package androidsupersquad.rocketfrenzy.Fragments;
 
 
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,7 +29,11 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
+        TextView userName = (TextView) view.findViewById(R.id.UserName);
+        Typeface myCustomFont = Typeface.createFromAsset(view.getContext().getAssets(),"fonts/TwoLines.ttf");
+        userName.setTypeface(myCustomFont);
+        //TODO: Set USERNAME from DataBase
+        userName.setText("Android Super Squad");
         return view;
     }
 

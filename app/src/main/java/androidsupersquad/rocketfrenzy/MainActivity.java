@@ -3,9 +3,13 @@ package androidsupersquad.rocketfrenzy;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
-import android.net.sip.SipAudioCall;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 //import android.support.design.widget.FloatingActionButton;
@@ -17,8 +21,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -40,17 +42,18 @@ import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
+import androidsupersquad.rocketfrenzy.DataBase.LocationsDB;
 import androidsupersquad.rocketfrenzy.Fragments.DailyTaskFragment;
 import androidsupersquad.rocketfrenzy.Fragments.KamikaziFragment;
 import androidsupersquad.rocketfrenzy.Fragments.ProfileFragment;
 import androidsupersquad.rocketfrenzy.Fragments.RocketsFragment;
 import androidsupersquad.rocketfrenzy.Fragments.ShopFragment;
-import androidsupersquad.rocketfrenzy.MiniGame.*;
+import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener, SensorEventListener {
 
     private MapView mapView;
     private MapboxMap map;
@@ -69,13 +72,21 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private FrameLayout fragmentHolder;
     private Fragment[] menuScreens;
 
+    private Sensor mPedometer;
+    private SensorManager sensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 //        final Button Begin = (Button) findViewById(R.id.button);
-        
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mPedometer = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+
+        sensorManager.registerListener(MainActivity.this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
+
+
 
         //Begin.setOnClickListener(this);
 
@@ -225,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
                 //startActivity(toProfile);
             }
-        });
+        });*/
         menu[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -233,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 startActivity(x);
             }
         });
-        */
+
         floatingActionButton = (FloatingActionButton) findViewById(R.id.location_toggle_fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -537,8 +548,44 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     }
 
     @Override
+    public void onBackPressed() {
+       Log.d("FRAGMENT", "" + fragmentHolder.isClickable());
+        if(fragmentHolder.isClickable()) {
+            fragmentHolder.animate().alpha(0F);
+            fragmentHolder.setClickable(false);
+            transaction = getSupportFragmentManager().beginTransaction();
+            Log.d("CURRENT FRAGMENT", "FRAGMENT: " + getCurrentFragment().getTag());
+            transaction.remove(getCurrentFragment());
+            transaction.commit();
+            fragmentManager.popBackStack();
+            fragmentManager.executePendingTransactions();
+            Log.d("POPPED FROM BACKSTACK", "BACKSTACK COUNT: " + fragmentManager.getBackStackEntryCount());
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         //do things
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        float steps;
+        if(sensorEvent.sensor.getType()==Sensor.TYPE_STEP_COUNTER)
+        {
+            steps = sensorEvent.values[0];
+            System.out.print("WOW"  + steps);
+            Log.d("step",Float.toString(steps));
+            if(steps%20==0){
+                Toast.makeText(MainActivity.this,"Stepped",Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 
 //    @Override

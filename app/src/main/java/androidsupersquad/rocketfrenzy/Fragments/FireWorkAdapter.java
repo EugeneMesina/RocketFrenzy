@@ -8,21 +8,21 @@ import android.widget.TextView;
 
 import androidsupersquad.rocketfrenzy.R;
 import androidsupersquad.rocketfrenzy.Fragments.RocketsFragment.OnListFragmentInteractionListener;
-import androidsupersquad.rocketfrenzy.Fragments.dummy.DummyContent.DummyItem;
+import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent.ShopItems;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link ShopItems} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class FireWorkAdapter extends RecyclerView.Adapter<FireWorkAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<ShopItems> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public FireWorkAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public FireWorkAdapter(List<ShopItems> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -61,7 +61,7 @@ public class FireWorkAdapter extends RecyclerView.Adapter<FireWorkAdapter.ViewHo
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public ShopItems mItem;
 
         public ViewHolder(View view) {
             super(view);

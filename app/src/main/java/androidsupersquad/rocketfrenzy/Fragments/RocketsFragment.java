@@ -11,10 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidsupersquad.rocketfrenzy.R;
-import androidsupersquad.rocketfrenzy.Fragments.dummy.DummyContent;
-import androidsupersquad.rocketfrenzy.Fragments.dummy.DummyContent.DummyItem;
-
-import java.util.List;
+import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent;
+import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent.ShopItems;
 
 /**
  * A fragment representing a list of Items.
@@ -105,6 +103,6 @@ public class RocketsFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(ShopItems item);
     }
 }
