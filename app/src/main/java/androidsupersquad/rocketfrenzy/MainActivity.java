@@ -37,6 +37,7 @@ import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
+import androidsupersquad.rocketfrenzy.DataBase.LocationsDB;
 import androidsupersquad.rocketfrenzy.Fragments.DailyTaskFragment;
 import androidsupersquad.rocketfrenzy.Fragments.KamikaziFragment;
 import androidsupersquad.rocketfrenzy.Fragments.ProfileFragment;
@@ -72,8 +73,9 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     {
         super.onCreate(savedInstanceState);
 //        final Button Begin = (Button) findViewById(R.id.button);
-        
 
+        LocationsDB db = new LocationsDB(getBaseContext());
+        db.
         //Begin.setOnClickListener(this);
 
         // Mapbox access token is configured here. This needs to be called either in your application
