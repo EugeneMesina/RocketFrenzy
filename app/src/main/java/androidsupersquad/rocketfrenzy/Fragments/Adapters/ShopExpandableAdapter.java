@@ -1,4 +1,4 @@
-package androidsupersquad.rocketfrenzy.Fragments;
+package androidsupersquad.rocketfrenzy.Fragments.Adapters;
 import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.R;
 import android.content.Context;

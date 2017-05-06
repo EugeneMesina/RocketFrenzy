@@ -1,4 +1,5 @@
 package androidsupersquad.rocketfrenzy.Fragments;
+import androidsupersquad.rocketfrenzy.Fragments.Adapters.ShopExpandableAdapter;
 import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.R;
 import android.os.Bundle;
