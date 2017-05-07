@@ -17,6 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <provider android:name="androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider"
+            android:authorities="androidsupersquad.rocketfrenzy.DataBase"
+            android:exported="false">
+        </provider>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
