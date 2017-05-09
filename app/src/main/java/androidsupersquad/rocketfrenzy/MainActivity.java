@@ -2,32 +2,29 @@ package androidsupersquad.rocketfrenzy;
 
 
 import android.Manifest;
-import android.content.ContentValues;
-import android.content.Intent;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-//import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import android.support.design.widget.FloatingActionButton;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
@@ -45,24 +42,26 @@ import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
-import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
-import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
-import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import androidsupersquad.rocketfrenzy.Fragments.DailyTaskFragment;
 import androidsupersquad.rocketfrenzy.Fragments.KamikaziFragment;
-import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.Fragments.ProfileFragment;
 import androidsupersquad.rocketfrenzy.Fragments.RocketsFragment;
 import androidsupersquad.rocketfrenzy.Fragments.ShopFragment;
+import androidsupersquad.rocketfrenzy.MiniGame.AccGame.AccGame;
+import androidsupersquad.rocketfrenzy.MiniGame.Lottery;
 import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
 
-import java.util.ArrayList;
-import java.util.List;
+//import android.support.design.widget.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener, SensorEventListener {
 
     private MapView mapView;
     private MapboxMap map;
+    private Location userLocation;
     //private com.getbase.floatingactionbutton.FloatingActionsMenu menu;
     private FloatingActionButton menu[];
     private FloatingActionButton floatingActionButton, fab_cancel;
@@ -77,67 +76,26 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private float stdY[] = new float[5];
     private FrameLayout fragmentHolder;
     private Fragment[] menuScreens;
-
+    private int ran;
+    private Context context;
     private Sensor mPedometer;
     private SensorManager sensorManager;
-
-    private RocketDB rocketDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-//        final Button Begin = (Button) findViewById(R.id.button);
 
-        rocketDB = new RocketDB(this);
+        super.onCreate(savedInstanceState);
+        context = getBaseContext();
+
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mPedometer = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         sensorManager.registerListener(MainActivity.this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
 
-        //-------------------------begin testing-------------------------//
-        Log.d("SENT", "START");
-
-        ShopItems item = new ShopItems("a different item name", 0, "it's an item", 10);
-        ArrayList<ShopItems> shopList = new ArrayList<ShopItems>();
-        shopList.add(item);
-        byte[] temp = ByteArrayConverter.ObjectToByteArray(shopList);
-
-//        try {
-//            ContentValues values = new ContentValues();
-//            values.put(RocketDB.USER_NAME_COLUMN, "USERNAME");
-//            values.put(RocketDB.COIN_AMOUNT_COLUMN, 6);
-//            values.put(RocketDB.ROCKETS_OWNED_COLUMN, temp);
-//            values.put(RocketDB.ITEMS_OWNED_COLUMN, temp);
-//            values.put(RocketDB.BLEACH_AMOUNT_COLUMN, 10);
-//            getContentResolver().insert(RocketContentProvider.CONTENT_URI, values);
-//            Log.d("SENT", "CORRECTLY");
-//        } catch(Exception e)
-//        {
-//            Log.d("SENT", "INCORRECTLY");
-//            e.printStackTrace();
-//        }
-        updatePlayerCoinAmount("USERNAME", 30, true);
-        updatePlayerBleachAmount("USERNAME", 5, true);
-        addItemToPlayer("USERNAME", item);
-
-        PlayerQueryTask query = new PlayerQueryTask();
-        query.execute();
-
-        ArrayList<ShopItems> newShopList = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(temp);
-        ShopItems newItem = newShopList.get(0);
-        Log.d("name,0,it's an item, 10", newItem.getItemName() + "," + newItem.getItemImage() + "," + newItem.getItemDescription() + "," + newItem.getItemCost() + "======");
-
-        updatePlayerCoinAmount("USERNAME", 5, false);
-        updatePlayerBleachAmount("USERNAME", -2, false);
-
-        getPlayerCoinAmount("USERNAME");
-        getPlayerBleachAmount("USERNAME");
-        getPlayerItems("USERNAME");
-        //-------------------------done testing-------------------------//
 
 
-        //Begin.setOnClickListener(this);
+
 
         // Mapbox access token is configured here. This needs to be called either in your application
         // object or in the same activity which contains the mapview.
@@ -156,35 +114,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
                 map = mapboxMap;
-                Icon icon = IconFactory.getInstance(MainActivity.this).fromResource(R.drawable.rocket);
 
-                // Add the custom icon marker to the map
-                mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(33.7878, -118.1134))
-                        .title("The Pyramid")
-                        .snippet("Cause it's a pyramid :)")
-                        .icon(icon));
-                mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(33.783303 ,  -118.113731))
-                        .title("Horn Center")
-                        .snippet("Computer and Crap")
-                        .icon(icon));
-                mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(33.78252527744477 ,  -118.11507797188824))
-                        .title("Brotman Hall ")
-                        .snippet("Admins")
-                        .icon(icon));
-                mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(33.783264 ,  -118.110649
-                        ))
-                        .title("Engineering")
-                        .snippet("Nerds, Stay Away Normies")
-                        .icon(icon));
-                mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(33.781035626614724 ,  -118.11357647180557))
-                        .title("USU")
-                        .snippet("Grab food")
-                        .icon(icon));
 
             }
         });
@@ -229,12 +159,12 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         menu[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(MainActivity.this, "Inside menu[0] onClick", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(AccGame.this, "Inside menu[0] onClick", Toast.LENGTH_SHORT).show();
                 if(isMenuOpen) {
-                    //Toast.makeText(MainActivity.this, "isMenuOpen is true", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(AccGame.this, "isMenuOpen is true", Toast.LENGTH_SHORT).show();
                     closeMenu();
                 } else {
-                    //Toast.makeText(MainActivity.this, "isMenuOpen is false", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(AccGame.this, "isMenuOpen is false", Toast.LENGTH_SHORT).show();
                     openMenu();
                 }
             }
@@ -267,21 +197,21 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         menu[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "TODO: Go to inventory", Toast.LENGTH_LONG).show();
+                Toast.makeText(AccGame.this, "TODO: Go to inventory", Toast.LENGTH_LONG).show();
                 //startActivity(toProfile);
             }
         });
         menu[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "TODO: Go to shop", Toast.LENGTH_LONG).show();
+                Toast.makeText(AccGame.this, "TODO: Go to shop", Toast.LENGTH_LONG).show();
                 //startActivity(toProfile);
             }
         });
         menu[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "TODO: Go to Daily Tasks", Toast.LENGTH_LONG).show();
+                Toast.makeText(AccGame.this, "TODO: Go to Daily Tasks", Toast.LENGTH_LONG).show();
 
                 //startActivity(toProfile);
             }
@@ -345,6 +275,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     public void onResume() {
         super.onResume();
         mapView.onResume();
+        sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -363,6 +294,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     public void onPause() {
         super.onPause();
         mapView.onPause();
+        sensorManager.unregisterListener(this);
     }
 
     @Override
@@ -416,6 +348,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 return;
             }
             Location lastLocation = locationEngine.getLastLocation();
+            userLocation = lastLocation;
             if (lastLocation != null) {
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLocation), 16));
             }
@@ -531,6 +464,68 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             }
         }
     }
+    private void startGame(){
+        sensorManager.unregisterListener(this);
+        Icon icon = IconFactory.getInstance(MainActivity.this).fromResource(R.drawable.profile);
+        final MarkerOptions gameMarker = new MarkerOptions();
+        gameMarker.position(new LatLng(userLocation))
+                .title("Game Start")
+                .snippet("Play Game")
+                .icon(icon);
+        map.addMarker(gameMarker);
+
+        Random random = new Random();
+        ran = random.nextInt(4)+1;
+
+        new AlertDialog.Builder(this)
+                .setTitle("Game Found")
+                .setMessage("Do you want to play?" + ran)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    Intent game;
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (ran){
+                            case 1:
+                                //shake game
+
+                                game = new Intent(MainActivity.this, Lottery.class);
+                                break;
+                            case 2:
+                                //lottery slot machine
+
+                                game = new Intent(MainActivity.this, ShakeMiniGame.class);
+                                //accgame
+                            case 3:
+
+                                game = new Intent(MainActivity.this, AccGame.class);
+                                //daniel's game
+                            case 4:
+
+                                game = new Intent(MainActivity.this, Lottery.class);
+                                break;
+
+
+                        }
+                        startActivity(game);
+                        game = null;
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        map.clear();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+        sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),SensorManager.SENSOR_DELAY_NORMAL);
+
+
+    }
+
+
+
+
+
 
     /**
      * Creates an onClickListener for the menu buttons
@@ -575,8 +570,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private void openMenu() {
         isMenuOpen = true;
         menu[0].animate().rotation(-60);
-            for(int ii = 1; ii < 6; ii++)
-                menu[ii].animate().translationY(0);
+        for(int ii = 1; ii < 6; ii++)
+            menu[ii].animate().translationY(0);
     }
 
     /**
@@ -598,7 +593,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
     @Override
     public void onBackPressed() {
-       Log.d("FRAGMENT", "" + fragmentHolder.isClickable());
+        Log.d("FRAGMENT", "" + fragmentHolder.isClickable());
         if(fragmentHolder.isClickable()) {
             fragmentHolder.animate().alpha(0F);
             fragmentHolder.setClickable(false);
@@ -625,8 +620,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             steps = sensorEvent.values[0];
             System.out.print("WOW"  + steps);
             Log.d("step",Float.toString(steps));
-            if(steps%20==0){
-                Toast.makeText(MainActivity.this,"Stepped",Toast.LENGTH_LONG).show();
+            if(steps%1==0){
+
+                startGame();
+
+
             }
         }
 
@@ -637,40 +635,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
     }
 
-    private class PlayerQueryTask extends AsyncTask<ContentValues, Void, Void> {
-
-        @Override
-        protected Void doInBackground(ContentValues... contentValues) {
-            Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
-            int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
-            int coin = cursor.getColumnIndex(RocketDB.COIN_AMOUNT_COLUMN);
-            int rockets = cursor.getColumnIndex(RocketDB.ROCKETS_OWNED_COLUMN);
-            int items = cursor.getColumnIndex(RocketDB.ITEMS_OWNED_COLUMN);
-            int bleach = cursor.getColumnIndex(RocketDB.BLEACH_AMOUNT_COLUMN);
-            cursor.moveToFirst();
-            //still kind of testing//
-            ArrayList<ShopItems> newList = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(rockets));
-            Log.d("DATABASE_INFO", "Username: " + cursor.getString(username) + "\nCoin amount: " + cursor.getInt(coin) + "\nBleach amount: " + cursor.getInt(bleach) + "\nRockets Owned: " + newList.get(0).getItemName() + "\nItems Owned: " + cursor.getBlob(items));
-            return null;
-        }
-    }
-
-    private class PlayerInsertTask extends AsyncTask<ContentValues, Void, Void> {
-        @Override
-        protected Void doInBackground(ContentValues... contentValues) {
-            getContentResolver().insert(RocketContentProvider.CONTENT_URI, contentValues[0]);
-            return null;
-        }
-    }
-
-    private class PlayerDeleteTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            getContentResolver().delete(RocketContentProvider.CONTENT_URI, null, null);
-            return null;
-        }
-    }
-
 //    @Override
 //    public boolean onMarkerClick(@NonNull Marker marker) {
 //        //do things
@@ -678,144 +642,12 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 //        return false;
 //    }
 
-    private int getPlayerCoinAmount(String playerName)
-    {
-        String where = RocketDB.USER_NAME_COLUMN + "= ?";
-        String whereArgs[] = {playerName};
-        String[] resultColumns = {RocketDB.COIN_AMOUNT_COLUMN};
-        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
-        int coin = cursor.getColumnIndex(RocketDB.COIN_AMOUNT_COLUMN);
-        cursor.moveToFirst();
-        int coinAmount = cursor.getInt(coin);
-        Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
-        return coinAmount;
-    }
+   /* public static class Rocket extends AppCompatActivity {
 
-    private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
-    {
-        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
-        String[] whereArgs = {playerName};
-        int newCoinAmount = 0;
-        ContentValues newValues = new ContentValues();
-        if(set) {
-            newCoinAmount = coinAmount;
-        } else {
-            int currentCoins = getPlayerCoinAmount(playerName);
-            newCoinAmount = currentCoins + coinAmount;
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_rocket);
         }
-        newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
-        return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
-    }
-
-    private int getPlayerBleachAmount(String playerName)
-    {
-        String where = RocketDB.USER_NAME_COLUMN + "= ?";
-        String whereArgs[] = {playerName};
-        String[] resultColumns = {RocketDB.BLEACH_AMOUNT_COLUMN};
-        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
-        int bleach = cursor.getColumnIndex(RocketDB.BLEACH_AMOUNT_COLUMN);
-        cursor.moveToFirst();
-        int bleachAmount = cursor.getInt(bleach);
-        Log.d("BLEACH_INFO", "Username: " + playerName + "\nBleach amount: " + bleachAmount);
-        return bleachAmount;
-    }
-
-    private int updatePlayerBleachAmount(String playerName, int bleachAmount, boolean set)
-    {
-        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
-        String[] whereArgs = {playerName};
-        int newBleachAmount = 0;
-        ContentValues newValues = new ContentValues();
-        if(set) {
-            newBleachAmount = bleachAmount;
-        } else {
-            int currentBleach = getPlayerBleachAmount(playerName);
-            newBleachAmount = currentBleach + bleachAmount;
-        }
-        newValues.put(RocketDB.BLEACH_AMOUNT_COLUMN, newBleachAmount);
-        return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
-    }
-
-    private ArrayList<ShopItems> getPlayerItems(String playerName)
-    {
-        String where = RocketDB.USER_NAME_COLUMN + "= ?";
-        String whereArgs[] = {playerName};
-        String[] resultColumns = {RocketDB.ITEMS_OWNED_COLUMN};
-        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
-        int items = cursor.getColumnIndex(RocketDB.ITEMS_OWNED_COLUMN);
-        cursor.moveToFirst();
-        try {
-            ArrayList<ShopItems> itemArray = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(items));
-            String itemString = "";
-
-            for (ShopItems si : itemArray) {
-                itemString += (si.getItemName() + "\n\t");
-                Log.d("ITEM NAME", si.getItemName());
-            }
-            Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: " + itemString);
-            return itemArray;
-        } catch (NullPointerException e)
-        {
-            Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: null");
-            return null;
-        }
-    }
-
-    private int addItemToPlayer(String playerName, ShopItems item)
-    {
-        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
-        String[] whereArgs = {playerName};
-        ArrayList<ShopItems> currentItems = getPlayerItems(playerName);
-        if(currentItems == null)
-        {
-            currentItems = new ArrayList<ShopItems>();
-        }
-        currentItems.add(item);
-        byte[]bytes = ByteArrayConverter.ObjectToByteArray(currentItems);
-        ContentValues values = new ContentValues();
-        values.put(RocketDB.ITEMS_OWNED_COLUMN, bytes);
-        return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
-    }
-
-    //will be implemented once rocket items are created
-//    private ArrayList<ShopItems> getPlayerRockets(String playerName)
-//    {
-//        String where = RocketDB.USER_NAME_COLUMN + "= ?";
-//        String whereArgs[] = {playerName};
-//        String[] resultColumns = {RocketDB.ROCKETS_OWNED_COLUMN};
-//        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
-//        int items = cursor.getColumnIndex(RocketDB.ROCKETS_OWNED_COLUMN);
-//        cursor.moveToFirst();
-//        try {
-//            ArrayList<> itemArray = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(items));
-//            String itemString = "";
-//
-//            for (ShopItems si : itemArray) {
-//                itemString += (si.getItemName() + "\n\t");
-//                Log.d("ITEM NAME", si.getItemName());
-//            }
-//            Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: " + itemString);
-//            return itemArray;
-//        } catch (NullPointerException e)
-//        {
-//            Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: null");
-//            return null;
-//        }
-//    }
-//
-//    private int addRocketToPlayer(String playerName, ShopItems item)
-//    {
-//        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
-//        String[] whereArgs = {playerName};
-//        ArrayList<ShopItems> currentItems = getPlayerItems(playerName);
-//        if(currentItems == null)
-//        {
-//            currentItems = new ArrayList<ShopItems>();
-//        }
-//        currentItems.add(item);
-//        byte[]bytes = ByteArrayConverter.ObjectToByteArray(currentItems);
-//        ContentValues values = new ContentValues();
-//        values.put(RocketDB.ITEMS_OWNED_COLUMN, bytes);
-//        return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
-//    }
+    }*/
 }

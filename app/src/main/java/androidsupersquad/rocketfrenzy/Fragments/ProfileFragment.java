@@ -42,8 +42,8 @@ public class ProfileFragment extends Fragment {
         //TODO: Set USERNAME from DataBase
         userName.setText("Android Super Squad");
         userName.setGravity(Gravity.CENTER);
-      //  EditText rename = (EditText) view.findViewById(R.id.NameChange);
-       // rename.setTypeface(myCustomFont);
+        EditText rename = (EditText) view.findViewById(R.id.NameChange);
+        rename.setTypeface(myCustomFont);
 
         userName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +53,7 @@ public class ProfileFragment extends Fragment {
                         .setTitle("Name Change");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                      //  nameChange();
+                        nameChange();
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
