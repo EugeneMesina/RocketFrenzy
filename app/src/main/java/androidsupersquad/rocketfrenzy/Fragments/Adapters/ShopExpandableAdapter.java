@@ -59,7 +59,7 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         description.setText(currentItem.getItemDescription());
         //set the cost of the item onto the button
         Button cost = (Button) convertView.findViewById(R.id.BuyButton);
-        cost.setText(((Float)currentItem.getItemCost()).toString());
+        cost.setText(((Integer)currentItem.getItemCost()).toString());
         cost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)

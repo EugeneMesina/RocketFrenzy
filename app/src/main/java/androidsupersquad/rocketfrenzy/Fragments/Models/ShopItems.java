@@ -13,14 +13,14 @@ public class ShopItems implements Serializable
         //The shop item Description
         private String ItemDescription;
         //The shop item Cost
-        private float ItemCost;
+        private int ItemCost;
         /**
          * Constructs the Shop Item
          * @param Name of Shop Item
          * @param image of Shop Item
          * @param Description of Shop Item
          */
-    public ShopItems(String Name, int image,String Description, float ItemCost){
+    public ShopItems(String Name, int image,String Description, int ItemCost){
         this.ItemImage=image;
         this.ItemName=Name;
         this.ItemDescription=Description;
@@ -33,7 +33,7 @@ public class ShopItems implements Serializable
     public String getItemDescription() {
         return ItemDescription;
     }
-    public float getItemCost() {
+    public int getItemCost() {
         return ItemCost;
     }
 }
