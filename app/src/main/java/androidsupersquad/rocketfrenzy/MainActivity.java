@@ -45,10 +45,12 @@ import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
+import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.DailyTaskFragment;
 import androidsupersquad.rocketfrenzy.Fragments.KamikaziFragment;
+import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.Fragments.ProfileFragment;
 import androidsupersquad.rocketfrenzy.Fragments.RocketsFragment;
 import androidsupersquad.rocketfrenzy.Fragments.ShopFragment;
@@ -93,23 +95,41 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         mPedometer = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         sensorManager.registerListener(MainActivity.this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
+
+        //-------------------------begin testing-------------------------//
         Log.d("SENT", "START");
+
+        ShopItems item = new ShopItems("name", 0, "it's an item", 10);
+        ArrayList<ShopItems> shopList = new ArrayList<ShopItems>();
+        shopList.add(item);
+        byte[] temp = ByteArrayConverter.ObjectToByteArray(shopList);
+
         try {
             ContentValues values = new ContentValues();
             values.put(RocketDB.USER_NAME_COLUMN, "USERNAME");
             values.put(RocketDB.COIN_AMOUNT_COLUMN, 6);
+            values.put(RocketDB.ROCKETS_OWNED_COLUMN, temp);
+            values.put(RocketDB.ITEMS_OWNED_COLUMN, temp);
             values.put(RocketDB.BLEACH_AMOUNT_COLUMN, 10);
-            Log.d("SENT", "CORRECTLY");
             getContentResolver().insert(RocketContentProvider.CONTENT_URI, values);
+            Log.d("SENT", "CORRECTLY");
         } catch(Exception e)
         {
-            e.printStackTrace();
             Log.d("SENT", "INCORRECTLY");
+            e.printStackTrace();
         }
 
         PlayerQueryTask query = new PlayerQueryTask();
         query.execute();
-//                insertTask.execute(contentValues);
+
+
+        ArrayList<ShopItems> newShopList = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(temp);
+        ShopItems newItem = newShopList.get(0);
+        Log.d("name,0,it's an item, 10", newItem.getItemName() + "," + newItem.getItemImage() + "," + newItem.getItemDescription() + "," + newItem.getItemCost() + "======");
+
+        //-------------------------done testing-------------------------//
+
+
         //Begin.setOnClickListener(this);
 
         // Mapbox access token is configured here. This needs to be called either in your application
@@ -617,9 +637,13 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
             int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
             int coin = cursor.getColumnIndex(RocketDB.COIN_AMOUNT_COLUMN);
+            int rockets = cursor.getColumnIndex(RocketDB.ROCKETS_OWNED_COLUMN);
+            int items = cursor.getColumnIndex(RocketDB.ITEMS_OWNED_COLUMN);
             int bleach = cursor.getColumnIndex(RocketDB.BLEACH_AMOUNT_COLUMN);
             cursor.moveToFirst();
-            Log.d("DATABASE_INFO", "Username: " + cursor.getString(username) + "\nCoin amount: " + cursor.getInt(coin) + "\nBleach amount: " + cursor.getInt(bleach));
+            //still kind of testing//
+            ArrayList<ShopItems> newList = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(rockets));
+            Log.d("DATABASE_INFO", "Username: " + cursor.getString(username) + "\nCoin amount: " + cursor.getInt(coin) + "\nBleach amount: " + cursor.getInt(bleach) + "\nRockets Owned: " + newList.get(0).getItemName() + "\nItems Owned: " + cursor.getBlob(items));
             return null;
         }
     }

@@ -24,13 +24,15 @@ public class RocketDB extends SQLiteOpenHelper {
 
     private static final String DATABASE_TABLE = "UserInfo";
     private static final String ROCKETS_TABLE = "Rockets";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
     private int zoomLevel;
 
     private static String createTable = "CREATE TABLE " + DATABASE_TABLE + "(" +
             ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             USER_NAME_COLUMN + " STRING, " +
             COIN_AMOUNT_COLUMN + " INT, " +
+            ROCKETS_OWNED_COLUMN + " BLOB, " +
+            ITEMS_OWNED_COLUMN + " BLOB, " +
             BLEACH_AMOUNT_COLUMN + " INT" +
             ")";
 
@@ -68,7 +70,7 @@ public class RocketDB extends SQLiteOpenHelper {
 
     public Cursor getAllPlayers() {
         SQLiteDatabase db = getReadableDatabase();
-        return db.query(DATABASE_TABLE, new String[] {USER_NAME_COLUMN, COIN_AMOUNT_COLUMN, BLEACH_AMOUNT_COLUMN}, null, null, null, null, null);
+        return db.query(DATABASE_TABLE, new String[] {USER_NAME_COLUMN, COIN_AMOUNT_COLUMN, ROCKETS_OWNED_COLUMN, ITEMS_OWNED_COLUMN, BLEACH_AMOUNT_COLUMN}, null, null, null, null, null);
     }
 
     public int deleteAllInformation(String name)
