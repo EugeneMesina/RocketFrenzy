@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
+import android.net.Uri;
 
 import java.util.ArrayList;
 
@@ -22,15 +23,15 @@ public class RocketDB extends SQLiteOpenHelper {
     public static final String ITEMS_OWNED_COLUMN = "itemsowned";
     public static final String BLEACH_AMOUNT_COLUMN = "bleachamount";
 
-    private static final String DATABASE_TABLE = "UserInfo";
-    private static final String ROCKETS_TABLE = "Rockets";
-    public static final int DATABASE_VERSION = 1;
-    private int zoomLevel;
+    public static final String DATABASE_TABLE = "UserInfo";
+    public static final int DATABASE_VERSION = 4;
 
     private static String createTable = "CREATE TABLE " + DATABASE_TABLE + "(" +
             ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             USER_NAME_COLUMN + " STRING, " +
             COIN_AMOUNT_COLUMN + " INT, " +
+            ROCKETS_OWNED_COLUMN + " BLOB, " +
+            ITEMS_OWNED_COLUMN + " BLOB, " +
             BLEACH_AMOUNT_COLUMN + " INT" +
             ")";
 
@@ -60,15 +61,15 @@ public class RocketDB extends SQLiteOpenHelper {
                 return db.insert(DATABASE_TABLE, null, values);
     }
 
-    public int update(String player, ContentValues values)
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs)
     {
         SQLiteDatabase db = getWritableDatabase();
-        return db.update(DATABASE_TABLE, values, "WHERE username = " + player, null);
+        return db.update(DATABASE_TABLE, values, selection, selectionArgs);
     }
 
     public Cursor getAllPlayers() {
         SQLiteDatabase db = getReadableDatabase();
-        return db.query(DATABASE_TABLE, new String[] {USER_NAME_COLUMN, COIN_AMOUNT_COLUMN, BLEACH_AMOUNT_COLUMN}, null, null, null, null, null);
+        return db.query(DATABASE_TABLE, new String[] {USER_NAME_COLUMN, COIN_AMOUNT_COLUMN, ROCKETS_OWNED_COLUMN, ITEMS_OWNED_COLUMN, BLEACH_AMOUNT_COLUMN}, null, null, null, null, null);
     }
 
     public int deleteAllInformation(String name)
