@@ -6,13 +6,6 @@
     android:background="@drawable/background"
     tools:context="androidsupersquad.rocketfrenzy.Fragments.ProfileFragment">
 
-    <TextView
-        android:id="@+id/profile_textview_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="I AM PROFILE VIEW"
-        android:layout_gravity="center"/>
-
     <ImageView
         android:id="@+id/ProfilePicture"
         android:layout_width="wrap_content"
@@ -28,10 +21,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ProfilePicture"
-        android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:layout_marginTop="35dp"
         android:background="@android:drawable/editbox_dropdown_dark_frame"
-        android:text="UserName"
+        android:text="@string/username"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="50dp" />
+
+    <EditText
+        android:id="@+id/NameChange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/UserName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="67dp"
+        android:background="?android:attr/actionModeBackground"
+        android:ems="10"
+        android:inputType="textPersonName" />
 </RelativeLayout>

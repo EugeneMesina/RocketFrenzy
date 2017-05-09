@@ -8,7 +8,16 @@
     <string name="title_activity_whack_my_mole">WhackMyMole</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Daily Tasks Fragment</string>
-
+    <string name="dailytask">Daily Tasks Fragment</string>
     <string name="buy">Buy</string>
+
+    <!--Shop Item Description-->
+    <string name="launchpad">The launch pad allows you to launch rockets that you own. Works on any types of rockets.</string>
+    <string name="launchpad_bundle"> A pack of 3 launch pads that will allows you to launch more rockets!</string>
+    <string name="Horizon_Icon">A nice looking icon of the horizon. Change up your profile now! </string>
+    <string name="Flame_Icon">A nice looking icon of fire. Change up your profile now! </string>
+    <string name="Skull_Icon">A nice looking icon of a skull. Change up your profile now! </string>
+    <string name="Bleach"> A Killer Substance</string>
+    <string name="username">UserName</string>
+
 </resources>
