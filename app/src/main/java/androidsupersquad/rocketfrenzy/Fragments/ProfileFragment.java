@@ -1,6 +1,7 @@
 package androidsupersquad.rocketfrenzy.Fragments;
 
 
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidsupersquad.rocketfrenzy.R;
 
@@ -41,8 +43,18 @@ public class ProfileFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setMessage("Want to Change your name")
                         .setTitle("Name Change");
-
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(getContext(),"FKED",Toast.LENGTH_SHORT);
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
                 AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
         return view;

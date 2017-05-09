@@ -27,4 +27,15 @@
         android:text="UserName"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="50dp" />
+
+    <EditText
+        android:id="@+id/NameChange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/UserName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="67dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name" />
 </RelativeLayout>
