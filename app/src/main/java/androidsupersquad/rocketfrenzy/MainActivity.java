@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         shopList.add(item);
         byte[] temp = ByteArrayConverter.ObjectToByteArray(shopList);
 
+//this only needs to be done once
 //        try {
 //            ContentValues values = new ContentValues();
 //            values.put(RocketDB.USER_NAME_COLUMN, "USERNAME");
