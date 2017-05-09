@@ -24,7 +24,7 @@
         android:gravity="center"
         android:layout_marginTop="35dp"
         android:background="@android:drawable/editbox_dropdown_dark_frame"
-        android:text="UserName"
+        android:text="@string/username"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="50dp" />
 
@@ -35,7 +35,7 @@
         android:layout_below="@+id/UserName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="67dp"
+        android:background="?android:attr/actionModeBackground"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name" />
+        android:inputType="textPersonName" />
 </RelativeLayout>

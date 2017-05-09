@@ -45,7 +45,8 @@ public class ProfileFragment extends Fragment {
                         .setTitle("Name Change");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getContext(),"FKED",Toast.LENGTH_SHORT);
+
+
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
