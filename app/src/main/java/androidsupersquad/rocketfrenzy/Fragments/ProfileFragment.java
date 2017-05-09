@@ -5,6 +5,8 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +16,6 @@ import androidsupersquad.rocketfrenzy.R;
 
 public class ProfileFragment extends Fragment {
 
-    private OnFragmentInteractionListener mListener;
-    private TextView mTextView1;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,13 +34,20 @@ public class ProfileFragment extends Fragment {
         userName.setTypeface(myCustomFont);
         //TODO: Set USERNAME from DataBase
         userName.setText("Android Super Squad");
+        userName.setGravity(Gravity.CENTER);
+        userName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Want to Change your name")
+                        .setTitle("Name Change");
+
+                AlertDialog dialog = builder.create();
+            }
+        });
         return view;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        mTextView1 = (TextView) view.findViewById(R.id.profile_textview_1);
-    }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
