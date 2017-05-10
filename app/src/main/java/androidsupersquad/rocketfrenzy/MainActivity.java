@@ -2,15 +2,18 @@ package androidsupersquad.rocketfrenzy;
 
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -46,6 +49,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
+import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
+import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.DailyTaskFragment;
 import androidsupersquad.rocketfrenzy.Fragments.KamikaziFragment;
 import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
