@@ -31,14 +31,6 @@ ArrayList rockets;
         super.onActivityCreated(savedInstanceState);
         rockets=getPlayerRockets(getPlayerName());
         rockets.addAll(getPlayerItems(getPlayerName()));
-        /*rockets= new ArrayList<>();
-        rockets.add(new Rocket("Apollo",R.drawable.apollorocket,"heck"));
-        rockets.add(new Rocket("Apollo",R.drawable.apollorocket,"heck"));
-        rockets.add(new Rocket("Apollo",R.drawable.apollorocket,"heck"));
-        rockets.add(new Rocket("Apollo",R.drawable.apollorocket,"heck"));
-        rockets.add(new Rocket("Apollo",R.drawable.kamakazirocket,"heck"));
-        rockets.add(new Rocket("Apollo",R.drawable.kamakazirocket,"heck"));
-        rockets.add(new ShopItems("Launch Pad",R.drawable.bleach,getActivity().getString(R.string.launchpad),10000));*/
         GridView inventory = (GridView) getActivity().findViewById(R.id.Inventory);
         inventory.setAdapter(new RocketGridAdapter(getActivity().getBaseContext(),rockets));
     }

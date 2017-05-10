@@ -104,14 +104,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
         db = new RocketDB(this);
 
-        insertPlayer("USERNAME");
-
-//        try{getPlayerName();}
-//        catch(NullPointerException e){
-//            PlayerDeleteTask task = new PlayerDeleteTask();
-//            task.execute();
-//            insertPlayer("USERNAME");
-//        }
+       // insertPlayer("USERNAME");
+        if(getPlayerName()==null){
+           insertPlayer("USERNAME");
+        }
         /*-------------------------begin testing-------------------------//
         Log.d("SENT", "START");
         PlayerDeleteTask task = new PlayerDeleteTask();
