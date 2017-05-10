@@ -22,12 +22,13 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
 
         <provider android:name="androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider"
             android:authorities="androidsupersquad.rocketfrenzy.DataBase"
-            android:exported="false">
+            android:exported="true">
         </provider>
-        </activity>
+
         <activity android:name=".MiniGame.ShakeMiniGame" />
         <activity android:name=".MiniGame.Lottery"></activity>
 

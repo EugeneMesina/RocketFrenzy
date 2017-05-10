@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private Context context;
     private Sensor mPedometer;
     private SensorManager sensorManager;
+    private RocketDB db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -101,12 +102,16 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
         sensorManager.registerListener(MainActivity.this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
 
-        try{getPlayerName();}
-        catch(NullPointerException e){
-            PlayerDeleteTask task = new PlayerDeleteTask();
-            task.execute();
-            insertPlayer("USERNAME");
-        }
+        db = new RocketDB(this);
+
+        insertPlayer("USERNAME");
+
+//        try{getPlayerName();}
+//        catch(NullPointerException e){
+//            PlayerDeleteTask task = new PlayerDeleteTask();
+//            task.execute();
+//            insertPlayer("USERNAME");
+//        }
         /*-------------------------begin testing-------------------------//
         Log.d("SENT", "START");
         PlayerDeleteTask task = new PlayerDeleteTask();
