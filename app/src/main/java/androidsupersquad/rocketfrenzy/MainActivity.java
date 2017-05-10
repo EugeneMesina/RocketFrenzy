@@ -538,9 +538,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                             case 2:
                                 //lottery slot machine
 
-                                game = new Intent(MainActivity.this, ShakeMiniGame.class);
-                                //accgame
-                            case 3:
+                                        game = new Intent(MainActivity.this, Rocket.class);
+                                        //accgame
+                                        break;
+                                    case 3:
 
                                 game = new Intent(MainActivity.this, AccGame.class);
                                 //daniel's game

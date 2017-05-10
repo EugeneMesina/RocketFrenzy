@@ -39,11 +39,11 @@ public class Lottery extends AppCompatActivity {
                 slot1anim.start();
 
                 slot2.setBackgroundResource(R.drawable.animate);
-                final AnimationDrawable slot2anim = (AnimationDrawable) slot1.getBackground();
+                final AnimationDrawable slot2anim = (AnimationDrawable) slot2.getBackground();
                 slot2anim.start();
 
                 slot3.setBackgroundResource(R.drawable.animate);
-                final AnimationDrawable slot3anim = (AnimationDrawable) slot1.getBackground();
+                final AnimationDrawable slot3anim = (AnimationDrawable) slot3.getBackground();
                 slot3anim.start();
 
                 Handler handler = new Handler();
@@ -58,7 +58,7 @@ public class Lottery extends AppCompatActivity {
 
                         getScore();
                     }
-                },500);
+                },3000);
             }
         });
     }
