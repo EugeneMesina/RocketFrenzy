@@ -1,10 +1,12 @@
 package androidsupersquad.rocketfrenzy.Fragments.Models;
 
+import java.io.Serializable;
+
 /**
  * Created by Jimmy on 5/6/2017.
  */
 
-public class Rocket {
+public class Rocket implements Serializable {
 
     private String Name;
     private int Image;
@@ -23,5 +25,9 @@ public class Rocket {
     }
     public String getDescription() {
         return Description;
+    }
+    public String toString()
+    {
+        return "Name: " + Name;
     }
 }

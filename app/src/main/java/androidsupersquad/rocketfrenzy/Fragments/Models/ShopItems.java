@@ -14,7 +14,9 @@ public class ShopItems implements Serializable
         private String ItemDescription;
         //The shop item Cost
         private int ItemCost;
-        /**
+        private static final long serialVersionUID = 1L;
+
+    /**
          * Constructs the Shop Item
          * @param Name of Shop Item
          * @param image of Shop Item
@@ -35,6 +37,11 @@ public class ShopItems implements Serializable
     }
     public int getItemCost() {
         return ItemCost;
+    }
+
+    public String toString()
+    {
+        return "Name: " + ItemName + " Cost: " + ItemCost;
     }
 }
 

@@ -50,7 +50,7 @@ import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.DailyTaskFragment;
 import androidsupersquad.rocketfrenzy.Fragments.KamikaziFragment;
-import androidsupersquad.rocketfrenzy.Fragments.Models.DummyContent;
+import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
 import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.Fragments.ProfileFragment;
 import androidsupersquad.rocketfrenzy.Fragments.RocketsFragment;
@@ -98,37 +98,38 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
         //-------------------------begin testing-------------------------//
         Log.d("SENT", "START");
+        PlayerDeleteTask task = new PlayerDeleteTask();
+        task.execute();
+        //----------------- MUST RUN THIS FIRST TIME TO INSERT PLAYER -----------------//
+        insertPlayer("USERNAME");
+        //----------------- MUST RUN THIS FIRST TIME TO INSERT PLAYER -----------------//
 
-        ShopItems item = new ShopItems("a different item name", 0, "it's an item", 10);
-        ArrayList<ShopItems> shopList = new ArrayList<ShopItems>();
-        shopList.add(item);
-        byte[] temp = ByteArrayConverter.ObjectToByteArray(shopList);
+        //PlayerDeleteTask task = new PlayerDeleteTask();
+        //task.execute();
+        ShopItems item = new ShopItems("item", 0, "it's an item", 100);
+        Rocket rocket = new Rocket("rocket", 0, "it's a rocket");
+        updatePlayerUsername("JOE", "USERNAME");
+//        ArrayList<ShopItems> shopList = new ArrayList<ShopItems>();
+//        shopList.add(item);
+//        byte[] temp = ByteArrayConverter.ObjectToByteArray(shopList);
 
-//this only needs to be done once
-//        try {
-//            ContentValues values = new ContentValues();
-//            values.put(RocketDB.USER_NAME_COLUMN, "USERNAME");
-//            values.put(RocketDB.COIN_AMOUNT_COLUMN, 6);
-//            values.put(RocketDB.ROCKETS_OWNED_COLUMN, temp);
-//            values.put(RocketDB.ITEMS_OWNED_COLUMN, temp);
-//            values.put(RocketDB.BLEACH_AMOUNT_COLUMN, 10);
-//            getContentResolver().insert(RocketContentProvider.CONTENT_URI, values);
-//            Log.d("SENT", "CORRECTLY");
-//        } catch(Exception e)
-//        {
-//            Log.d("SENT", "INCORRECTLY");
-//            e.printStackTrace();
-//        }
+
+        //addItemToPlayer("USERNAME", item);
+        //removeAllItemsFromPlayer("USERNAME");
         updatePlayerCoinAmount("USERNAME", 30, true);
         updatePlayerBleachAmount("USERNAME", 5, true);
-        addItemToPlayer("USERNAME", item);
+        //removeAllRocketsFromPlayer("USERNAME");
+        //addRocketToPlayer("USERNAME", rocket);
+        //addItemToPlayer("USERNAME", item);
+        removeItemFromPlayer("USERNAME",item);
+        removeRocketFromPlayer("USERNAME", rocket);
+        removeRocketFromPlayer("USERNAME", rocket);
 
         PlayerQueryTask query = new PlayerQueryTask();
         query.execute();
-
-        ArrayList<ShopItems> newShopList = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(temp);
-        ShopItems newItem = newShopList.get(0);
-        Log.d("name,0,it's an item, 10", newItem.getItemName() + "," + newItem.getItemImage() + "," + newItem.getItemDescription() + "," + newItem.getItemCost() + "======");
+//        ArrayList<ShopItems> newShopList = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(temp);
+//        ShopItems newItem = newShopList.get(0);
+        //Log.d("name,0,it's an item, 10", newItem.getItemName() + "," + newItem.getItemImage() + "," + newItem.getItemDescription() + "," + newItem.getItemCost() + "======");
 
         updatePlayerCoinAmount("USERNAME", 5, false);
         updatePlayerBleachAmount("USERNAME", -2, false);
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         getPlayerCoinAmount("USERNAME");
         getPlayerBleachAmount("USERNAME");
         getPlayerItems("USERNAME");
+        getPlayerName();
         //-------------------------done testing-------------------------//
 
 
@@ -651,8 +653,19 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             int bleach = cursor.getColumnIndex(RocketDB.BLEACH_AMOUNT_COLUMN);
             cursor.moveToFirst();
             //still kind of testing//
-            ArrayList<ShopItems> newList = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(rockets));
-            Log.d("DATABASE_INFO", "Username: " + cursor.getString(username) + "\nCoin amount: " + cursor.getInt(coin) + "\nBleach amount: " + cursor.getInt(bleach) + "\nRockets Owned: " + newList.get(0).getItemName() + "\nItems Owned: " + cursor.getBlob(items));
+            ArrayList<ShopItems> newList = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(items));
+            String itemString = "\t";
+            for(ShopItems si : newList)
+            {
+                itemString += (si + "\n\t");
+            }
+            ArrayList<Rocket> newerList = (ArrayList<Rocket>)  ByteArrayConverter.ByteArrayToObject(cursor.getBlob(rockets));
+            String rocketString = "\t";
+            for(Rocket r : newerList)
+            {
+                rocketString += (r + "\n\t");
+            }
+            Log.d("DATABASE_INFO", "Username: " + cursor.getString(username) + "\nCoin amount: " + cursor.getInt(coin) + "\nBleach amount: " + cursor.getInt(bleach) + "\nRockets Owned: " + rocketString + "\nItems Owned: " + itemString);
             return null;
         }
     }
@@ -679,6 +692,26 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 //
 //        return false;
 //    }
+
+    private String getPlayerName()
+    {
+        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
+        int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
+        cursor.moveToFirst();
+        //still kind of testing//
+        String name = cursor.getString(username);
+        Log.d("PLAYER_NAME_INFO", "Username: " + name);
+        return name;
+    }
+
+    private int updatePlayerUsername(String playerName, String newName)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        ContentValues newValues = new ContentValues();
+        newValues.put(RocketDB.USER_NAME_COLUMN, newName);
+        return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
+    }
 
     private int getPlayerCoinAmount(String playerName)
     {
@@ -738,6 +771,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
 
+    //items
     private ArrayList<ShopItems> getPlayerItems(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -748,15 +782,14 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         cursor.moveToFirst();
         try {
             ArrayList<ShopItems> itemArray = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(items));
-            String itemString = "";
+            String itemString = "\t";
 
             for (ShopItems si : itemArray) {
-                itemString += (si.getItemName() + "\n\t");
-                Log.d("ITEM NAME", si.getItemName());
+                itemString += (si + "\n\t");
             }
-            Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: " + itemString);
+            Log.d("ITEM_INFO", itemString);
             return itemArray;
-        } catch (NullPointerException e)
+        } catch (Exception e)
         {
             Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: null");
             return null;
@@ -779,45 +812,133 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
 
-    //will be implemented once rocket items are created
-//    private ArrayList<ShopItems> getPlayerRockets(String playerName)
-//    {
-//        String where = RocketDB.USER_NAME_COLUMN + "= ?";
-//        String whereArgs[] = {playerName};
-//        String[] resultColumns = {RocketDB.ROCKETS_OWNED_COLUMN};
-//        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
-//        int items = cursor.getColumnIndex(RocketDB.ROCKETS_OWNED_COLUMN);
-//        cursor.moveToFirst();
-//        try {
-//            ArrayList<> itemArray = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(items));
-//            String itemString = "";
-//
-//            for (ShopItems si : itemArray) {
-//                itemString += (si.getItemName() + "\n\t");
-//                Log.d("ITEM NAME", si.getItemName());
-//            }
-//            Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: " + itemString);
-//            return itemArray;
-//        } catch (NullPointerException e)
-//        {
-//            Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: null");
-//            return null;
-//        }
-//    }
-//
-//    private int addRocketToPlayer(String playerName, ShopItems item)
-//    {
-//        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
-//        String[] whereArgs = {playerName};
-//        ArrayList<ShopItems> currentItems = getPlayerItems(playerName);
-//        if(currentItems == null)
-//        {
-//            currentItems = new ArrayList<ShopItems>();
-//        }
-//        currentItems.add(item);
-//        byte[]bytes = ByteArrayConverter.ObjectToByteArray(currentItems);
-//        ContentValues values = new ContentValues();
-//        values.put(RocketDB.ITEMS_OWNED_COLUMN, bytes);
-//        return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
-//    }
+    private int removeItemFromPlayer(String playerName, ShopItems item)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        ArrayList<ShopItems> currentItems = getPlayerItems(playerName);
+        if(currentItems == null)
+        {
+            currentItems = new ArrayList<ShopItems>();
+        }
+        for(int i = 0; i < currentItems.size(); i++)
+        {
+            if(currentItems.get(i).getItemName().equals(item.getItemName()))
+            {
+                currentItems.remove(i);
+                i = currentItems.size();
+                Log.d("REMOVAL", "SUCCESSFUL: " + item.getItemName() + " " + item.getItemCost());
+            }
+        }
+        byte[]bytes = ByteArrayConverter.ObjectToByteArray(currentItems);
+        ContentValues values = new ContentValues();
+        values.put(RocketDB.ITEMS_OWNED_COLUMN, bytes);
+        return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
+    }
+
+    private int removeAllItemsFromPlayer(String playerName)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        ArrayList<ShopItems>items = new ArrayList<ShopItems>();
+        byte[]bytes = ByteArrayConverter.ObjectToByteArray(items);
+        ContentValues values = new ContentValues();
+        values.put(RocketDB.ITEMS_OWNED_COLUMN, bytes);
+        return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
+    }
+
+    //rockets
+
+    private ArrayList<Rocket> getPlayerRockets(String playerName)
+    {
+        String where = RocketDB.USER_NAME_COLUMN + "= ?";
+        String whereArgs[] = {playerName};
+        String[] resultColumns = {RocketDB.ROCKETS_OWNED_COLUMN};
+        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
+        int rockets = cursor.getColumnIndex(RocketDB.ROCKETS_OWNED_COLUMN);
+        cursor.moveToFirst();
+        try {
+            ArrayList<Rocket> rocketArray = (ArrayList<Rocket>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(rockets));
+            String rocketString = "\t";
+
+            for (Rocket r : rocketArray) {
+                rocketString += (r + "\n\t");
+            }
+            Log.d("ROCKET_INFO", rocketString);
+            return rocketArray;
+        } catch (Exception e)
+        {
+            Log.d("ROCKET_INFO", "Username: " + playerName + "\nRocket names: null");
+            return null;
+        }
+    }
+
+    private int addRocketToPlayer(String playerName, Rocket rocket)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        ArrayList<Rocket> currentRockets = getPlayerRockets(playerName);
+        if(currentRockets == null)
+        {
+            currentRockets = new ArrayList<Rocket>();
+        }
+        currentRockets.add(rocket);
+        byte[]bytes = ByteArrayConverter.ObjectToByteArray(currentRockets);
+        ContentValues values = new ContentValues();
+        values.put(RocketDB.ROCKETS_OWNED_COLUMN, bytes);
+        return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
+    }
+
+    private int removeRocketFromPlayer(String playerName, Rocket rocket)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        ArrayList<Rocket> currentRockets = getPlayerRockets(playerName);
+        if(currentRockets == null)
+        {
+            currentRockets = new ArrayList<Rocket>();
+        }
+        for(int i = 0; i < currentRockets.size(); i++)
+        {
+            if(currentRockets.get(i).getName().equals(rocket.getName()))
+            {
+                currentRockets.remove(i);
+                i = currentRockets.size();
+                Log.d("REMOVAL", "SUCCESSFUL: " + rocket.getName());
+            }
+        }
+        byte[]bytes = ByteArrayConverter.ObjectToByteArray(currentRockets);
+        ContentValues values = new ContentValues();
+        values.put(RocketDB.ROCKETS_OWNED_COLUMN, bytes);
+        return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
+    }
+
+    private int removeAllRocketsFromPlayer(String playerName)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        ArrayList<Rocket>rockets = new ArrayList<Rocket>();
+        byte[]bytes = ByteArrayConverter.ObjectToByteArray(rockets);
+        ContentValues values = new ContentValues();
+        values.put(RocketDB.ROCKETS_OWNED_COLUMN, bytes);
+        return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
+    }
+
+    private void insertPlayer(String userName)
+    {
+        try {
+            ContentValues values = new ContentValues();
+            values.put(RocketDB.USER_NAME_COLUMN, userName);
+            values.put(RocketDB.COIN_AMOUNT_COLUMN, 0);
+            values.put(RocketDB.ROCKETS_OWNED_COLUMN, ByteArrayConverter.ObjectToByteArray(new ArrayList<Rocket>()));
+            values.put(RocketDB.ITEMS_OWNED_COLUMN, ByteArrayConverter.ObjectToByteArray(new ArrayList<ShopItems>()));
+            values.put(RocketDB.BLEACH_AMOUNT_COLUMN, 0);
+            getContentResolver().insert(RocketContentProvider.CONTENT_URI, values);
+            Log.d("SENT", "CORRECTLY");
+        } catch(Exception e)
+        {
+            Log.d("SENT", "INCORRECTLY");
+            e.printStackTrace();
+        }
+    }
 }
