@@ -18,24 +18,26 @@ import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.Adapters.RocketGridAdapter;
 import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
+import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.R;
 
 
 public class RocketsFragment extends Fragment {
-ArrayList<Rocket> rockets;
+ArrayList rockets;
     public RocketsFragment() {
-        rockets= new ArrayList<Rocket>();
+    }
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
         rockets=getPlayerRockets(getPlayerName());
-      /*  rockets.add(new Rocket("Apollo",R.drawable.apollorocket,"heck"));
+        rockets.addAll(getPlayerItems(getPlayerName()));
+        /*rockets= new ArrayList<>();
+        rockets.add(new Rocket("Apollo",R.drawable.apollorocket,"heck"));
         rockets.add(new Rocket("Apollo",R.drawable.apollorocket,"heck"));
         rockets.add(new Rocket("Apollo",R.drawable.apollorocket,"heck"));
         rockets.add(new Rocket("Apollo",R.drawable.apollorocket,"heck"));
         rockets.add(new Rocket("Apollo",R.drawable.kamakazirocket,"heck"));
-        rockets.add(new Rocket("Apollo",R.drawable.kamakazirocket,"heck"));*/
-
-    }
-    public void onActivityCreated(Bundle savedInstanceState){
-        super.onActivityCreated(savedInstanceState);
+        rockets.add(new Rocket("Apollo",R.drawable.kamakazirocket,"heck"));
+        rockets.add(new ShopItems("Launch Pad",R.drawable.bleach,getActivity().getString(R.string.launchpad),10000));*/
         GridView inventory = (GridView) getActivity().findViewById(R.id.Inventory);
         inventory.setAdapter(new RocketGridAdapter(getActivity().getBaseContext(),rockets));
     }
@@ -54,6 +56,30 @@ ArrayList<Rocket> rockets;
         Log.d("PLAYER_NAME_INFO", "Username: " + name);
         return name;
     }
+    private ArrayList<ShopItems> getPlayerItems(String playerName)
+    {
+        String where = RocketDB.USER_NAME_COLUMN + "= ?";
+        String whereArgs[] = {playerName};
+        String[] resultColumns = {RocketDB.ITEMS_OWNED_COLUMN};
+        Cursor cursor = getActivity().getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
+        int items = cursor.getColumnIndex(RocketDB.ITEMS_OWNED_COLUMN);
+        cursor.moveToFirst();
+        try {
+            ArrayList<ShopItems> itemArray = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(items));
+            String itemString = "\t";
+
+            for (ShopItems si : itemArray) {
+                itemString += (si + "\n\t");
+            }
+            Log.d("ITEM_INFO", itemString);
+            return itemArray;
+        } catch (Exception e)
+        {
+            Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: null");
+            return null;
+        }
+    }
+
     private ArrayList<Rocket> getPlayerRockets(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";

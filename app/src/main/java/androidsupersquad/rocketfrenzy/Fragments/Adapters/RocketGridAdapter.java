@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import java.util.List;
 
 import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
+import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.R;
 
 /**
@@ -18,9 +19,9 @@ import androidsupersquad.rocketfrenzy.R;
 
 public class RocketGridAdapter extends BaseAdapter{
     private Context mContext;
-    private List<Rocket> rocket;
+    private List rocket;
 
-    public RocketGridAdapter(Context c, List<Rocket> rockets)
+    public RocketGridAdapter(Context c, List rockets)
     {
         mContext=c;
         rocket=rockets;
@@ -49,7 +50,17 @@ public class RocketGridAdapter extends BaseAdapter{
             grid= new View(mContext);
             grid=inflater.inflate((R.layout.rocket_grid_single),null);
             ImageView rocketImage= (ImageView) grid.findViewById(R.id.rocket);
-            rocketImage.setImageResource(rocket.get(position).getImage());
+            if(Rocket.class.isInstance(rocket.get(position)))
+            {
+                Rocket currentRocket = (Rocket) rocket.get(position);
+                rocketImage.setImageResource(currentRocket.getImage());
+            }
+            else
+            {
+                ShopItems currentRocket = (ShopItems) rocket.get(position);
+                rocketImage.setImageResource(currentRocket.getItemImage());
+            }
+
         }
         else
         {
