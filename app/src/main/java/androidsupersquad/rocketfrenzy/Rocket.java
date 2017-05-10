@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import java.util.Random;
 
-import tyrantgit.explosionfield.ExplosionField;
+import androidsupersquad.rocketfrenzy.tyrantgit.explosionfield.ExplosionField;
 
 public class Rocket extends AppCompatActivity {
     private ImageView img , img2;
