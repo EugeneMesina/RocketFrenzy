@@ -18,27 +18,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         <provider android:name="androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider"
             android:authorities="androidsupersquad.rocketfrenzy.DataBase"
             android:exported="false">
         </provider>
-
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".MiniGame.ShakeMiniGame" />
         <activity android:name=".MiniGame.Lottery"></activity>
 
-        <activity android:name=".Rocket"><intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter></activity>
+        <activity android:name=".Rocket"></activity>
     </application>
 
 </manifest>
