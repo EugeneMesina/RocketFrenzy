@@ -771,14 +771,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return coinAmount;
     }
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_rocket);
-        }
-        newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
-        return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
-    }
+    
 
     private int getPlayerBleachAmount(String playerName)
     {
