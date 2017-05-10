@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 import android.net.Uri;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class RocketDB extends SQLiteOpenHelper {
     public static final String BLEACH_AMOUNT_COLUMN = "bleachamount";
 
     public static final String DATABASE_TABLE = "UserInfo";
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 4;
 
     private static String createTable = "CREATE TABLE " + DATABASE_TABLE + "(" +
             ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -48,16 +49,16 @@ public class RocketDB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-       if(oldVersion != newVersion) {
-           db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
-           onCreate(db);
-       }
+        if(oldVersion != newVersion) {
+            db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
+            onCreate(db);
+        }
     }
 
     public long insertPlayer(ContentValues values)
     {
         SQLiteDatabase db = getWritableDatabase();
-                return db.insert(DATABASE_TABLE, null, values);
+        return db.insert(DATABASE_TABLE, null, values);
     }
 
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs)
