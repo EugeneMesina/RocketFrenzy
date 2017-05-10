@@ -20,23 +20,51 @@
         android:id="@+id/UserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ProfilePicture"
         android:gravity="center"
-        android:layout_marginTop="35dp"
         android:background="@android:drawable/editbox_dropdown_dark_frame"
         android:text="@string/username"
         android:textColor="@android:color/holo_red_dark"
-        android:textSize="50dp" />
+        android:textSize="50dp"
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/NameChange"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:id="@+id/NameChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/UserName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="67dp"
         android:background="?android:attr/actionModeBackground"
         android:ems="10"
         android:inputType="textPersonName"
-        android:visibility="invisible" />
+        android:textSize="24sp"
+        android:visibility="invisible"
+        android:layout_below="@+id/ProfilePicture"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+
+    <ImageView
+        android:id="@+id/CoinImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/coin"
+        android:layout_marginLeft="67dp"
+        android:layout_marginStart="67dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/NameChange"
+        android:layout_alignStart="@+id/NameChange"
+        android:layout_marginBottom="106dp" />
+
+    <TextView
+        android:id="@+id/CoinAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:text="@string/coins"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:layout_alignBottom="@+id/CoinImage"
+        android:layout_toRightOf="@+id/CoinImage"
+        android:layout_toEndOf="@+id/CoinImage" />
 </RelativeLayout>

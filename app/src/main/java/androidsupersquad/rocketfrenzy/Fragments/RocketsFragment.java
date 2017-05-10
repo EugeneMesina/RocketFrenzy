@@ -1,6 +1,7 @@
 package androidsupersquad.rocketfrenzy.Fragments;
 
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,21 @@ ArrayList rockets;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_rockets, container, false);
+    }
+    private int addRocketToPlayer(String playerName, Rocket rocket)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        ArrayList<Rocket> currentRockets = getPlayerRockets(playerName);
+        if(currentRockets == null)
+        {
+            currentRockets = new ArrayList<Rocket>();
+        }
+        currentRockets.add(rocket);
+        byte[]bytes = ByteArrayConverter.ObjectToByteArray(currentRockets);
+        ContentValues values = new ContentValues();
+        values.put(RocketDB.ROCKETS_OWNED_COLUMN, bytes);
+        return getActivity().getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
     private String getPlayerName()
     {

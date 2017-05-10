@@ -44,11 +44,16 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         final TextView userName = (TextView) view.findViewById(R.id.UserName);
+        TextView coins = (TextView) view.findViewById(R.id.CoinAmount);
         Typeface myCustomFont = Typeface.createFromAsset(view.getContext().getAssets(),"fonts/TwoLines.ttf");
         userName.setTypeface(myCustomFont);
+        //coins.setTypeface(myCustomFont);
         //TODO: Set USERNAME from DataBase
         userName.setText(getPlayerName());
         userName.setGravity(Gravity.CENTER);
+        Integer coinAmount=getPlayerCoinAmount(getPlayerName());
+        coins.setText(coinAmount.toString() );
+        System.out.println(coinAmount);
         final EditText rename = (EditText) view.findViewById(R.id.NameChange);
         rename.setTypeface(myCustomFont);
         rename.setOnKeyListener(new View.OnKeyListener() {
@@ -91,6 +96,18 @@ public class ProfileFragment extends Fragment {
             }
         });
         return view;
+    }
+    private int getPlayerCoinAmount(String playerName)
+    {
+        String where = RocketDB.USER_NAME_COLUMN + "= ?";
+        String whereArgs[] = {playerName};
+        String[] resultColumns = {RocketDB.COIN_AMOUNT_COLUMN};
+        Cursor cursor = getActivity().getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
+        int coin = cursor.getColumnIndex(RocketDB.COIN_AMOUNT_COLUMN);
+        cursor.moveToFirst();
+        int coinAmount = cursor.getInt(coin);
+        Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
+        return coinAmount;
     }
 
 
