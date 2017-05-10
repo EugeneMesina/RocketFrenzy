@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
         sensorManager.registerListener(MainActivity.this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
 
-        //-------------------------begin testing-------------------------//
+        /*-------------------------begin testing-------------------------//
         Log.d("SENT", "START");
         PlayerDeleteTask task = new PlayerDeleteTask();
         task.execute();
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         getPlayerBleachAmount("USERNAME");
         getPlayerItems("USERNAME");
         getPlayerName();
-        //-------------------------done testing-------------------------//
+        //-------------------------done testing-------------------------*/
 
 
         //Begin.setOnClickListener(this);
@@ -173,11 +173,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 //        Begin.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//
-//
-//
-//
-//
 //            }
 //        });
 

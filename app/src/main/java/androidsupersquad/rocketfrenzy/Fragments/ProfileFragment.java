@@ -1,8 +1,10 @@
 package androidsupersquad.rocketfrenzy.Fragments;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.method.KeyListener;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,8 +23,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.R;
-
+import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class ProfileFragment extends Fragment {
@@ -43,7 +47,7 @@ public class ProfileFragment extends Fragment {
         Typeface myCustomFont = Typeface.createFromAsset(view.getContext().getAssets(),"fonts/TwoLines.ttf");
         userName.setTypeface(myCustomFont);
         //TODO: Set USERNAME from DataBase
-        userName.setText("Android Super Squad");
+        userName.setText(getPlayerName());
         userName.setGravity(Gravity.CENTER);
         final EditText rename = (EditText) view.findViewById(R.id.NameChange);
         rename.setTypeface(myCustomFont);
@@ -57,6 +61,7 @@ public class ProfileFragment extends Fragment {
                    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
                    rename.setVisibility(View.INVISIBLE);
                    String newName= rename.getText().toString();
+                   updatePlayerUsername(getPlayerName(),newName);
                    userName.setText(newName);
                    userName.setGravity(Gravity.CENTER);
                    return true;
@@ -89,6 +94,25 @@ public class ProfileFragment extends Fragment {
     }
 
 
+    private String getPlayerName()
+    {
+        Cursor cursor = getActivity().getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
+        int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
+        cursor.moveToFirst();
+        //still kind of testing//
+        String name = cursor.getString(username);
+        Log.d("PLAYER_NAME_INFO", "Username: " + name);
+        return name;
+    }
+
+    private int updatePlayerUsername(String playerName, String newName)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        ContentValues newValues = new ContentValues();
+        newValues.put(RocketDB.USER_NAME_COLUMN, newName);
+        return getActivity().getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
+    }
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
