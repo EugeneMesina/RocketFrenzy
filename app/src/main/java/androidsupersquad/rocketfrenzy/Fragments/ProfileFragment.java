@@ -49,6 +49,7 @@ public class ProfileFragment extends Fragment {
         userName.setTypeface(myCustomFont);
         //coins.setTypeface(myCustomFont);
         //TODO: Set USERNAME from DataBase
+
         userName.setText(getPlayerName());
         userName.setGravity(Gravity.CENTER);
         Integer coinAmount=getPlayerCoinAmount(getPlayerName());
