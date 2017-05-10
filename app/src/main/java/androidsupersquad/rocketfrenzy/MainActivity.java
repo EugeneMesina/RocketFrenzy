@@ -101,6 +101,12 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
         sensorManager.registerListener(MainActivity.this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
 
+        if(getPlayerName()==null)
+        {
+            PlayerDeleteTask task = new PlayerDeleteTask();
+            task.execute();
+            insertPlayer("USERNAME");
+        }
         /*-------------------------begin testing-------------------------//
         Log.d("SENT", "START");
         PlayerDeleteTask task = new PlayerDeleteTask();
