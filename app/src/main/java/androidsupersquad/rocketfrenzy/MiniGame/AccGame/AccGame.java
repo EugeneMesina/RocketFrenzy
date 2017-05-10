@@ -15,8 +15,8 @@ import androidsupersquad.rocketfrenzy.R;
  * Jimmy Chao
  * 012677182
  */
-public class MainActivity extends AppCompatActivity  {
-    private static final String TAG="com.example.accelerometer.MainActivity";
+public class AccGame extends AppCompatActivity  {
+    private static final String TAG="com.example.accelerometer.AccGame";
     private PowerManager.WakeLock mWakeLock;
     private SimulationView simulationView;
     @Override

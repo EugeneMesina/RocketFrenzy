@@ -37,5 +37,6 @@
         android:layout_marginTop="67dp"
         android:background="?android:attr/actionModeBackground"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:visibility="invisible" />
 </RelativeLayout>
