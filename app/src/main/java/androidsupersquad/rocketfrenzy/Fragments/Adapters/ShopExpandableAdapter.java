@@ -5,6 +5,8 @@ import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.R;
 
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,16 +33,16 @@ import java.util.List;
  */
 public class ShopExpandableAdapter extends BaseExpandableListAdapter {
    //The current context the ExpandableListView is in
-    private Context context;
+    private Activity context;
     //The shop items to display
-    private List<ShopItems> ItemList;
+    private ArrayList<ShopItems> ItemList;
 
     /**
      * Constructs the values passed in from the Shop Fragment
      * @param context the current context the fragment is in
      * @param list the list of items
      */
-    public ShopExpandableAdapter(Context context, List<ShopItems> list)
+    public ShopExpandableAdapter(Activity context, ArrayList<ShopItems> list)
     {
         this.context=context;
         ItemList= list;
@@ -67,6 +69,7 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         //set the text to the description of the item
         TextView description= (TextView) convertView.findViewById(R.id.Description);
         description.setText(currentItem.getItemDescription());
+        final TextView coinCount =(TextView) context.findViewById(R.id.ShopCoinAmount);
         //set the cost of the item onto the button
         Button cost = (Button) convertView.findViewById(R.id.BuyButton);
         cost.setText(((Integer)currentItem.getItemCost()).toString());
@@ -81,8 +84,22 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             Integer coinAmount = getPlayerCoinAmount(getPlayerName())-currentItem.getItemCost();
-                            addItemToPlayer(getPlayerName(),currentItem);
-                            updatePlayerCoinAmount(getPlayerName(),coinAmount,true);
+                            if(currentItem.getItemName().equals("Launch Pad Bundle"))
+                            {
+                                addItemToPlayer(getPlayerName(),ItemList.get(0));
+                                addItemToPlayer(getPlayerName(),ItemList.get(0));
+                                addItemToPlayer(getPlayerName(),ItemList.get(0));
+                                updatePlayerCoinAmount(getPlayerName(), coinAmount, true);
+                                Integer amount = getPlayerCoinAmount(getPlayerName());
+                                coinCount.setText(amount.toString());
+
+                            }
+                            else {
+                                addItemToPlayer(getPlayerName(), currentItem);
+                                updatePlayerCoinAmount(getPlayerName(), coinAmount, true);
+                                Integer amount = getPlayerCoinAmount(getPlayerName());
+                                coinCount.setText(amount.toString());
+                            }
                         }
                     });
                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

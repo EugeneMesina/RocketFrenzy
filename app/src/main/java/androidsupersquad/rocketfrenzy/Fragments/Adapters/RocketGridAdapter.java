@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -54,12 +55,19 @@ public class RocketGridAdapter extends BaseAdapter{
             {
                 Rocket currentRocket = (Rocket) rocket.get(position);
                 rocketImage.setImageResource(currentRocket.getImage());
+                rocketImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(mContext,"Rocket Clicked",Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
             else
             {
                 ShopItems currentRocket = (ShopItems) rocket.get(position);
                 rocketImage.setImageResource(currentRocket.getItemImage());
             }
+
 
         }
         else

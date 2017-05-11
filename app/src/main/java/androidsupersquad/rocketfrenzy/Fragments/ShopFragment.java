@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class ShopFragment extends Fragment {
     //Data Structure to hold all shop items
-    private List<ShopItems> Items;
+    private ArrayList<ShopItems> Items;
     /**
      * Fragment Constructor that creates all the items in the shop
      */
@@ -36,12 +36,12 @@ public class ShopFragment extends Fragment {
     {
         //Create new ArrayList to hold existing items or add items
         Items = new ArrayList<ShopItems>();
-        Items.add(new ShopItems("Launch Pad",R.drawable.bleach,getActivity().getString(R.string.launchpad),10000));
-        Items.add(new ShopItems("Launch Pad Bundle",R.drawable.bleach,getActivity().getString(R.string.launchpad_bundle),10000));
-        Items.add(new ShopItems("Horizon Icon",R.drawable.horizonicon,getActivity().getString(R.string.Horizon_Icon),10000));
-        Items.add(new ShopItems("Fire Icon",R.drawable.fireemblem,getActivity().getString(R.string.Flame_Icon),10000));
-        Items.add(new ShopItems("Skull Icon",R.drawable.skullicon,getActivity().getString(R.string.Skull_Icon),10000));
-        Items.add(new ShopItems("Bleach",R.drawable.bleach,getActivity().getString(R.string.Bleach),10000));
+        Items.add(new ShopItems("Launch Pad",R.drawable.launchpad,getActivity().getString(R.string.launchpad),50));
+        Items.add(new ShopItems("Launch Pad Bundle",R.drawable.launchpadbundle,getActivity().getString(R.string.launchpad_bundle),100));
+        Items.add(new ShopItems("Horizon Icon",R.drawable.horizonicon,getActivity().getString(R.string.Horizon_Icon),500));
+        Items.add(new ShopItems("Fire Icon",R.drawable.fireemblem,getActivity().getString(R.string.Flame_Icon),1000));
+        Items.add(new ShopItems("Skull Icon",R.drawable.skullicon,getActivity().getString(R.string.Skull_Icon),250));
+        Items.add(new ShopItems("Bleach",R.drawable.bleach,getActivity().getString(R.string.Bleach),1000));
     }
     /**
      * Sets teh Expandable List View Adapter with specific
