@@ -19,9 +19,10 @@ public class RocketDB extends SQLiteOpenHelper {
     public static final String ROCKETS_OWNED_COLUMN = "rocketsowned";
     public static final String ITEMS_OWNED_COLUMN = "itemsowned";
     public static final String BLEACH_AMOUNT_COLUMN = "bleachamount";
+    public static final String PLAYER_ICON_COLUMN = "playericon";
 
     public static final String DATABASE_TABLE = "UserInfo";
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 10;
 
     private static String createTable = "CREATE TABLE " + DATABASE_TABLE + "(" +
             ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -29,7 +30,8 @@ public class RocketDB extends SQLiteOpenHelper {
             COIN_AMOUNT_COLUMN + " INT, " +
             ROCKETS_OWNED_COLUMN + " BLOB, " +
             ITEMS_OWNED_COLUMN + " BLOB, " +
-            BLEACH_AMOUNT_COLUMN + " INT" +
+            BLEACH_AMOUNT_COLUMN + " INT," +
+            PLAYER_ICON_COLUMN + " STRING" +
             ")";
 
     public RocketDB(Context context) {
@@ -66,7 +68,7 @@ public class RocketDB extends SQLiteOpenHelper {
 
     public Cursor getAllPlayers() {
         SQLiteDatabase db = getReadableDatabase();
-        return db.query(DATABASE_TABLE, new String[] {USER_NAME_COLUMN, COIN_AMOUNT_COLUMN, ROCKETS_OWNED_COLUMN, ITEMS_OWNED_COLUMN, BLEACH_AMOUNT_COLUMN}, null, null, null, null, null);
+        return db.query(DATABASE_TABLE, new String[] {USER_NAME_COLUMN, COIN_AMOUNT_COLUMN, ROCKETS_OWNED_COLUMN, ITEMS_OWNED_COLUMN, BLEACH_AMOUNT_COLUMN, PLAYER_ICON_COLUMN}, null, null, null, null, null);
     }
 
     public int deleteAllInformation(String name)

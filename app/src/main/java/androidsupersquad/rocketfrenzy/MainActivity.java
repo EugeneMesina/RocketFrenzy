@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         if(getPlayerName()==null){
            insertPlayer("USERNAME");
         }
+
         /*-------------------------begin testing-------------------------//
         Log.d("SENT", "START");
         PlayerDeleteTask task = new PlayerDeleteTask();
@@ -722,6 +723,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             int rockets = cursor.getColumnIndex(RocketDB.ROCKETS_OWNED_COLUMN);
             int items = cursor.getColumnIndex(RocketDB.ITEMS_OWNED_COLUMN);
             int bleach = cursor.getColumnIndex(RocketDB.BLEACH_AMOUNT_COLUMN);
+            int icon = cursor.getColumnIndex(RocketDB.PLAYER_ICON_COLUMN);
             cursor.moveToFirst();
             //still kind of testing//
             ArrayList<ShopItems> newList = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(items));
@@ -736,7 +738,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             {
                 rocketString += (r + "\n\t");
             }
-            Log.d("DATABASE_INFO", "Username: " + cursor.getString(username) + "\nCoin amount: " + cursor.getInt(coin) + "\nBleach amount: " + cursor.getInt(bleach) + "\nRockets Owned: " + rocketString + "\nItems Owned: " + itemString);
+            Log.d("DATABASE_INFO", "Username: " + cursor.getString(username) + "\nCoin amount: " + cursor.getInt(coin) + "\nBleach amount: " + cursor.getInt(bleach) + "\nRockets Owned: " + rocketString + "\nItems Owned: " + itemString + "\nIcon String: " + cursor.getInt(icon));
             return null;
         }
     }
@@ -1005,6 +1007,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             values.put(RocketDB.ROCKETS_OWNED_COLUMN, ByteArrayConverter.ObjectToByteArray(new ArrayList<Rocket>()));
             values.put(RocketDB.ITEMS_OWNED_COLUMN, ByteArrayConverter.ObjectToByteArray(new ArrayList<ShopItems>()));
             values.put(RocketDB.BLEACH_AMOUNT_COLUMN, 0);
+            values.put(RocketDB.PLAYER_ICON_COLUMN, "testString.png");
             getContentResolver().insert(RocketContentProvider.CONTENT_URI, values);
             Log.d("SENT", "CORRECTLY");
         } catch(Exception e)
@@ -1012,5 +1015,27 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             Log.d("SENT", "INCORRECTLY");
             e.printStackTrace();
         }
+    }
+
+    private String getPlayerIconString(String playerName)
+    {
+        String where = RocketDB.USER_NAME_COLUMN + "= ?";
+        String whereArgs[] = {playerName};
+        String[] resultColumns = {RocketDB.PLAYER_ICON_COLUMN};
+        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
+        int icon = cursor.getColumnIndex(RocketDB.PLAYER_ICON_COLUMN);
+        cursor.moveToFirst();
+        String iconString = cursor.getString(icon);
+        Log.d("ICON_INFO", "Username: " + playerName + "\nIcon string: " + iconString);
+        return iconString;
+    }
+
+    private int updatePlayerIconString(String playerName, String newIconString)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        ContentValues newValues = new ContentValues();
+        newValues.put(RocketDB.PLAYER_ICON_COLUMN, newIconString);
+        return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
 }
