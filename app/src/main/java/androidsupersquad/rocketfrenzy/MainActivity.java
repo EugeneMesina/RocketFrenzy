@@ -693,6 +693,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                         }
                         else{
                             //do nothing
+
                         }
 
 
