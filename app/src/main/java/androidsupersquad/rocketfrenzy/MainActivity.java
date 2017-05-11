@@ -60,7 +60,6 @@ import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.Fragments.ProfileFragment;
 import androidsupersquad.rocketfrenzy.Fragments.RocketsFragment;
 import androidsupersquad.rocketfrenzy.Fragments.ShopFragment;
-import androidsupersquad.rocketfrenzy.MiniGame.AccGame.AccGame;
 import androidsupersquad.rocketfrenzy.MiniGame.Lottery;
 import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
 
@@ -106,9 +105,9 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         db = new RocketDB(this);
 
        // insertPlayer("USERNAME");
-        if(getPlayerName()==null){
-           insertPlayer("USERNAME");
-        }
+        //if(getPlayerName()==null){
+           //insertPlayer("USERNAME");
+        //}
         /*-------------------------begin testing-------------------------//
         Log.d("SENT", "START");
         PlayerDeleteTask task = new PlayerDeleteTask();
@@ -544,12 +543,13 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                             case 2:
                                 //lottery slot machine
 
-                                        game = new Intent(MainActivity.this, Rocket.class);
-                                        //accgame
-                                        break;
-                                    case 3:
+                                game = new Intent(MainActivity.this, ShakeMiniGame.class);
+                                //accgame
+                                break;
+                            case 3:
 
-                                game = new Intent(MainActivity.this, AccGame.class);
+                                game = new Intent(MainActivity.this, ShakeMiniGame.class);
+                                break;
                                 //daniel's game
                             case 4:
 
@@ -559,18 +559,19 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
                         }
                         startActivity(game);
-
+                        map.clear();
+                        finish();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-
+                        map.clear();
 
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
-        map.clear();
+
 
 
     }
@@ -678,14 +679,15 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                     @Override
                     public void run() {
                         //  img.setVisibility(View.GONE);
-                        if(userLocation!=null) {
+                        if(userLocation!=null ) {
                             Icon icon = IconFactory.getInstance(MainActivity.this).fromResource(R.drawable.profile);
                             final MarkerOptions gameMarker = new MarkerOptions();
-                            gameMarker.position(new LatLng(userLocation))
+                            map.addMarker( new MarkerOptions()
+                                    .position(new LatLng(userLocation))
                                     .title("Game Start")
                                     .snippet("Play Game")
-                                    .icon(icon);
-                            map.addMarker(gameMarker)   ;
+                                    .icon(icon));
+
 
 
                         }

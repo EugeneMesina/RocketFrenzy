@@ -3,6 +3,7 @@ package androidsupersquad.rocketfrenzy;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -81,6 +82,17 @@ public class Rocket extends AppCompatActivity {
 
             }
         }, 3000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+            Intent x = new Intent(Rocket.this, MainActivity.class);
+            startActivity(x);
+            finish();
+
+            }
+        }, 5000);
+
+
 
 
         }

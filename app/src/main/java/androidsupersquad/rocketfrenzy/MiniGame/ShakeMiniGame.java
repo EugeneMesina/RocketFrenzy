@@ -1,5 +1,6 @@
 package androidsupersquad.rocketfrenzy.MiniGame;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -14,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidsupersquad.rocketfrenzy.MainActivity;
 import androidsupersquad.rocketfrenzy.R;
 
 
@@ -61,11 +63,15 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
                                     {
                                         Counter.setText("You Won");
                                         this.cancel();
+                                        Intent x = new Intent(ShakeMiniGame.this, MainActivity.class);
+                                        startActivity(x);
                                         finish();
                                     }
                                     else {
                                         Counter.setText("Game Over");
                                         this.cancel();
+                                        Intent x = new Intent(ShakeMiniGame.this, MainActivity.class);
+                                        startActivity(x);
                                         finish();
                                     }
                                 }
