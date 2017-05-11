@@ -29,8 +29,9 @@ ArrayList rockets;
     }
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
+        //TODO: For Eugene Uncomment these Lines then run the inventory fragment to get these rockets
         //Delete After
-      /*  addRocketToPlayer(getPlayerName(),new RocketLaunch("Apollo",R.drawable.apollorocket, "Heck"));
+        /*addRocketToPlayer(getPlayerName(),new RocketLaunch("Apollo",R.drawable.apollorocket, "Heck"));
         addRocketToPlayer(getPlayerName(),new RocketLaunch("Horizon",R.drawable.horizonrocket, "Heck"));
         addRocketToPlayer(getPlayerName(),new RocketLaunch("Something",R.drawable.kamakazirocket, "Heck"));*/
         //Delete After
