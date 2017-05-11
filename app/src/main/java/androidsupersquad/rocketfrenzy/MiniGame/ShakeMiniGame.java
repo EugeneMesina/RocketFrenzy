@@ -61,10 +61,12 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
                                     {
                                         Counter.setText("You Won");
                                         this.cancel();
+                                        finish();
                                     }
                                     else {
                                         Counter.setText("Game Over");
                                         this.cancel();
+                                        finish();
                                     }
                                 }
                             }.start();

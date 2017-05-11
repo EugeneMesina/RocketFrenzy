@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
-import java.util.ArrayList;
-
 /**
  * Created by cman4_000 on 4/16/2017.
  */
@@ -23,7 +21,7 @@ public class RocketDB extends SQLiteOpenHelper {
     public static final String BLEACH_AMOUNT_COLUMN = "bleachamount";
 
     public static final String DATABASE_TABLE = "UserInfo";
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
 
     private static String createTable = "CREATE TABLE " + DATABASE_TABLE + "(" +
             ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

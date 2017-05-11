@@ -15,6 +15,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -172,7 +173,13 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
                 map = mapboxMap;
-
+                mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(@NonNull Marker marker) {
+                        startGame();
+                        return true;
+                    }
+                });
 
             }
         });
@@ -518,14 +525,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
     private void startGame(){
-        sensorManager.unregisterListener(this);
-        Icon icon = IconFactory.getInstance(MainActivity.this).fromResource(R.drawable.profile);
-        final MarkerOptions gameMarker = new MarkerOptions();
-        gameMarker.position(new LatLng(userLocation))
-                .title("Game Start")
-                .snippet("Play Game")
-                .icon(icon);
-        map.addMarker(gameMarker);
 
         Random random = new Random();
         ran = random.nextInt(4)+1;
@@ -560,18 +559,18 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
                         }
                         startActivity(game);
-                        game = null;
+
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-                        map.clear();
+
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
-        sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),SensorManager.SENSOR_DELAY_NORMAL);
+        map.clear();
 
 
     }
@@ -675,8 +674,29 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             System.out.print("WOW"  + steps);
             Log.d("step",Float.toString(steps));
             if(steps%1==0){
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //  img.setVisibility(View.GONE);
+                        if(userLocation!=null) {
+                            Icon icon = IconFactory.getInstance(MainActivity.this).fromResource(R.drawable.profile);
+                            final MarkerOptions gameMarker = new MarkerOptions();
+                            gameMarker.position(new LatLng(userLocation))
+                                    .title("Game Start")
+                                    .snippet("Play Game")
+                                    .icon(icon);
+                            map.addMarker(gameMarker)   ;
 
-                startGame();
+
+                        }
+                        else{
+                            //do nothing
+                        }
+
+
+                    }
+                }, 500);
+
 
 
             }
@@ -747,7 +767,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
         cursor.moveToFirst();
         //still kind of testing//
-        String name = cursor.getString(username);
+         String name = cursor.getString(username);
+
         Log.d("PLAYER_NAME_INFO", "Username: " + name);
         return name;
     }
