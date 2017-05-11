@@ -73,6 +73,8 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         //set the cost of the item onto the button
         Button cost = (Button) convertView.findViewById(R.id.BuyButton);
         cost.setText(((Integer)currentItem.getItemCost()).toString());
+        //TODO: For Eugene Uncomment this Line To Give Yourself A bunch of Gold
+        //updatePlayerCoinAmount(getPlayerName(), 10000, true);
         cost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
