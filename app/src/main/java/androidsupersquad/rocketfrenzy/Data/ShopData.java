@@ -10,10 +10,10 @@ import androidsupersquad.rocketfrenzy.R;
  */
 
 public class ShopData {
-        public final static ShopItems LaunchPad =new ShopItems("Launch Pad",R.drawable.launchpad, Resources.getSystem().getString(R.string.launchpad),50);
-        public final static ShopItems LaunchPadBundle =new ShopItems("Launch Pad Bundle",R.drawable.launchpadbundle,Resources.getSystem().getString(R.string.launchpad_bundle),100);
-        public final static ShopItems HorizonIcon =new ShopItems("Horizon Icon",R.drawable.horizonicon,Resources.getSystem().getString(R.string.Horizon_Icon),500);
-        public final static ShopItems FireIcon =new ShopItems("Fire Icon",R.drawable.fireemblem,Resources.getSystem().getString(R.string.Flame_Icon),1000);
-        public final static ShopItems SkullIcon =new ShopItems("Skull Icon",R.drawable.skullicon,Resources.getSystem().getString(R.string.Skull_Icon),250);
-        public final static ShopItems Bleach =new ShopItems("Bleach",R.drawable.bleach,Resources.getSystem().getString(R.string.Bleach),1000);
+        public static ShopItems LaunchPad =new ShopItems("Launch Pad",R.drawable.launchpad, "The launch pad allows you to launch rockets that you own. Works on any types of rockets.",50);
+        public static ShopItems LaunchPadBundle =new ShopItems("Launch Pad Bundle",R.drawable.launchpadbundle,"A pack of 3 launch pads that will allows you to launch more rockets!",100);
+        public static ShopItems HorizonIcon =new ShopItems("Horizon Icon",R.drawable.horizonicon,"A nice looking icon of the horizon. Change up your profile now! ",500);
+        public static ShopItems FireIcon =new ShopItems("Fire Icon",R.drawable.fireemblem,"A nice looking icon of fire. Change up your profile now! ",1000);
+        public static ShopItems SkullIcon =new ShopItems("Skull Icon",R.drawable.skullicon,"A nice looking icon of a skull. Change up your profile now! ",250);
+        public static ShopItems Bleach =new ShopItems("Bleach",R.drawable.bleach,"A Killer Substance",1000);
 }
