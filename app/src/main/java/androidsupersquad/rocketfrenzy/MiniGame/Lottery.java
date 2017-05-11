@@ -58,7 +58,7 @@ public class Lottery extends AppCompatActivity {
 
                         getScore();
                     }
-                },500);
+                },2000);
             }
         });
     }

@@ -176,67 +176,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 //fragmentHolder.setVisibility(View.GONE);
             }
         });
-        /*
-        menu[0].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Toast.makeText(MainActivity.this, "Inside menu[0] onClick", Toast.LENGTH_SHORT).show();
-                if(isMenuOpen) {
-                    //Toast.makeText(MainActivity.this, "isMenuOpen is true", Toast.LENGTH_SHORT).show();
-                    closeMenu();
-                } else {
-                    //Toast.makeText(MainActivity.this, "isMenuOpen is false", Toast.LENGTH_SHORT).show();
-                    openMenu();
-                }
-            }
-        });
-        menu[1].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Close Menu
-                closeMenu();
-                //Reinstantiate transaction
-                transaction = getSupportFragmentManager().beginTransaction();
-                //Set holder to visible even though alpha = 0
-                fragmentHolder.setVisibility(View.VISIBLE);
-                //Fade in when loading frame
-                fragmentHolder.animate().alpha(1F);
-                //Only the current panel is clickable
-                fragmentHolder.setClickable(true);
-                //Adds Profile Fragment
-                transaction.add(R.id.fragmentHolder, new ProfileFragment(), Integer.toString(getFragmentCount()));
-                //Adds Profile Fragment ID to backStack
-                transaction.addToBackStack(Integer.toString(getFragmentCount()));
-                //Finish Changes
-                transaction.commit();
-                //Execute commits
-                fragmentManager.executePendingTransactions();
-                //transaction.commit();
-                //Log.d("ADDED TO BACKSTACK", "BACKSTACK COUNT: " + fragmentManager.getBackStackEntryCount());
-            }
-        });
-        menu[2].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "TODO: Go to inventory", Toast.LENGTH_LONG).show();
-                //startActivity(toProfile);
-            }
-        });
-        menu[3].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "TODO: Go to shop", Toast.LENGTH_LONG).show();
-                //startActivity(toProfile);
-            }
-        });
-        menu[4].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "TODO: Go to Daily Tasks", Toast.LENGTH_LONG).show();
 
-                //startActivity(toProfile);
-            }
-        });*/
         menu[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
