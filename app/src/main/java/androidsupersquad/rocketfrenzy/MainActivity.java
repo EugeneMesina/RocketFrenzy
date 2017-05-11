@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
         db = new RocketDB(this);
 
-       // insertPlayer("USERNAME");
+        insertPlayer("USERNAME");
         if(getPlayerName()==null){
            insertPlayer("USERNAME");
         }
