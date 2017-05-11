@@ -34,6 +34,7 @@ import android.widget.Toast;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import androidsupersquad.rocketfrenzy.Data.ShopData;
 import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
@@ -59,20 +60,17 @@ public class ProfileFragment extends Fragment {
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.context_menu, menu);
         ArrayList<ShopItems> Icons = getPlayerItems(getPlayerName());
-        ShopItems Icon1 = new ShopItems("Horizon Icon");
-        ShopItems Icon2 = new ShopItems("Fire Icon");
-        ShopItems Icon3 = new ShopItems("Skull Icon");
-        if(Icons.contains(Icon1))
+        if(Icons.contains(ShopData.HorizonIcon))
         {
             MenuItem HIcon = menu.findItem(R.id.Horizon);
             HIcon.setVisible(true);
         }
-        if(Icons.contains(Icon2))
+        if(Icons.contains(ShopData.FireIcon))
         {
            MenuItem FIcon =menu.findItem(R.id.FireEmblem);
             FIcon.setVisible(true);
         }
-        if(Icons.contains(Icon3))
+        if(Icons.contains(ShopData.SkullIcon))
         {
            MenuItem SIcon= menu.findItem(R.id.SkullIcon);
                    SIcon.setVisible(true);

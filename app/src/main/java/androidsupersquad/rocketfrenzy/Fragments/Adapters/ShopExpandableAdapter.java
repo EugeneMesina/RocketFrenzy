@@ -1,4 +1,5 @@
 package androidsupersquad.rocketfrenzy.Fragments.Adapters;
+import androidsupersquad.rocketfrenzy.Data.ShopData;
 import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
@@ -88,9 +89,9 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
                             Integer coinAmount = getPlayerCoinAmount(getPlayerName())-currentItem.getItemCost();
                             if(currentItem.getItemName().equals("Launch Pad Bundle"))
                             {
-                                addItemToPlayer(getPlayerName(),ItemList.get(0));
-                                addItemToPlayer(getPlayerName(),ItemList.get(0));
-                                addItemToPlayer(getPlayerName(),ItemList.get(0));
+                                addItemToPlayer(getPlayerName(), ShopData.LaunchPad);
+                                addItemToPlayer(getPlayerName(), ShopData.LaunchPad);
+                                addItemToPlayer(getPlayerName(), ShopData.LaunchPad);
                                 updatePlayerCoinAmount(getPlayerName(), coinAmount, true);
                                 Integer amount = getPlayerCoinAmount(getPlayerName());
                                 coinCount.setText(amount.toString());

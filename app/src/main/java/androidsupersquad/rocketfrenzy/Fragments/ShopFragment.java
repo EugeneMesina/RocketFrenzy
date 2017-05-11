@@ -1,4 +1,5 @@
 package androidsupersquad.rocketfrenzy.Fragments;
+import androidsupersquad.rocketfrenzy.Data.ShopData;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.Adapters.ShopExpandableAdapter;
@@ -36,12 +37,12 @@ public class ShopFragment extends Fragment {
     {
         //Create new ArrayList to hold existing items or add items
         Items = new ArrayList<ShopItems>();
-        Items.add(new ShopItems("Launch Pad",R.drawable.launchpad,getActivity().getString(R.string.launchpad),50));
-        Items.add(new ShopItems("Launch Pad Bundle",R.drawable.launchpadbundle,getActivity().getString(R.string.launchpad_bundle),100));
-        Items.add(new ShopItems("Horizon Icon",R.drawable.horizonicon,getActivity().getString(R.string.Horizon_Icon),500));
-        Items.add(new ShopItems("Fire Icon",R.drawable.fireemblem,getActivity().getString(R.string.Flame_Icon),1000));
-        Items.add(new ShopItems("Skull Icon",R.drawable.skullicon,getActivity().getString(R.string.Skull_Icon),250));
-        Items.add(new ShopItems("Bleach",R.drawable.bleach,getActivity().getString(R.string.Bleach),1000));
+        Items.add(ShopData.LaunchPad);
+        Items.add(ShopData.LaunchPadBundle);
+        Items.add(ShopData.HorizonIcon);
+        Items.add(ShopData.FireIcon);
+        Items.add(ShopData.SkullIcon);
+        Items.add(ShopData.Bleach);
     }
     /**
      * Sets teh Expandable List View Adapter with specific
