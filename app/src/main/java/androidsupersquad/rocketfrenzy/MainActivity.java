@@ -336,10 +336,18 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         super.onResume();
         mapView.onResume();
         sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),SensorManager.SENSOR_DELAY_NORMAL);
+        if (locationEngineListener != null && userLocation == null) {
+            locationEngine.addLocationEngineListener(locationEngineListener);
+            locationEngine.activate();
+        }
     }
 
     @Override
     protected void onStart() {
+        if (locationEngineListener != null && userLocation == null) {
+            locationEngine.addLocationEngineListener(locationEngineListener);
+            locationEngine.activate();
+        }
         super.onStart();
         mapView.onStart();
     }
@@ -408,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 return;
             }
             Location lastLocation = locationEngine.getLastLocation();
-            userLocation = lastLocation;
+
             if (lastLocation != null) {
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lastLocation), 16));
             }
@@ -426,7 +434,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                         // listener so the camera isn't constantly updating when the user location
                         // changes. When the user disables and then enables the location again, this
                         // listener is registered again and will adjust the camera once again.
-
+                        userLocation = location;
                         CameraPosition position = new CameraPosition.Builder()
                                 .target(new LatLng(location)) // Sets the new camera position
                                 .zoom(17) // Sets the zoom
@@ -694,7 +702,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                         }
                         else{
                             //do nothing
-
+                            Log.d("no location", "no location");
                         }
 
 
