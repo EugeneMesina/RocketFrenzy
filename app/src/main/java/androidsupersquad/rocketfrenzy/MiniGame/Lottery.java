@@ -77,7 +77,7 @@ public class Lottery extends AppCompatActivity {
 
                         getScore();
                     }
-                },2500);
+                },2000);
             }
         });
     }
@@ -146,6 +146,7 @@ public class Lottery extends AppCompatActivity {
         }
         Intent x = new Intent(Lottery.this, MainActivity.class);
         startActivity(x);
+        finish();
     }
     private String getPlayerName()
     {
