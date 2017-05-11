@@ -1,16 +1,20 @@
 package androidsupersquad.rocketfrenzy.MiniGame;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.Random;
 
+import androidsupersquad.rocketfrenzy.MainActivity;
 import androidsupersquad.rocketfrenzy.R;
 
 public class Lottery extends AppCompatActivity {
@@ -34,6 +38,7 @@ public class Lottery extends AppCompatActivity {
         rocket.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                rocket.setEnabled(false);
                 slot1.setBackgroundResource(R.drawable.animate);
                 final AnimationDrawable slot1anim = (AnimationDrawable) slot1.getBackground();
                 slot1anim.start();
@@ -47,6 +52,11 @@ public class Lottery extends AppCompatActivity {
                 slot3anim.start();
 
                 Handler handler = new Handler();
+                RotateAnimation r;
+                r = new RotateAnimation(0.0f, -10.0f * 360.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                r.setDuration(2000);
+                r.setRepeatCount(0);
+                rocket.startAnimation(r);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -58,7 +68,7 @@ public class Lottery extends AppCompatActivity {
 
                         getScore();
                     }
-                },3000);
+                },2500);
             }
         });
     }
@@ -120,5 +130,7 @@ public class Lottery extends AppCompatActivity {
         else{
             Toast.makeText(this,"Loser",Toast.LENGTH_LONG).show();
         }
+        Intent x = new Intent(Lottery.this, MainActivity.class);
+        startActivity(x);
     }   
 }
