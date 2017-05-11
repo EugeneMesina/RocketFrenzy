@@ -1,20 +1,30 @@
 package androidsupersquad.rocketfrenzy.MiniGame;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import androidsupersquad.rocketfrenzy.Data.RocketData;
+import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
+import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
+import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
+import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
 import androidsupersquad.rocketfrenzy.MainActivity;
 import androidsupersquad.rocketfrenzy.R;
 
@@ -63,6 +73,10 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
                                     {
                                         Counter.setText("You Won");
                                         this.cancel();
+                                        if(getPlayerName()!=null) {
+                                            addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
+                                        }
+
                                         Intent x = new Intent(ShakeMiniGame.this, MainActivity.class);
                                         startActivity(x);
                                         finish();
@@ -81,6 +95,15 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
                         }
                     }
                 });
+
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Ensure no memory leak occurs if we register the location listener but the call hasn't
+        // been made yet.
 
 
     }
@@ -122,5 +145,59 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
             sensorManager.unregisterListener(this);
         }
     }
+    private String getPlayerName()
+    {
+        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
+        int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
+        cursor.moveToFirst();
+        //still kind of testing//
+        String name = cursor.getString(username);
+
+        Log.d("PLAYER_NAME_INFO", "Username: " + name);
+        return name;
+    }
+
+
+    private ArrayList<Rocket> getPlayerRockets(String playerName)
+    {
+        String where = RocketDB.USER_NAME_COLUMN + "= ?";
+        String whereArgs[] = {playerName};
+        String[] resultColumns = {RocketDB.ROCKETS_OWNED_COLUMN};
+        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
+        int rockets = cursor.getColumnIndex(RocketDB.ROCKETS_OWNED_COLUMN);
+        cursor.moveToFirst();
+        try {
+            ArrayList<Rocket> rocketArray = (ArrayList<Rocket>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(rockets));
+            String rocketString = "\t";
+
+            for (Rocket r : rocketArray) {
+                rocketString += (r + "\n\t");
+            }
+            Log.d("ROCKET_INFO", rocketString);
+            return rocketArray;
+        } catch (Exception e)
+        {
+            Log.d("ROCKET_INFO", "Username: " + playerName + "\nRocketLaunch names: null");
+            return null;
+        }
+    }
+
+
+    private int addRocketToPlayer(String playerName, Rocket rocket)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        ArrayList<Rocket> currentRockets = getPlayerRockets(playerName);
+        if(currentRockets == null)
+        {
+            currentRockets = new ArrayList<Rocket>();
+        }
+        currentRockets.add(rocket);
+        byte[]bytes = ByteArrayConverter.ObjectToByteArray(currentRockets);
+        ContentValues values = new ContentValues();
+        values.put(RocketDB.ROCKETS_OWNED_COLUMN, bytes);
+        return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
+    }
+
 
 }
