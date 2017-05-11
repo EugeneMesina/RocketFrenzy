@@ -86,6 +86,7 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
                             .setTitle("Buy?");
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            ArrayList<ShopItems> PlayerItem=getPlayerItems(getPlayerName());
                             Integer coinAmount = getPlayerCoinAmount(getPlayerName())-currentItem.getItemCost();
                             if(currentItem.getItemName().equals("Launch Pad Bundle"))
                             {
@@ -96,6 +97,10 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
                                 Integer amount = getPlayerCoinAmount(getPlayerName());
                                 coinCount.setText(amount.toString());
 
+                            }
+                            else if(PlayerItem.contains(currentItem)&& currentItem.getItemName().contains("Icon"))
+                            {
+                                Toast.makeText(context, "You have this Icon Already",Toast.LENGTH_SHORT).show();
                             }
                             else {
                                 addItemToPlayer(getPlayerName(), currentItem);
