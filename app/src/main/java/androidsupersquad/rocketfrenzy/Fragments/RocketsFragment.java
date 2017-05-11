@@ -30,9 +30,9 @@ ArrayList rockets;
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         //Delete After
-        addRocketToPlayer(getPlayerName(),new Rocket("Apollo",R.drawable.apollorocket, "Heck"));
+      /*  addRocketToPlayer(getPlayerName(),new Rocket("Apollo",R.drawable.apollorocket, "Heck"));
         addRocketToPlayer(getPlayerName(),new Rocket("Horizon",R.drawable.horizonrocket, "Heck"));
-        addRocketToPlayer(getPlayerName(),new Rocket("Something",R.drawable.kamakazirocket, "Heck"));
+        addRocketToPlayer(getPlayerName(),new Rocket("Something",R.drawable.kamakazirocket, "Heck"));*/
         //Delete After
         rockets=getPlayerRockets(getPlayerName());
         rockets.addAll(getPlayerItems(getPlayerName()));
