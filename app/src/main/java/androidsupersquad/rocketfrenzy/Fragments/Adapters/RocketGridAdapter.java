@@ -1,7 +1,9 @@
 package androidsupersquad.rocketfrenzy.Fragments.Adapters;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,16 +22,17 @@ import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
 import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.R;
+import androidsupersquad.rocketfrenzy.RocketLaunch;
 
 /**
  * Created by Jimmy on 5/6/2017.
  */
 
 public class RocketGridAdapter extends BaseAdapter{
-    private Context mContext;
+    private Activity mContext;
     private List rocket;
 
-    public RocketGridAdapter(Context c, List rockets)
+    public RocketGridAdapter(Activity c, List rockets)
     {
         mContext=c;
         rocket=rockets;
@@ -61,15 +64,22 @@ public class RocketGridAdapter extends BaseAdapter{
             final ArrayList<ShopItems> PlayerItems = getPlayerItems(getPlayerName());
             if(Rocket.class.isInstance(rocket.get(position)))
             {
-                Rocket currentRocket = (Rocket) rocket.get(position);
+                final Rocket currentRocket = (Rocket) rocket.get(position);
                 rocketImage.setImageResource(currentRocket.getImage());
                 rocketImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         ShopItems launchPad =new ShopItems("Launch Pad",R.drawable.launchpad,mContext.getString(R.string.launchpad),50);
                         if(PlayerItems.contains(launchPad)) {
-                            Toast.makeText(mContext, "Rocket Clicked", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "RocketLaunch Clicked", Toast.LENGTH_SHORT).show();
                             removeItemFromPlayer(getPlayerName(),launchPad);
+                            removeRocketFromPlayer(getPlayerName(),currentRocket);
+                            //Create a new intent to move to another class
+                            Intent ShowName = new Intent(mContext, RocketLaunch.class);
+                            //Send the name to the new activity
+                            //ShowName.putExtra("uname",name.getText().toString());
+                            //Start new activity
+                            mContext.startActivity(ShowName);
                         }
                         else
                             {
@@ -150,4 +160,52 @@ public class RocketGridAdapter extends BaseAdapter{
             return null;
         }
     }
+    private ArrayList<Rocket> getPlayerRockets(String playerName)
+    {
+        String where = RocketDB.USER_NAME_COLUMN + "= ?";
+        String whereArgs[] = {playerName};
+        String[] resultColumns = {RocketDB.ROCKETS_OWNED_COLUMN};
+        Cursor cursor = mContext.getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
+        int rockets = cursor.getColumnIndex(RocketDB.ROCKETS_OWNED_COLUMN);
+        cursor.moveToFirst();
+        try {
+            ArrayList<Rocket> rocketArray = (ArrayList<Rocket>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(rockets));
+            String rocketString = "\t";
+
+            for (Rocket r : rocketArray) {
+                rocketString += (r + "\n\t");
+            }
+            Log.d("ROCKET_INFO", rocketString);
+            return rocketArray;
+        } catch (Exception e)
+        {
+            Log.d("ROCKET_INFO", "Username: " + playerName + "\nRocketLaunch names: null");
+            return null;
+        }
+    }
+    private int removeRocketFromPlayer(String playerName, Rocket rocket)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        ArrayList<Rocket> currentRockets = getPlayerRockets(playerName);
+        if(currentRockets == null)
+        {
+            currentRockets = new ArrayList<Rocket>();
+        }
+        for(int i = 0; i < currentRockets.size(); i++)
+        {
+            if(currentRockets.get(i).getName().equals(rocket.getName()))
+            {
+                currentRockets.remove(i);
+                i = currentRockets.size();
+                Log.d("REMOVAL", "SUCCESSFUL: " + rocket.getName());
+            }
+        }
+        byte[]bytes = ByteArrayConverter.ObjectToByteArray(currentRockets);
+        ContentValues values = new ContentValues();
+        values.put(RocketDB.ROCKETS_OWNED_COLUMN, bytes);
+        return mContext.getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
+    }
+
+
 }

@@ -33,7 +33,7 @@
 
         <activity android:name=".MiniGame.ShakeMiniGame" />
         <activity android:name=".MiniGame.Lottery"></activity>
-        <activity android:name=".Rocket"></activity>
+        <activity android:name=".RocketLaunch"></activity>
 
     </application>
 
