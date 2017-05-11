@@ -15,13 +15,16 @@ public class ShopItems implements Serializable
         //The shop item Cost
         private int ItemCost;
         private static final long serialVersionUID = 1L;
-
+    public ShopItems(String Name){
+        this.ItemName=Name;
+    }
     /**
          * Constructs the Shop Item
          * @param Name of Shop Item
          * @param image of Shop Item
          * @param Description of Shop Item
          */
+
     public ShopItems(String Name, int image,String Description, int ItemCost){
         this.ItemImage=image;
         this.ItemName=Name;
@@ -42,6 +45,12 @@ public class ShopItems implements Serializable
     public String toString()
     {
         return "Name: " + ItemName + " Cost: " + ItemCost;
+    }
+    public boolean equals(Object obj)
+    {
+        ShopItems current= (ShopItems) obj;
+        if(current.ItemName.equals(this.ItemName)){return true;}
+        return false;
     }
 }
 

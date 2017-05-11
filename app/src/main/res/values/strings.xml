@@ -20,5 +20,9 @@
     <string name="Bleach"> A Killer Substance</string>
     <string name="username">UserName</string>
     <string name="coins">Coins</string>
+    <string name="water_icon">Water Icon</string>
+    <string name="fire_emblem">Fire Emblem</string>
+    <string name="horizon_icon">Horizon Icon</string>
+    <string name="skull_emblem">Skull Emblem</string>
 
 </resources>

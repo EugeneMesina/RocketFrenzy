@@ -104,10 +104,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
         db = new RocketDB(this);
 
-       // insertPlayer("USERNAME");
-        //if(getPlayerName()==null){
-           //insertPlayer("USERNAME");
-        //}
+        insertPlayer("USERNAME");
+        if(getPlayerName()==null){
+           insertPlayer("USERNAME");
+        }
         /*-------------------------begin testing-------------------------//
         Log.d("SENT", "START");
         PlayerDeleteTask task = new PlayerDeleteTask();
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         //PlayerDeleteTask task = new PlayerDeleteTask();
         //task.execute();
         ShopItems item = new ShopItems("item", 0, "it's an item", 100);
-        Rocket rocket = new Rocket("rocket", 0, "it's a rocket");
+        RocketLaunch rocket = new RocketLaunch("rocket", 0, "it's a rocket");
         updatePlayerUsername("JOE", "USERNAME");
 //        ArrayList<ShopItems> shopList = new ArrayList<ShopItems>();
 //        shopList.add(item);
@@ -940,7 +940,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             return rocketArray;
         } catch (Exception e)
         {
-            Log.d("ROCKET_INFO", "Username: " + playerName + "\nRocket names: null");
+            Log.d("ROCKET_INFO", "Username: " + playerName + "\nRocketLaunch names: null");
             return null;
         }
     }

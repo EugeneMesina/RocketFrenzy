@@ -29,10 +29,15 @@ ArrayList rockets;
     }
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
+        //Delete After
+      /*  addRocketToPlayer(getPlayerName(),new RocketLaunch("Apollo",R.drawable.apollorocket, "Heck"));
+        addRocketToPlayer(getPlayerName(),new RocketLaunch("Horizon",R.drawable.horizonrocket, "Heck"));
+        addRocketToPlayer(getPlayerName(),new RocketLaunch("Something",R.drawable.kamakazirocket, "Heck"));*/
+        //Delete After
         rockets=getPlayerRockets(getPlayerName());
         rockets.addAll(getPlayerItems(getPlayerName()));
         GridView inventory = (GridView) getActivity().findViewById(R.id.Inventory);
-        inventory.setAdapter(new RocketGridAdapter(getActivity().getBaseContext(),rockets));
+        inventory.setAdapter(new RocketGridAdapter(getActivity(),rockets));
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,7 +112,7 @@ ArrayList rockets;
             return rocketArray;
         } catch (Exception e)
         {
-            Log.d("ROCKET_INFO", "Username: " + playerName + "\nRocket names: null");
+            Log.d("ROCKET_INFO", "Username: " + playerName + "\nRocketLaunch names: null");
             return null;
         }
     }

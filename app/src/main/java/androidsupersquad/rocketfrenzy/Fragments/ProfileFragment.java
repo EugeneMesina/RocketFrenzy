@@ -13,24 +13,37 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.method.KeyListener;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
+import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.R;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class ProfileFragment extends Fragment {
 
-
+    ImageView profilePicture;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -39,17 +52,63 @@ public class ProfileFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+        ArrayList<ShopItems> Icons = getPlayerItems(getPlayerName());
+        ShopItems Icon1 = new ShopItems("Horizon Icon");
+        ShopItems Icon2 = new ShopItems("Fire Icon");
+        ShopItems Icon3 = new ShopItems("Skull Icon");
+        if(Icons.contains(Icon1))
+        {
+            MenuItem HIcon = menu.findItem(R.id.Horizon);
+            HIcon.setVisible(true);
+        }
+        if(Icons.contains(Icon2))
+        {
+           MenuItem FIcon =menu.findItem(R.id.FireEmblem);
+            FIcon.setVisible(true);
+        }
+        if(Icons.contains(Icon3))
+        {
+           MenuItem SIcon= menu.findItem(R.id.SkullIcon);
+                   SIcon.setVisible(true);
+        }
+
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.WaterIcon:
+                profilePicture.setImageResource(R.drawable.watericon);
+                return true;
+            case R.id.Horizon:
+                profilePicture.setImageResource(R.drawable.horizonicon);
+                return true;
+            case R.id.FireEmblem:
+                profilePicture.setImageResource(R.drawable.fireemblem);
+                return true;
+            case R.id.SkullIcon:
+                profilePicture.setImageResource(R.drawable.skullicon);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         final TextView userName = (TextView) view.findViewById(R.id.UserName);
+        profilePicture = (ImageView) view.findViewById(R.id.ProfilePicture);
+        registerForContextMenu(profilePicture);
         TextView coins = (TextView) view.findViewById(R.id.CoinAmount);
         Typeface myCustomFont = Typeface.createFromAsset(view.getContext().getAssets(),"fonts/TwoLines.ttf");
         userName.setTypeface(myCustomFont);
         //coins.setTypeface(myCustomFont);
-        //TODO: Set USERNAME from DataBase
-
         userName.setText(getPlayerName());
         userName.setGravity(Gravity.CENTER);
         Integer coinAmount=getPlayerCoinAmount(getPlayerName());
@@ -97,6 +156,29 @@ public class ProfileFragment extends Fragment {
             }
         });
         return view;
+    }
+    private ArrayList<ShopItems> getPlayerItems(String playerName)
+    {
+        String where = RocketDB.USER_NAME_COLUMN + "= ?";
+        String whereArgs[] = {playerName};
+        String[] resultColumns = {RocketDB.ITEMS_OWNED_COLUMN};
+        Cursor cursor = getActivity().getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
+        int items = cursor.getColumnIndex(RocketDB.ITEMS_OWNED_COLUMN);
+        cursor.moveToFirst();
+        try {
+            ArrayList<ShopItems> itemArray = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(items));
+            String itemString = "\t";
+
+            for (ShopItems si : itemArray) {
+                itemString += (si + "\n\t");
+            }
+            Log.d("ITEM_INFO", itemString);
+            return itemArray;
+        } catch (Exception e)
+        {
+            Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: null");
+            return null;
+        }
     }
     private int getPlayerCoinAmount(String playerName)
     {
