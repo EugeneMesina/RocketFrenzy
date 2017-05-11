@@ -132,5 +132,6 @@ public class Lottery extends AppCompatActivity {
         }
         Intent x = new Intent(Lottery.this, MainActivity.class);
         startActivity(x);
-    }   
+    }
+
 }
