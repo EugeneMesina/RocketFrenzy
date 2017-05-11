@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/WaterIcon"
+        android:title="@string/water_icon" />
+    <item
+        android:id="@+id/Horizon"
+        android:icon="@drawable/mapbox_compass_icon"
+        android:title="@string/horizon_icon"
+        android:visible="false" />
+    <item
+        android:id="@+id/FireEmblem"
+        android:title="@string/fire_emblem"
+        android:visible="false" />
+    <item
+        android:id="@+id/SkullIcon"
+        android:title="@string/skull_emblem"
+        android:visible="false" />
+</menu>
