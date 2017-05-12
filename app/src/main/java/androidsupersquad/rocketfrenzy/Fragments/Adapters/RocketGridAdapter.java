@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -61,30 +62,32 @@ public class RocketGridAdapter extends BaseAdapter{
             grid= new View(mContext);
             grid=inflater.inflate((R.layout.rocket_grid_single),null);
             final ImageView rocketImage= (ImageView) grid.findViewById(R.id.rocket);
+            final TextView itemName = (TextView) grid.findViewById(R.id.rocketName);
             final ArrayList<ShopItems> PlayerItems = getPlayerItems(getPlayerName());
             if(Rocket.class.isInstance(rocket.get(position)))
             {
                 final Rocket currentRocket = (Rocket) rocket.get(position);
                 rocketImage.setImageResource(currentRocket.getImage());
+                itemName.setText(currentRocket.getName());
                 rocketImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ShopItems launchPad =new ShopItems("Launch Pad",R.drawable.launchpad,mContext.getString(R.string.launchpad),50);
-                        if(PlayerItems.contains(launchPad)) {
-                            Toast.makeText(mContext, "RocketLaunch Clicked", Toast.LENGTH_SHORT).show();
-                            removeItemFromPlayer(getPlayerName(),launchPad);
-                            removeRocketFromPlayer(getPlayerName(),currentRocket);
-                            //Create a new intent to move to another class
-                            Intent ShowName = new Intent(mContext, RocketLaunch.class);
-                            //Send the name to the new activity
-                            //ShowName.putExtra("uname",name.getText().toString());
-                            //Start new activity
-                            mContext.startActivity(ShowName);
-                        }
-                        else
-                            {
-                                Toast.makeText(mContext, "Need Launch Pads", Toast.LENGTH_SHORT).show();
-                            }
+                    ShopItems launchPad =new ShopItems("Launch Pad",R.drawable.launchpad,mContext.getString(R.string.launchpad),50);
+                    if(PlayerItems.contains(launchPad)) {
+                        Toast.makeText(mContext, "RocketLaunch Clicked", Toast.LENGTH_SHORT).show();
+                        removeItemFromPlayer(getPlayerName(),launchPad);
+                        removeRocketFromPlayer(getPlayerName(),currentRocket);
+                        //Create a new intent to move to another class
+                        Intent ShowName = new Intent(mContext, RocketLaunch.class);
+                        //Send the name to the new activity
+                        //ShowName.putExtra("uname",name.getText().toString());
+                        //Start new activity
+                        mContext.startActivity(ShowName);
+                    }
+                    else
+                    {
+                        Toast.makeText(mContext, "You don't have a launch pad, buy one from the shop!", Toast.LENGTH_SHORT).show();
+                    }
                     }
                 });
             }
@@ -92,6 +95,7 @@ public class RocketGridAdapter extends BaseAdapter{
             {
                 ShopItems currentRocket = (ShopItems) rocket.get(position);
                 rocketImage.setImageResource(currentRocket.getItemImage());
+                itemName.setText(currentRocket.getItemName());
             }
 
 

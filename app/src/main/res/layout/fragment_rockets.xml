@@ -3,15 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context="androidsupersquad.rocketfrenzy.Fragments.RocketsFragment">
 
+    <TextView
+        android:id="@+id/inventoryName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="8dp"
+        android:textSize="24sp"
+        android:text="Rockets"
+        />
 
     <GridView
         android:id="@+id/Inventory"
-        android:numColumns="auto_fit"
-        android:columnWidth="100dp"
-        android:stretchMode="columnWidth"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:numColumns="auto_fit"
+        android:columnWidth="70dp"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:stretchMode="columnWidth" />
 </LinearLayout>
