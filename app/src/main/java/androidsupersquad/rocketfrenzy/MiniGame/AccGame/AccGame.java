@@ -38,11 +38,13 @@ public class AccGame extends AppCompatActivity  {
         simulationView=(SimulationView) findViewById(R.id.view);
         simulationView.freeze();
         counter = (TextView) findViewById(R.id.AsteroidCounter);
-        ImageButton close = (ImageButton) findViewById(R.id.AccGameCloseButton);
+        final ImageButton close = (ImageButton) findViewById(R.id.AccGameCloseButton);
+        close.setVisibility(View.INVISIBLE);
         final TextView gameOver = (TextView) findViewById(R.id.accgameover);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                close.setVisibility(View.VISIBLE);
                 finish();
             }
         });

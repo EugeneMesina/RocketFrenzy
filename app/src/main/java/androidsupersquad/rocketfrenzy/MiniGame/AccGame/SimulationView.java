@@ -70,7 +70,7 @@ public class SimulationView extends View implements SensorEventListener {
         ballHeight = ball.getHeight()/2;
         mBitmap = Bitmap.createScaledBitmap(ball,ballWidth,ballHeight,true);
         //set the drawable for the basket
-        Bitmap basket= BitmapFactory.decodeResource(getResources(),R.drawable.basket);
+        Bitmap basket= BitmapFactory.decodeResource(getResources(),R.drawable.earth);
         mBasket = Bitmap.createScaledBitmap(basket,BASKET_SIZE,BASKET_SIZE,true);
         //set the field
 
