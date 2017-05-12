@@ -3,6 +3,7 @@ package androidsupersquad.rocketfrenzy.MiniGame;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -35,11 +36,16 @@ public class Lottery extends AppCompatActivity {
 /*
  onCreate Method Life Cycle Method
  */
-
+    MediaPlayer music;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lottery);
+        music= MediaPlayer.create(this, R.raw.agm);
+        //set music to loop
+        music.setLooping(true);
+        //start service
+        music.start();
         //setting variables to match layout file
         random = new Random();
         rocket = (ImageButton) findViewById(R.id.RocketButton);
@@ -299,5 +305,18 @@ public class Lottery extends AppCompatActivity {
         int coinAmount = cursor.getInt(coin);
         Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
         return coinAmount;
+    }
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        music.stop();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        music.start();
     }
 }

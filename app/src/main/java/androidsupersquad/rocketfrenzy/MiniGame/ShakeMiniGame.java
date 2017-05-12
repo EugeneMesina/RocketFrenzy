@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -40,12 +41,17 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
     ProgressBar PGShake;
     boolean Register,start,win,isRunning;
     CountDownTimer timers;
-
+    MediaPlayer music;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setting game variables to layout file
         setContentView(R.layout.activity_shake_mini_game);
+        music= MediaPlayer.create(this, R.raw.agm);
+        //set music to loop
+        music.setLooping(true);
+        //start service
+        music.start();
         Counter = (TextView) findViewById(R.id.SGCounter);
         close = (ImageButton) findViewById(R.id.ShakeCloseButton);
         close.setVisibility(View.INVISIBLE);
@@ -164,6 +170,7 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
     protected void onResume()
     {
         super.onResume();
+        music.start();
         if(Register){
             sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_NORMAL);
 
@@ -176,6 +183,7 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
     protected void onPause()
     {
         super.onPause();
+        music.stop();
         if(Register) {
             sensorManager.unregisterListener(this);
         }
@@ -276,6 +284,7 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
         Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
         return coinAmount;
     }
+
 }
 
 

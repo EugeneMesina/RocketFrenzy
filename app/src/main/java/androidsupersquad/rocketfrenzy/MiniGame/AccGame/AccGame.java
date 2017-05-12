@@ -2,6 +2,7 @@ package androidsupersquad.rocketfrenzy.MiniGame.AccGame;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.PowerManager;
@@ -25,12 +26,18 @@ public class AccGame extends AppCompatActivity  {
     private SimulationView simulationView;
     CountDownTimer timers;
     private TextView counter,won;
+    MediaPlayer music;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.accgame);
+        music= MediaPlayer.create(this, R.raw.agm);
+        //set music to loop
+        music.setLooping(true);
+        //start service
+        music.start();
         //set wake lock
         PowerManager mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
         mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, TAG);
@@ -83,6 +90,7 @@ public class AccGame extends AppCompatActivity  {
     {
         super.onResume();
         //get wakelock
+        music.start();
         mWakeLock.acquire();
         //set listener
         simulationView.startSimulation();
@@ -92,6 +100,7 @@ public class AccGame extends AppCompatActivity  {
     protected void onPause()
     {
         super.onPause();
+        music.stop();
         //release wakelock
         mWakeLock.release();
         //unregister listener
