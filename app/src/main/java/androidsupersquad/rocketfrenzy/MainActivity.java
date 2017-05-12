@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     public void onPause() {
         super.onPause();
         mapView.onPause();
-        music.start();
+        music.stop();
         sensorManager.unregisterListener(this);
     }
 
