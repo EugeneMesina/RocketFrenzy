@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
                 map = mapboxMap;
+                map.setStyleUrl("mapbox://styles/mapbox/dark-v9");
                 mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(@NonNull Marker marker) {
@@ -569,7 +570,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                         }
                         startActivity(game);
                         map.clear();
-                        finish();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -691,8 +691,16 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                         if(userLocation!=null ) {
                             Icon icon = IconFactory.getInstance(MainActivity.this).fromResource(R.drawable.profile);
                             final MarkerOptions gameMarker = new MarkerOptions();
+                            LatLng newLocation = new LatLng(userLocation);
+                            Random rand = new Random();
+                            double randLat = (rand.nextDouble() * 0.001) - 0.0005;
+                            double randLong = (rand.nextDouble() * 0.001) - 0.0005;
+                            newLocation.setLatitude(newLocation.getLatitude() + randLat);
+                            newLocation.setLongitude(newLocation.getLongitude() + randLong);
+                            //0.0005----
+                            Log.d("SPAWN MARKER", "user location: " + new LatLng(userLocation).toString() + "\nmarker location: " + newLocation.toString());
                             map.addMarker( new MarkerOptions()
-                                    .position(new LatLng(userLocation))
+                                    .position(newLocation)
                                     .title("Game Start")
                                     .snippet("Play Game")
                                     .icon(icon));
