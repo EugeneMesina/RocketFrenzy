@@ -7,8 +7,11 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -24,13 +27,23 @@ import androidsupersquad.rocketfrenzy.R;
 
 public class Title extends AppCompatActivity {
 
+    /** Full screen button that allows user to click anywhere to move to next screen */
     private Button start;
+    /** Layout that contains the background */
     private RelativeLayout titleLayout;
+    /** The elements of the title screen ui */
     private ImageView titleBg, titleRocket, titleCloud, titleName, startImage;
+    /** Used for getting screen */
     private DisplayMetrics displayMetrics;
+    /** Screen Width and Screen Height */
     private int screenWidth, screenHeight;
     private MediaPlayer music;
 
+    /**
+     * Creates Title Screen
+     *
+     * @param savedInstanceState Bundle of data
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,20 +97,28 @@ public class Title extends AppCompatActivity {
                 animateStartButton();
             }
         }, 1700);
-        /*new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                animateStartButton2();
+                startButton();
             }
-        }, 1800);*/
+        }, 1800);
 
     }
 
+    /**
+     * Intent to go to the MainActivity
+     *
+     * @param view The current view
+     */
     public void startGame(View view) {
         Intent intent = new Intent(Title.this, MainActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Animates (Translates) Background into position on screen
+     */
     public void animateBackground() {
         TranslateAnimation moveBackground = new TranslateAnimation(0, 0, screenHeight, 0);
         moveBackground.setDuration(1000);
@@ -105,6 +126,9 @@ public class Title extends AppCompatActivity {
         titleBg.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Animates (Translates) cloud into position on screen
+     */
     public void animateCloud() {
         TranslateAnimation moveCloud = new TranslateAnimation(-screenWidth, 0, 0, 0);
         moveCloud.setDuration(500);
@@ -112,6 +136,9 @@ public class Title extends AppCompatActivity {
         titleCloud.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Animates (Translates) rocket into position on screen
+     */
     public void animateRocket() {
         TranslateAnimation moveRocket = new TranslateAnimation(-screenWidth, 0, screenHeight, 0);
         moveRocket.setDuration(500);
@@ -119,6 +146,9 @@ public class Title extends AppCompatActivity {
         titleRocket.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Animates (Translates) Logo into position on screen
+     */
     public void preAnimateName() {
         titleName.setVisibility(View.INVISIBLE);
         TranslateAnimation moveName = new TranslateAnimation(screenWidth, 0, 0, 0);
@@ -127,62 +157,35 @@ public class Title extends AppCompatActivity {
         titleName.setVisibility(View.VISIBLE);
     }
 
-    public void animateName() {
-        titleName.setVisibility(View.INVISIBLE);
-        ExpandDong expandName = new ExpandDong(titleName, 0, screenWidth, 0, screenHeight);
-        expandName.setDuration(750);
-        titleName.startAnimation(expandName);
-        titleName.setVisibility(View.VISIBLE);
-    }
-
+    /**
+     * Unused animation for Start Button
+     */
     public void animateStartButton() {
         AlphaAnimation fadeStart = new AlphaAnimation(0f, 1f);
-        fadeStart.setDuration(100);
-        fadeStart.setRepeatCount(Animation.INFINITE);
-        startImage.startAnimation(fadeStart);
+        fadeStart.setInterpolator(new DecelerateInterpolator());
+        fadeStart.setDuration(1000);
+
+        AlphaAnimation fadeEnd = new AlphaAnimation(1f, 0f);
+        fadeEnd.setInterpolator(new AccelerateInterpolator());
+        fadeEnd.setStartOffset(1200);
+        fadeStart.setDuration(1000);
+
+        AnimationSet fullFade = new AnimationSet(false);
+        fullFade.addAnimation(fadeStart);
+        fullFade.addAnimation(fadeEnd);
+        fullFade.setRepeatCount(Animation.INFINITE);
+        startImage.startAnimation(fullFade);
     }
 
-    public void animateStartButton2() {
-        AlphaAnimation fadeStart = new AlphaAnimation(1f, 0f);
-        fadeStart.setDuration(100);
-        fadeStart.setRepeatCount(Animation.INFINITE);
+    /**
+     * Animates fade in for Start button
+     */
+    public void startButton() {
+        AlphaAnimation fadeStart = new AlphaAnimation(0f, 1f);
+        fadeStart.setInterpolator(new DecelerateInterpolator());
+        fadeStart.setDuration(800);
         startImage.startAnimation(fadeStart);
-    }
-
-    
-
-    private class ExpandDong extends Animation {
-
-        final int targetHeight, targetWidth;
-        View view;
-        int startHeight, startWidth;
-
-        public ExpandDong(View view, int startWidth, int targetWidth, int startHeight, int targetHeight) {
-            this.view = view;
-            this.startHeight = startHeight;
-            this.targetHeight = targetHeight;
-            this.startWidth = startWidth;
-            this.targetWidth = targetWidth;
-        }
-
-        @Override
-        protected void applyTransformation(float interpolatedTime, Transformation t) {
-            int newHeight = (int) (startHeight + (targetHeight - startHeight) * interpolatedTime);
-            int newWidth = (int) (startWidth + (targetWidth - startWidth) * interpolatedTime);
-            view.getLayoutParams().height = newHeight;
-            view.getLayoutParams().width = newWidth;
-            view.requestLayout();
-        }
-
-        @Override
-        public void initialize(int width, int height, int parentWidth, int parentHeight) {
-            super.initialize(width, height, parentWidth, parentHeight);
-        }
-
-        @Override
-        public boolean willChangeBounds() {
-            return true;
-        }
+        startImage.setVisibility(View.VISIBLE);
     }
 
     @Override
