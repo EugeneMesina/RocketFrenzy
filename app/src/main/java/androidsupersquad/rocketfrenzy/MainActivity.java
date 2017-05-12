@@ -64,12 +64,11 @@ import androidsupersquad.rocketfrenzy.MiniGame.AccGame.AccGame;
 import androidsupersquad.rocketfrenzy.MiniGame.Lottery;
 import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
 
-<<<<<<< HEAD
-=======
+
 /**
  * Created by: Christian, Jimmy, Daniel, and Eugene
  */
->>>>>>> refs/remotes/origin/master
+
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener, SensorEventListener {
 
@@ -294,6 +293,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
+    /**
+     * enables Location
+     * @param enabled
+     */
     private void enableLocation(boolean enabled) {
         if (enabled) {
             // If we have the last location of the user, we can move the camera to that position.
@@ -314,6 +317,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             }
 
             locationEngineListener = new LocationEngineListener() {
+
                 @Override
                 public void onConnected() {
                     // No action needed here.
@@ -326,20 +330,23 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                         // listener so the camera isn't constantly updating when the user location
                         // changes. When the user disables and then enables the location again, this
                         // listener is registered again and will adjust the camera once again.
+                        //gets user location when location changes
                         userLocation = location;
+                        //moves camera
                         CameraPosition position = new CameraPosition.Builder()
                                 .target(new LatLng(location)) // Sets the new camera position
                                 .zoom(17) // Sets the zoom
                                 .bearing(180) // Rotate the camera
                                 .tilt(30) // Set the camera tilt
                                 .build(); // Creates a CameraPosition from the builder
-
+                        //animates camera
                         map.animateCamera(CameraUpdateFactory
                                 .newCameraPosition(position), 2000);
 
                     }
                 }
             };
+
             locationEngine.addLocationEngineListener(locationEngineListener);
             floatingActionButton.setImageResource(R.drawable.ic_location_disabled_24dp);
         } else {
@@ -349,10 +356,21 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         map.setMyLocationEnabled(enabled);
     }
 
+    /**
+     * Request Permision from user to getLocation
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+    /**
+     * explains permission
+     * @param permissionsToExplain
+     */
 
     @Override
     public void onExplanationNeeded(List<String> permissionsToExplain) {
@@ -360,6 +378,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Permissions result if given or not
+     * @param granted
+     */
     @Override
     public void onPermissionResult(boolean granted) {
         if (granted) {
@@ -424,6 +446,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             }
         }
     }
+
+    /**
+     * starts games called from on marker click
+     */
     private void startGame(){
 
         Random random = new Random();
