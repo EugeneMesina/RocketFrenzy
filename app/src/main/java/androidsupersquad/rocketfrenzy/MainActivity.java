@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         mPedometer = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         sensorManager.registerListener(MainActivity.this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
-        music= MediaPlayer.create(this, R.raw.bg);
+        music= MediaPlayer.create(this, R.raw.mm);
         //set music to loop
         music.setLooping(true);
         //start service
