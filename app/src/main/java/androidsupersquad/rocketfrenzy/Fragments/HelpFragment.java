@@ -13,10 +13,19 @@ import android.widget.ScrollView;
 
 import androidsupersquad.rocketfrenzy.R;
 
+/**
+ * Created by Jimmy Chao (Lazer)
+ * This is the Help Fragment
+ * This provides the basic rules of the game
+ * UI information
+ * and Game Objectives
+ */
 public class HelpFragment extends Fragment{
 
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
+        //Get UI elements from the layout
         final ScrollView ObjectiveHelp= (ScrollView) getActivity().findViewById(R.id.ObjectiveSV);
         final ScrollView MenuHelp= (ScrollView) getActivity().findViewById(R.id.MenuSV);
         final RelativeLayout ObjectiveHelpL= (RelativeLayout) getActivity().findViewById(R.id.ObjectiveHelp);
@@ -25,6 +34,7 @@ public class HelpFragment extends Fragment{
         final Button ObjectiveB =(Button) getActivity().findViewById(R.id.Objectives);
         Button  GameHelpB=(Button) getActivity().findViewById(R.id.Games);
         Button MenuB =(Button) getActivity().findViewById(R.id.Menu_Buttons);
+        //Sets OnclickListener for the buttons to show Objectives/Game Rules/UI Navigations Description
         ObjectiveB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

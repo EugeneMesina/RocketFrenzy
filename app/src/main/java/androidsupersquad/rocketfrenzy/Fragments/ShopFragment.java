@@ -24,7 +24,7 @@ import java.util.List;
 /**
  *  This is the Shop Menu where it will display to the user
  *  different shop items they can buy
- *  Created by Lazer
+ *  Created by Jimmy Chao (Lazer)
  */
 public class ShopFragment extends Fragment {
     //Data Structure to hold all shop items
@@ -75,6 +75,10 @@ public class ShopFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_shop, container, false);
     }
+    /**
+     * DataBase Method to get Player's Coin Amount
+     * @return UserName
+     */
     private int getPlayerCoinAmount(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -87,7 +91,10 @@ public class ShopFragment extends Fragment {
         Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
         return coinAmount;
     }
-
+    /**
+     * DataBase Method to Retrieve the UserName
+     * @return UserName
+     */
     private String getPlayerName()
     {
         Cursor cursor = getActivity().getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);

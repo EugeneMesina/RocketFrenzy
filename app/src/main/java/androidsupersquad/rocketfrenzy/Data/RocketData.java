@@ -10,9 +10,15 @@ import androidsupersquad.rocketfrenzy.R;
  */
 
 public class RocketData {
+    /**Static Premade Rockets**/
     public static Rocket ApolloRocket = new Rocket("Apollo", R.drawable.apollorocket, "Heck");
     public static Rocket HorizonRocket=new Rocket("Horizon",R.drawable.horizonrocket, "Heck");
     public static Rocket KamakaziRocket=new Rocket("Something",R.drawable.kamakazirocket, "Heck");
+
+    /**
+     * Reward System
+     * @return random rocket
+     */
     public static Rocket giveRocket()
     {
         Random giveRocket = new Random();
