@@ -32,9 +32,6 @@ public class Title extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View decorView = getWindow().getDecorView();
-        int fullOption = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(fullOption);
         setContentView(R.layout.activity_title_screen);
         titleLayout = (RelativeLayout) findViewById(R.id.titleLayout);
         titleBg = (ImageView) findViewById(R.id.titleBg);
@@ -176,6 +173,18 @@ public class Title extends AppCompatActivity {
         public boolean willChangeBounds() {
             return true;
         }
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume()
+    {
+       super.onResume();
     }
 
 }

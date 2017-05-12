@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
         super.onCreate(savedInstanceState);
         context = getBaseContext();
-
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mPedometer = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 

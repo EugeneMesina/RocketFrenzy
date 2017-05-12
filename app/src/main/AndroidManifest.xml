@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:theme="@android:style/Fullscreen"
             android:name=".Title.Title"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -27,6 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:screenOrientation="portrait">
         </activity>
 
@@ -34,23 +36,27 @@
             android:authorities="androidsupersquad.rocketfrenzy.DataBase"
             android:exported="true">
         </provider>
+
         <activity
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".MiniGame.ShakeMiniGame"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".MiniGame.Lottery"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".RocketLaunch"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".MiniGame.AccGame.AccGame"
-
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
         </activity>
