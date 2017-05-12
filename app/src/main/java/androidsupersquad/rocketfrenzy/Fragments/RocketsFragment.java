@@ -31,9 +31,9 @@ ArrayList rockets;
         super.onActivityCreated(savedInstanceState);
         //TODO: For Eugene Uncomment these Lines then run the inventory fragment to get these rockets
         //Delete After
-        /*addRocketToPlayer(getPlayerName(),new RocketLaunch("Apollo",R.drawable.apollorocket, "Heck"));
-        addRocketToPlayer(getPlayerName(),new RocketLaunch("Horizon",R.drawable.horizonrocket, "Heck"));
-        addRocketToPlayer(getPlayerName(),new RocketLaunch("Something",R.drawable.kamakazirocket, "Heck"));*/
+        /*addRocketToPlayer(getPlayerName(),new Rocket("Apollo",R.drawable.apollorocket, "Heck"));
+        addRocketToPlayer(getPlayerName(),new Rocket("Horizon",R.drawable.horizonrocket, "Heck"));
+        addRocketToPlayer(getPlayerName(),new Rocket("Something",R.drawable.kamakazirocket, "Heck"));*/
         //Delete After
         rockets=getPlayerRockets(getPlayerName());
         rockets.addAll(getPlayerItems(getPlayerName()));
@@ -59,6 +59,14 @@ ArrayList rockets;
         ContentValues values = new ContentValues();
         values.put(RocketDB.ROCKETS_OWNED_COLUMN, bytes);
         return getActivity().getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
+    }
+    public void onResume()
+    {
+        super.onResume();
+        rockets=getPlayerRockets(getPlayerName());
+        rockets.addAll(getPlayerItems(getPlayerName()));
+        GridView inventory = (GridView) getActivity().findViewById(R.id.Inventory);
+        inventory.setAdapter(new RocketGridAdapter(getActivity(),rockets));
     }
     private String getPlayerName()
     {
