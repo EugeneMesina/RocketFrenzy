@@ -48,5 +48,15 @@
         android:layout_centerHorizontal="true"
         tools:ignore="ContentDescription" />
 
+    <ImageButton
+        android:id="@+id/LotteryCloseButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/cancel"
+        tools:ignore="ContentDescription" />
+
 
 </RelativeLayout>

@@ -27,7 +27,7 @@ import androidsupersquad.rocketfrenzy.MainActivity;
 import androidsupersquad.rocketfrenzy.R;
 
 public class Lottery extends AppCompatActivity {
-    ImageButton rocket;
+    ImageButton rocket, close;
     ImageView slot1,slot2,slot3;
     Random random;
     int img1,img2,img3;
@@ -40,6 +40,8 @@ public class Lottery extends AppCompatActivity {
 
         random = new Random();
         rocket = (ImageButton) findViewById(R.id.RocketButton);
+        close = (ImageButton) findViewById(R.id.LotteryCloseButton);
+        close.setVisibility(View.INVISIBLE);
         slot1 = (ImageView)findViewById(R.id.imageView);
         slot2 = (ImageView)findViewById(R.id.imageView2);
         slot3 = (ImageView)findViewById(R.id.imageView3);
@@ -50,7 +52,6 @@ public class Lottery extends AppCompatActivity {
                 rocket.setEnabled(false);
                 slot1.setBackgroundResource(R.drawable.animate);
                 final AnimationDrawable slot1anim = (AnimationDrawable) slot1.getBackground();
-                slot1anim.start();
 
                 slot2.setBackgroundResource(R.drawable.animate);
                 final AnimationDrawable slot2anim = (AnimationDrawable) slot2.getBackground();
@@ -59,6 +60,25 @@ public class Lottery extends AppCompatActivity {
                 slot3.setBackgroundResource(R.drawable.animate);
                 final AnimationDrawable slot3anim = (AnimationDrawable) slot3.getBackground();
                 slot3anim.start();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        slot1anim.start();
+                    }
+                },0);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        slot2anim.start();
+                    }
+                },50);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        slot3anim.start();
+                    }
+                },100);
 
                 Handler handler = new Handler();
                 RotateAnimation r;
@@ -78,6 +98,13 @@ public class Lottery extends AppCompatActivity {
                         getScore();
                     }
                 },2000);
+            }
+        });
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -141,12 +168,10 @@ public class Lottery extends AppCompatActivity {
             addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
             //some number
         }
-        else{
-            Toast.makeText(this,"Loser",Toast.LENGTH_LONG).show();
+        else {
+            Toast.makeText(this, "Loser", Toast.LENGTH_LONG).show();
         }
-        Intent x = new Intent(Lottery.this, MainActivity.class);
-        startActivity(x);
-        finish();
+        close.setVisibility(View.VISIBLE);
     }
     private String getPlayerName()
     {

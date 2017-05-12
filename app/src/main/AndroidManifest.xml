@@ -34,9 +34,21 @@
         </provider>
 
 
-        <activity android:name=".MiniGame.ShakeMiniGame" android:screenOrientation="portrait"/>
-        <activity android:name=".MiniGame.Lottery" android:screenOrientation="portrait"></activity>
-        <activity android:name=".RocketLaunch" android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".MiniGame.ShakeMiniGame"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".MiniGame.Lottery"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".RocketLaunch"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
 
     </application>
 
