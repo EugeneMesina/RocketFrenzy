@@ -25,5 +25,22 @@
     <string name="fire_emblem">Fire Emblem</string>
     <string name="horizon_icon">Horizon Icon</string>
     <string name="skull_emblem">Skull Emblem</string>
-
+    <string name="ObjectivesMessage">
+        Welcome to Rocket Frenzy developed by the Android Super Squad! This android game is here to help you have fun, waste time, and ultimately keep you active.
+        The main goal is to walk around and collect rockets to launch and earn in game rewards in the shop. To earn rockets you have to walk around anywhere in the world.
+        When you walk a certain distance a notification will pop up asking you the user if you want to play the game(see Game Help for more info). Pressing Yes will launch the game mode
+        and depending on if you win or lose you can earn rockets and/or coins to spend in the shop. The rockets you earned will be stored in your inventory and can be launched in your inventory
+        as well as long as you have launch pads. If you do not have launch pads you can buy them from the shop located in the menu list (see Menu Button Help for more details). If you
+        do have a launch pad you can click on one of the rockets you own and launch the rocket and earn more coins. We hope you have fun playing our game and competing with your friends with your rockets.
+    </string>
+    <string name="ProfileButton">This menu item displays your username and icon you have. Long Hold the icon to change your icon. Tap on the username to change your username. Also you can see the amount of coins you have!</string>
+    <string name="RocketButton">The rocket notification alerts you of a new game that pops up so you can earn rockets!</string>
+    <string name="ShopButton">This menu item displays the item you can buy and the amount of coins you have. Click on the item you want to buy and a description and a buy button will appear.</string>
+    <string name="KamakaziButton"></string>
+    <string name="LocationButton">This button zooms you to your current position in the map of our game!</string>
+    <string name="InventoryButton">This menu item displays the rockets and shop items you bought all in one list. You can click a button to launch a rocket from your inventory but make sure you have a launch pad to launch it!</string>
+    <string name="ShakeGame">The Shake Game: shake your phone to fill up the progress bar before the timer reaches 0. Earn a rocket and coins if you win! Earn coins if you lose!</string>
+    <string name="LotteryGame">The Lottery Game: press the icon in the middle of the screen and try your luck! Match 3 in a row to earn a rocket and coins! Earn just coins if unmatched triplets! </string>
+    <string name="WackAMole">Wack A Mole: Wack the moles that pop up! Wack all to earn a rocket and coins! If you miss one earn just coins instead!</string>
+    <string name="AsteroidGame">Asteroid Game: Get the asteroid in the worm hole! Get it in the worm hole earn a rocket and coins! If not earn just coins!</string>
 </resources>

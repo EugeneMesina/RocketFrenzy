@@ -53,7 +53,7 @@ import java.util.Random;
 import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
-import androidsupersquad.rocketfrenzy.Fragments.DailyTaskFragment;
+import androidsupersquad.rocketfrenzy.Fragments.HelpFragment;
 import androidsupersquad.rocketfrenzy.Fragments.KamikaziFragment;
 import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
 import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
@@ -285,14 +285,14 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
                 //startActivity(toProfile);
             }
-        });*/
+        });
         menu[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent x = new Intent(MainActivity.this, ShakeMiniGame.class);
                 startActivity(x);
             }
-        });
+        });*/
 
         floatingActionButton = (FloatingActionButton) findViewById(R.id.location_toggle_fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -515,8 +515,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
      */
     private void bindMenuScreens() {
         menuScreens = new Fragment[5];
-        menuScreens[3] = new KamikaziFragment();
-        menuScreens[4] = new DailyTaskFragment();
+        menuScreens[4] = new KamikaziFragment();
+        menuScreens[3] = new HelpFragment();
         menuScreens[2] = new ShopFragment();
         menuScreens[1] = new RocketsFragment();
         menuScreens[0] = new ProfileFragment();
@@ -526,7 +526,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
      * Attaches onClickListeners to menu buttons
      */
     private void setOnClickListeners() {
-        for(int ii = 0; ii < menu.length - 1; ii++) {
+        for(int ii = 0; ii < menu.length; ii++) {
             if(ii != 0)
                 menu[ii].setOnClickListener(setListenerOptions(ii));
             else {
@@ -591,8 +591,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
 
-
-
     }
 
 
@@ -646,7 +644,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         System.out.println("Player Bleach "+getPlayerBleachAmount(getPlayerName()));
         if(getPlayerBleachAmount(getPlayerName())>=100)
         {
-            menu[4].setVisibility(View.VISIBLE);
+            menu[5].setVisibility(View.VISIBLE);
         }
         for(int ii = 1; ii < 6; ii++)
             menu[ii].animate().translationY(0);
