@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fragmentbg"
     tools:context="androidsupersquad.rocketfrenzy.Fragments.HelpFragment">
 
     <ScrollView
@@ -10,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible"
-        android:paddingBottom="50dp">
+        android:paddingBottom="50dp"
+        android:layout_marginTop="80dp">
 
         <RelativeLayout
             android:id="@+id/ObjectiveHelp"
@@ -27,6 +29,7 @@
                 android:id="@+id/Objective"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="@string/ObjectivesMessage" />
 
             <TextView
@@ -36,6 +39,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/Objective"
                 android:layout_marginTop="30dp"
+                android:textColor="@color/white"
                 android:text="Jimmy Chao\nEugene Mesina\nChristian Blydt-Hansen\nDaniel Lee" />
 
             <ImageView
@@ -69,6 +73,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="230dp"
+            android:textColor="@color/white"
             android:text="@string/ShakeGame" />
 
         <TextView
@@ -78,6 +83,7 @@
             android:layout_alignBottom="@+id/textView10"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="76dp"
+            android:textColor="@color/white"
             android:text="@string/LotteryGame" />
 
 
@@ -88,6 +94,7 @@
             android:layout_above="@+id/textView7"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="23dp"
+            android:textColor="@color/white"
             android:text="@string/AsteroidGame" />
     </RelativeLayout>
 
@@ -95,7 +102,8 @@
         android:id="@+id/MenuSV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        android:layout_marginTop="80dp">
 
         <RelativeLayout
             android:id="@+id/MenuHelp"
@@ -126,6 +134,7 @@
                 android:layout_marginStart="19dp"
                 android:layout_toEndOf="@+id/imageView7"
                 android:layout_toRightOf="@+id/imageView7"
+                android:textColor="@color/white"
                 android:text="@string/ShopButton" />
 
             <ImageView
@@ -145,6 +154,7 @@
                 android:layout_alignLeft="@+id/textView2"
                 android:layout_alignStart="@+id/textView2"
                 android:layout_alignTop="@+id/imageView6"
+                android:textColor="@color/white"
                 android:text="@string/ProfileButton" />
 
             <ImageView
@@ -164,6 +174,7 @@
                 android:layout_alignLeft="@+id/textView3"
                 android:layout_alignStart="@+id/textView3"
                 android:layout_alignTop="@+id/imageView8"
+                android:textColor="@color/white"
                 android:text="@string/InventoryButton" />
 
             <ImageView
@@ -184,6 +195,7 @@
                 android:layout_alignLeft="@+id/textView4"
                 android:layout_alignStart="@+id/textView4"
                 android:layout_alignTop="@+id/imageView9"
+                android:textColor="@color/white"
                 android:text="@string/LocationButton" />
 
             <ImageView
@@ -205,42 +217,53 @@
                 android:layout_alignLeft="@+id/textView5"
                 android:layout_alignStart="@+id/textView5"
                 android:layout_alignTop="@+id/imageView10"
+                android:textColor="@color/white"
                 android:text="@string/RocketButton" />
 
         </RelativeLayout>
     </ScrollView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/Objectives"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/Menu_Buttons"
-        android:layout_alignBottom="@+id/Menu_Buttons"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="Objectives" />
+        <Button
+            android:id="@+id/Objectives"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/Menu_Buttons"
+            android:layout_alignBottom="@+id/Menu_Buttons"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="Objectives"
+            android:textSize="12sp" />
 
-    <Button
-        android:id="@+id/Games"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Game Help"
-        android:layout_alignBaseline="@+id/Menu_Buttons"
-        android:layout_alignBottom="@+id/Menu_Buttons"
-        android:layout_toLeftOf="@+id/Menu_Buttons"
-        android:layout_toStartOf="@+id/Menu_Buttons"
-        android:layout_marginRight="20dp"
-        android:layout_marginEnd="20dp" />
+        <Button
+            android:id="@+id/Games"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-    <Button
-        android:id="@+id/Menu_Buttons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Menu Button"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+            android:layout_alignBaseline="@+id/Menu_Buttons"
+            android:layout_alignBottom="@+id/Menu_Buttons"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:text="Game Help"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/Menu_Buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
+            android:text="Menu Button"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
 
 
 </RelativeLayout>

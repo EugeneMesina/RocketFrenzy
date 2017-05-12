@@ -199,7 +199,8 @@ public class Lottery extends AppCompatActivity {
             //some number
         }
         else {
-            Toast.makeText(this, "Loser", Toast.LENGTH_LONG).show();
+            won.setText("You Lose");
+            won.setVisibility(View.VISIBLE);
         }
         close.setVisibility(View.VISIBLE);
     }
