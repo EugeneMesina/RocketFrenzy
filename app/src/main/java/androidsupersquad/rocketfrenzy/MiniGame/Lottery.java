@@ -306,6 +306,9 @@ public class Lottery extends AppCompatActivity {
         Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
         return coinAmount;
     }
+    /*
+    pause the activity
+     */
     @Override
     protected void onPause()
     {
@@ -313,6 +316,9 @@ public class Lottery extends AppCompatActivity {
         music.stop();
     }
 
+    /*
+    resume the activity
+     */
     @Override
     protected void onResume()
     {

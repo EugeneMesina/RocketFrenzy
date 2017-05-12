@@ -86,6 +86,9 @@ public class AccGame extends AppCompatActivity  {
         });
     }
 
+    /**
+     * Runs when activity resumes
+     */
     @Override
     protected void onResume()
     {
@@ -97,6 +100,10 @@ public class AccGame extends AppCompatActivity  {
         simulationView.startSimulation();
 
     }
+
+    /**
+     * Runs when activity is paused
+     */
     @Override
     protected void onPause()
     {
@@ -107,9 +114,11 @@ public class AccGame extends AppCompatActivity  {
         //unregister listener
         simulationView.stopSimulation();
     }
-    //database methods
-    /*
-    gets and returns player name from databse
+
+    /**
+     * Gets the current player's name
+     *
+     * @return the current player's name
      */
     private String getPlayerName()
     {
@@ -122,10 +131,15 @@ public class AccGame extends AppCompatActivity  {
         Log.d("PLAYER_NAME_INFO", "Username: " + name);
         return name;
     }
-    /*
-      gives coins to player
-      returns int
-       */
+
+    /**
+     * Updates a player's coin count and stores it into the database
+     *
+     * @param playerName specified player
+     * @param coinAmount amount to change
+     * @param set if true, will set the amount to coin amount, if false, will add amount to coin amount
+     * @return result of update
+     */
     private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -141,8 +155,12 @@ public class AccGame extends AppCompatActivity  {
         newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
-    /*
-    get coin amount returns int
+
+    /**
+     * Gets the player's coin amount
+     *
+     * @param playerName specified player
+     * @return the player's coin amount
      */
     private int getPlayerCoinAmount(String playerName)
     {

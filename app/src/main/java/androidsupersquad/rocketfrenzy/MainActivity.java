@@ -235,6 +235,9 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
+    /**
+     * Starts the activity
+     */
     @Override
     protected void onStart() {
         if (locationEngineListener != null && userLocation == null) {
@@ -246,6 +249,9 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         //music.start();
     }
 
+    /**
+     * Stops the activity
+     */
     @Override
     protected void onStop() {
         super.onStop();
@@ -253,6 +259,9 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         //music.stop();
     }
 
+    /**
+     * Pauses the activity
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -261,12 +270,19 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         sensorManager.unregisterListener(this);
     }
 
+    /**
+     * Saves the state of the activity
+     * @param outState state to be saved
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
 
+    /**
+     * Destroys the activity
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -278,12 +294,19 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
+    /**
+     * Runs the activity on low memory
+     */
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
     }
 
+    /**
+     * Toggles the GPS
+     * @param enableGps GPS enabled or not enabled
+     */
     private void toggleGps(boolean enableGps) {
         if (enableGps) {
             // Check if user has granted location permission
@@ -300,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
     /**
      * enables Location
-     * @param enabled
+     * @param enabled GPS enabled or not enabled
      */
     private void enableLocation(boolean enabled) {
         if (enabled) {
@@ -376,7 +399,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
      * explains permission
      * @param permissionsToExplain
      */
-
     @Override
     public void onExplanationNeeded(List<String> permissionsToExplain) {
         Toast.makeText(this, "This app needs location permissions in order to show its functionality.",
@@ -500,11 +522,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
     }
 
-
-
-
-
-
     /**
      * Creates an onClickListener for the menu buttons
      *
@@ -574,6 +591,9 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         menu[5].animate().translationY(offSet-600);*/
     }
 
+    /**
+     * Runs when back button is pressed
+     */
     @Override
     public void onBackPressed() {
         Log.d("FRAGMENT", "" + fragmentHolder.isClickable());
@@ -590,11 +610,20 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
+    /**
+     * Unused
+     *
+     * @param view
+     */
     @Override
     public void onClick(View view) {
-        //do things
+        //do nothing
     }
 
+    /**
+     * Runs when the sensor is changed
+     * @param sensorEvent sensor that is changed
+     */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         float steps;
@@ -642,13 +671,20 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
     }
 
+    /**
+     * Unused
+     * @param sensor
+     * @param i
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
 
+    /**
+     * Query's the player from the database
+     */
     private class PlayerQueryTask extends AsyncTask<ContentValues, Void, Void> {
-
         @Override
         protected Void doInBackground(ContentValues... contentValues) {
             Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
@@ -659,7 +695,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             int bleach = cursor.getColumnIndex(RocketDB.BLEACH_AMOUNT_COLUMN);
             int icon = cursor.getColumnIndex(RocketDB.PLAYER_ICON_COLUMN);
             cursor.moveToFirst();
-            //still kind of testing//
             ArrayList<ShopItems> newList = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(cursor.getBlob(items));
             String itemString = "\t";
             for(ShopItems si : newList)
@@ -672,11 +707,15 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             {
                 rocketString += (r + "\n\t");
             }
+            //print out the information
             Log.d("DATABASE_INFO", "Username: " + cursor.getString(username) + "\nCoin amount: " + cursor.getInt(coin) + "\nBleach amount: " + cursor.getInt(bleach) + "\nRockets Owned: " + rocketString + "\nItems Owned: " + itemString + "\nIcon String: " + cursor.getInt(icon));
             return null;
         }
     }
 
+    /**
+     * Insert a player into the database
+     */
     private class PlayerInsertTask extends AsyncTask<ContentValues, Void, Void> {
         @Override
         protected Void doInBackground(ContentValues... contentValues) {
@@ -685,6 +724,9 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
+    /**
+     * Delete a player from the database
+     */
     private class PlayerDeleteTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
@@ -693,13 +735,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
-//    @Override
-//    public boolean onMarkerClick(@NonNull Marker marker) {
-//        //do things
-//
-//        return false;
-//    }
-
+    /**
+     * Get's the player's name
+     * @return the player's name
+     */
     private String getPlayerName()
     {
         Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
@@ -712,6 +751,13 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return name;
     }
 
+    /**
+     * Updates the player's name
+     *
+     * @param playerName player's current name
+     * @param newName player's name name
+     * @return results of the update
+     */
     private int updatePlayerUsername(String playerName, String newName)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -721,6 +767,12 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
 
+    /**
+     * Gets a player's coing amount
+     *
+     * @param playerName player to get amount from
+     * @return the coin amount
+     */
     private int getPlayerCoinAmount(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -734,6 +786,14 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return coinAmount;
     }
 
+    /**
+     * Updates a player's coin count and stores it into the database
+     *
+     * @param playerName specified player
+     * @param coinAmount amount to change
+     * @param set if true, will set the amount to coin amount, if false, will add amount to coin amount
+     * @return result of update
+     */
     private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -750,6 +810,12 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
 
+    /**
+     * Gets the player's bleach amount
+     *
+     * @param playerName player to get amount from
+     * @return the bleach amount
+     */
     private int getPlayerBleachAmount(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -763,6 +829,14 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return bleachAmount;
     }
 
+    /**
+     * Updates a player's bleach amount and stores it into the database
+     *
+     * @param playerName specified player
+     * @param bleachAmount amount to change
+     * @param set if true, will set the amount to coin amount, if false, will add amount to coin amount
+     * @return result of update
+     */
     private int updatePlayerBleachAmount(String playerName, int bleachAmount, boolean set)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -779,7 +853,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
 
-    //items
+    /**
+     * Gets an arraylist of the player's items
+     * @param playerName player to get items from
+     * @return the player's items
+     */
     private ArrayList<ShopItems> getPlayerItems(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -804,6 +882,13 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
+    /**
+     * Add an item to a player's inventory
+     *
+     * @param playerName player to add items to
+     * @param item item to be added
+     * @return result of the update
+     */
     private int addItemToPlayer(String playerName, ShopItems item)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -820,6 +905,13 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
 
+    /**
+     * Remove an item from a player's inventory
+     *
+     * @param playerName player to remove from
+     * @param item item to be removed
+     * @return result of the update
+     */
     private int removeItemFromPlayer(String playerName, ShopItems item)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -844,6 +936,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
 
+    /**
+     * Remove all items from a player
+     * @param playerName player to have items removed from
+     * @return results of the update
+     */
     private int removeAllItemsFromPlayer(String playerName)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -855,8 +952,12 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
 
-    //rockets
-
+    /**
+     * Gets an arraylist of the player's rockets
+     *
+     * @param playerName player to get rockets from
+     * @return the player's rockets
+     */
     private ArrayList<Rocket> getPlayerRockets(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -881,6 +982,13 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
+    /**
+     * Add a rocket to a player
+     *
+     * @param playerName player to have rocket added to
+     * @param rocket rocket to be added
+     * @return result of the update
+     */
     private int addRocketToPlayer(String playerName, Rocket rocket)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -897,6 +1005,13 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
 
+    /**
+     * Remove aa rocket from a player's inventory
+     *
+     * @param playerName player to remove from
+     * @param rocket rocket to be removed
+     * @return result of the update
+     */
     private int removeRocketFromPlayer(String playerName, Rocket rocket)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -921,6 +1036,12 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
 
+    /**
+     * Remove all rockets from a player
+     *
+     * @param playerName player to have rockets removed from
+     * @return result of the update
+     */
     private int removeAllRocketsFromPlayer(String playerName)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -932,6 +1053,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
 
+    /**
+     * Insert a player into the database
+     *
+     * @param userName player to be removed
+     */
     private void insertPlayer(String userName)
     {
         try {
@@ -951,6 +1077,12 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
+    /**
+     * Get the string representing the player's current icon
+     *
+     * @param playerName player to get icon string from
+     * @return the string representing the player's icon
+     */
     private String getPlayerIconString(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -964,6 +1096,13 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         return iconString;
     }
 
+    /**
+     * Update a player's icon string
+     *
+     * @param playerName player to update string for
+     * @param newIconString new string for the icon
+     * @return result of the update
+     */
     private int updatePlayerIconString(String playerName, String newIconString)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";

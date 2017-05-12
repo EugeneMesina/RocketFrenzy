@@ -5,24 +5,28 @@ import android.util.Log;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.sql.Blob;
-import java.util.ArrayList;
-
-import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 
 /**
- * Created by Christian on 5/9/2017.
+ * Created by Christian Blydt-Hansen
+ *
+ * Converts Object to byte steams and vice versa
+ * to be able to store serializable objects into
+ * the database using BLOBs
  */
-
 public class ByteArrayConverter {
+    /**
+     * Converts an Object to a byte array
+     *
+     * @param o Object to be converted
+     * @return byte array represention of the o
+     */
     public static byte[] ObjectToByteArray(Object o)
     {
         ByteArrayOutputStream baos = null;
         ObjectOutputStream oos = null;
-
+        //attempt to convert
         try {
             baos = new ByteArrayOutputStream();
             oos = new ObjectOutputStream(baos);
@@ -36,6 +40,7 @@ public class ByteArrayConverter {
             return null;
         } finally {
             try {
+                //close streams
                 baos.close();
                 oos.close();
             } catch (IOException e)
@@ -45,10 +50,17 @@ public class ByteArrayConverter {
         }
     }
 
+    /**
+     * Converts a byte array to an Object
+     *
+     * @param list byte array to be converted
+     * @return an Object representation of list
+     */
     public static Object ByteArrayToObject(byte[] list)
     {
         ByteArrayInputStream bais = null;
         ObjectInputStream ois = null;
+        //attempt to convert
         try {
             bais = new ByteArrayInputStream(list);
             ois = new ObjectInputStream(bais);
@@ -61,6 +73,7 @@ public class ByteArrayConverter {
         } finally {
             try
             {
+                //close streams
                 bais.close();
                 ois.close();
             } catch (IOException e)

@@ -1,29 +1,20 @@
 package androidsupersquad.rocketfrenzy.MiniGame.AccGame;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
-import android.text.Layout;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.Random;
 
@@ -37,15 +28,15 @@ import androidsupersquad.rocketfrenzy.R;
 public class SimulationView extends View implements SensorEventListener {
     //Setting variables and bitmaps
     private SensorManager sensorManager;
-    private Bitmap mBasket, mBitmap;
-    private Particle mBall;
+    private Bitmap mPlanet, mBitmap;
+    private Particle mRocket;
     private Display mDisplay;
-    private static final int BASKET_SIZE=120;
+    private static final int PLANET_SIZE =120;
     private float mXOrigin, mYOrigin , mHorizontalBound, mVerticalBound, mSensorX, mSensorY,mSensorZ;
     private long mSensorTimeStamp;
-    int score, sleep, ballWidth, ballHeight;
+    int score, sleep, planetWidth, planetHeight;
     boolean scorekeeper;
-    private int xBasket, yBasket;
+    private int xPlanet, yPlanet;
     private boolean isRunning;
 
     /**
@@ -61,17 +52,17 @@ public class SimulationView extends View implements SensorEventListener {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         //set accelerometer event listener
         sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_GAME);
-       //set new particle class to move ball and handle boundries
-        mBall=new Particle();
-        //set the drawable for the ball
+       //set new particle class to move rocket and handle boundries
+        mRocket =new Particle();
+        //set the drawable for the rocket
 
-        Bitmap ball= BitmapFactory.decodeResource(getResources(),R.drawable.tiny_rocket);
-        ballWidth = ball.getWidth()/2;
-        ballHeight = ball.getHeight()/2;
-        mBitmap = Bitmap.createScaledBitmap(ball,ballWidth,ballHeight,true);
+        Bitmap rocket= BitmapFactory.decodeResource(getResources(),R.drawable.tiny_rocket);
+        planetWidth = rocket.getWidth()/2;
+        planetHeight = rocket.getHeight()/2;
+        mBitmap = Bitmap.createScaledBitmap(rocket, planetWidth, planetHeight,true);
         //set the drawable for the basket
         Bitmap basket= BitmapFactory.decodeResource(getResources(),R.drawable.earth);
-        mBasket = Bitmap.createScaledBitmap(basket,BASKET_SIZE,BASKET_SIZE,true);
+        mPlanet = Bitmap.createScaledBitmap(basket, PLANET_SIZE, PLANET_SIZE,true);
         //set the field
 
     // initial the current score
@@ -85,8 +76,8 @@ public class SimulationView extends View implements SensorEventListener {
         mHorizontalBound = mDisplay.getWidth()/2;
         mVerticalBound = mDisplay.getHeight()/2;
 
-        xBasket= Math.round(((mXOrigin-BASKET_SIZE/2)-20));
-        yBasket= Math.round(((mYOrigin-BASKET_SIZE/2)-755));
+        xPlanet = Math.round(((mXOrigin- PLANET_SIZE /2)-20));
+        yPlanet = Math.round(((mYOrigin- PLANET_SIZE /2)-755));
 
         sleep=0;
         scorekeeper=true;
@@ -100,27 +91,27 @@ public class SimulationView extends View implements SensorEventListener {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
 //draw the Basket in it's static place
-            canvas.drawBitmap(mBasket, xBasket, yBasket, null);
+            canvas.drawBitmap(mPlanet, xPlanet, yPlanet, null);
 //update the ball position
-            mBall.updatePosition(mSensorX, mSensorY, mSensorZ, mSensorTimeStamp);
-            mBall.resolveCollisionWithBounds(mHorizontalBound, mVerticalBound);
+            mRocket.updatePosition(mSensorX, mSensorY, mSensorZ, mSensorTimeStamp);
+            mRocket.resolveCollisionWithBounds(mHorizontalBound, mVerticalBound);
 
 //        Matrix matrix = new Matrix();
-//        matrix.postRotate(mBall.mAngle);
+//        matrix.postRotate(mRocket.mAngle);
 //        Bitmap tempBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
 
-            canvas.drawBitmap(mBitmap, (mXOrigin - ballWidth / 2) + mBall.mPosX, (mYOrigin - ballHeight / 2) - mBall.mPosY, null);
+            canvas.drawBitmap(mBitmap, (mXOrigin - planetWidth / 2) + mRocket.mPosX, (mYOrigin - planetHeight / 2) - mRocket.mPosY, null);
 
             //checkvalues to see if the ball image touches the basket image
-            Integer xPos = Math.round((mXOrigin - ballWidth / 2) + mBall.mPosX);
-            Integer YPos = Math.round((mYOrigin - ballHeight / 2) - mBall.mPosY);
+            Integer xPos = Math.round((mXOrigin - planetWidth / 2) + mRocket.mPosX);
+            Integer YPos = Math.round((mYOrigin - planetHeight / 2) - mRocket.mPosY);
 //add score if the ball hits the basket image
 
-            if ((xPos <= xBasket + 80 && xPos >= xBasket - 80) && (yBasket + 80 >= YPos && yBasket - 80 <= YPos) && scorekeeper) {
+            if ((xPos <= xPlanet + 80 && xPos >= xPlanet - 80) && (yPlanet + 80 >= YPos && yPlanet - 80 <= YPos) && scorekeeper) {
                 System.out.println("HERE");
                 score++;
                 scorekeeper = false;
-                mBall.throwParticle();
+                mRocket.throwParticle();
                 scramble();
             }
             //sleep so the player doesn't just keep the ball in one place and indefinitely get an infinite score
@@ -161,8 +152,8 @@ public class SimulationView extends View implements SensorEventListener {
         mXOrigin = w * 0.5f;
         mYOrigin = h * 0.5f;
 
-        mHorizontalBound = (w - ballWidth) * 0.5f;
-        mVerticalBound = (h - ballHeight) * 0.5f;
+        mHorizontalBound = (w - planetWidth) * 0.5f;
+        mVerticalBound = (h - planetHeight) * 0.5f;
     }
 
     /**
@@ -203,28 +194,45 @@ public class SimulationView extends View implements SensorEventListener {
         sensorManager.unregisterListener(this);
     }
 
+    /**
+     * Ends the game
+     */
     public void end()
     {
         isRunning = false;
-        mBall.freeze();
+        mRocket.freeze();
     }
 
+    /**
+     * Chooses a random location for the
+     */
     public void scramble()
     {
         Random rand = new Random();
-        xBasket = 100 + rand.nextInt((int)mXOrigin*2 - 200);
-        yBasket = 100 + rand.nextInt((int)mYOrigin*2 - 200);
+        xPlanet = 100 + rand.nextInt((int)mXOrigin*2 - 200);
+        yPlanet = 100 + rand.nextInt((int)mYOrigin*2 - 200);
     }
 
+    /**
+     * Pause the game
+     */
     public void freeze()
     {
-        mBall.freeze();
-    }
-    public void unFreeze()
-    {
-        mBall.unFreeze();
+        mRocket.freeze();
     }
 
+    /**
+     * Unpause the game
+     */
+    public void unFreeze()
+    {
+        mRocket.unFreeze();
+    }
+
+    /**
+     * Get the score
+     * @return the score
+     */
     public int getScore()
     {
         return score;

@@ -11,16 +11,17 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 /**
- * Created by cman4_000 on 4/16/2017.
+ * Created by Christian Blydt-Hansen
+ *
+ *  Allows the rocket database to be accessed throughout the
+ *  application using a content provider
  */
-
 public class RocketContentProvider extends ContentProvider{
-
     private static final String AUTHORITY = "androidsupersquad.rocketfrenzy.DataBase";
-
+    //content location
     public static final Uri CONTENT_URI =
             Uri.parse("content://" + AUTHORITY + "/players");
-    private static final int PLAYERS = 1;
+    private static final int PLAYERS = 1; //for once player
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
@@ -29,12 +30,27 @@ public class RocketContentProvider extends ContentProvider{
 
     private RocketDB rocketDB;
 
+    /**
+     * Creates the database with the given context
+     *
+     * @return results of the creation
+     */
     @Override
     public boolean onCreate() {
         rocketDB = new RocketDB(getContext());
         return true;
     }
 
+    /**
+     *
+     *
+     * @param uri matches with player Uri
+     * @param projection data protections
+     * @param selection specifies WHERE clause
+     * @param selectionArgs replaces "?" in WHERE clause
+     * @param sortOrder order
+     * @return null
+     */
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
@@ -46,6 +62,12 @@ public class RocketContentProvider extends ContentProvider{
         return null;
     }
 
+    /**
+     * No utilized
+     *
+     * @param uri Uri
+     * @return null
+     */
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
@@ -53,6 +75,13 @@ public class RocketContentProvider extends ContentProvider{
         return null;
     }
 
+    /**
+     * Insert an element into the database
+     *
+     * @param uri matches with player Uri
+     * @param values attributes to insert
+     * @return
+     */
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
@@ -66,12 +95,29 @@ public class RocketContentProvider extends ContentProvider{
 
     }
 
+    /**
+     * Deletes all information from the database
+     *
+     * @param uri Uri
+     * @param selection specifies WHERE clause
+     * @param selectionArgs replaces "?" in WHERE clause
+     * @return result of the deletion
+     */
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        int id  = rocketDB.deleteAllInformation(selection);
+        int id  = rocketDB.deleteAllInformation();
         return id;
     }
 
+    /**
+     * Updates a selection of the database
+     *
+     * @param uri Uri
+     * @param values updates attributes
+     * @param selection specifies WHERE clause
+     * @param selectionArgs replaces "?" in WHERE clause
+     * @return result of the update
+     */
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
         int id = rocketDB.update(uri, values, selection, selectionArgs);

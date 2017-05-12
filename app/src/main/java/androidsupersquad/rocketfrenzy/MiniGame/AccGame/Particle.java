@@ -44,6 +44,9 @@ public class Particle {
         }
     }
 
+    /**
+     * Shoots the particle in a random direction
+     */
     public void throwParticle()
     {
         Random rand = new Random();
@@ -53,6 +56,9 @@ public class Particle {
         mVelY=y;
     }
 
+    /**
+     * Stops of particle, pauses the game
+     */
     public void freeze()
     {
         mVelX = 0;
@@ -60,6 +66,9 @@ public class Particle {
         isRunning = false;
     }
 
+    /**
+     * Unpauses the game
+     */
     public void unFreeze()
     {
         isRunning = true;
