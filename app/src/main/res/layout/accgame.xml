@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/accgame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="androidsupersquad.rocketfrenzy.MiniGame.AccGame.AccGame">
+    tools:context="androidsupersquad.rocketfrenzy.MiniGame.AccGame.AccGame"
+    android:background="@drawable/field">
 
-    <com.example.accelerometer.accgame.SimulationView
+    <androidsupersquad.rocketfrenzy.MiniGame.AccGame.SimulationView
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,4 +16,38 @@
         android:layout_alignParentStart="true"
         android:configChanges="orientation"
         android:screenOrientation="portrait"/>
+
+    <ImageButton
+        android:id="@+id/AccGameCloseButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/cancel"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/AsteroidCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="5dp"
+        android:text="30"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/accgameover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:textAlignment="center"
+        android:text="TOUCH TO BEGIN"
+        android:textSize="100dp"
+        android:textColor="@color/white"/>
+
 </RelativeLayout>

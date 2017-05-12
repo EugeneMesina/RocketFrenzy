@@ -22,6 +22,7 @@ public class Title extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_title_screen);
+
         start = (Button) findViewById(R.id.startButton);
         new Handler().postDelayed(new Runnable() {
             @Override

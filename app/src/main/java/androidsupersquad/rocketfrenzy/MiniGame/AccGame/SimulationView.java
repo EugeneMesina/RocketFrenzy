@@ -1,22 +1,31 @@
 package androidsupersquad.rocketfrenzy.MiniGame.AccGame;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
+import android.text.Layout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Surface;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.Random;
 
 import androidsupersquad.rocketfrenzy.R;
 
@@ -28,15 +37,16 @@ import androidsupersquad.rocketfrenzy.R;
 public class SimulationView extends View implements SensorEventListener {
     //Setting variables and bitmaps
     private SensorManager sensorManager;
-    private Bitmap mField, mBasket, mBitmap;
+    private Bitmap mBasket, mBitmap;
     private Particle mBall;
     private Display mDisplay;
-    private static final int BALL_SIZE=64;
     private static final int BASKET_SIZE=120;
     private float mXOrigin, mYOrigin , mHorizontalBound, mVerticalBound, mSensorX, mSensorY,mSensorZ;
     private long mSensorTimeStamp;
-    int score, sleep;
+    int score, sleep, ballWidth, ballHeight;
     boolean scorekeeper;
+    private int xBasket, yBasket;
+    private boolean isRunning;
 
     /**
      * The instantiation for the custom view
@@ -47,22 +57,22 @@ public class SimulationView extends View implements SensorEventListener {
     {
         super(context,attributeSet);
         //set sensors
+        isRunning = true;
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         //set accelerometer event listener
         sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_GAME);
        //set new particle class to move ball and handle boundries
         mBall=new Particle();
         //set the drawable for the ball
-        Bitmap ball= BitmapFactory.decodeResource(getResources(),R.drawable.ball);
-        mBitmap = Bitmap.createScaledBitmap(ball,BALL_SIZE,BALL_SIZE,true);
+
+        Bitmap ball= BitmapFactory.decodeResource(getResources(),R.drawable.tiny_rocket);
+        ballWidth = ball.getWidth()/2;
+        ballHeight = ball.getHeight()/2;
+        mBitmap = Bitmap.createScaledBitmap(ball,ballWidth,ballHeight,true);
         //set the drawable for the basket
         Bitmap basket= BitmapFactory.decodeResource(getResources(),R.drawable.basket);
         mBasket = Bitmap.createScaledBitmap(basket,BASKET_SIZE,BASKET_SIZE,true);
         //set the field
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inDither = true;
-        opts.inPreferredConfig = Bitmap.Config.RGB_565;
-        mField = BitmapFactory.decodeResource(getResources(),R.drawable.field,opts);
 
     // initial the current score
         score=0;
@@ -74,6 +84,10 @@ public class SimulationView extends View implements SensorEventListener {
         mYOrigin = mDisplay.getHeight()/2;
         mHorizontalBound = mDisplay.getWidth()/2;
         mVerticalBound = mDisplay.getHeight()/2;
+
+        xBasket= Math.round(((mXOrigin-BASKET_SIZE/2)-20));
+        yBasket= Math.round(((mYOrigin-BASKET_SIZE/2)-755));
+
         sleep=0;
         scorekeeper=true;
     }
@@ -86,36 +100,38 @@ public class SimulationView extends View implements SensorEventListener {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
 //draw the Basket in it's static place
-        canvas.drawBitmap(mField,0,0,null);
-        canvas.drawBitmap(mBasket,(mXOrigin-BASKET_SIZE/2)-20,(mYOrigin-BASKET_SIZE/2)-755,null);
+            canvas.drawBitmap(mBasket, xBasket, yBasket, null);
 //update the ball position
-        mBall.updatePosition(mSensorX,mSensorY,mSensorZ,mSensorTimeStamp);
-        mBall.resolveCollisionWithBounds(mHorizontalBound,mVerticalBound);
+            mBall.updatePosition(mSensorX, mSensorY, mSensorZ, mSensorTimeStamp);
+            mBall.resolveCollisionWithBounds(mHorizontalBound, mVerticalBound);
 
-        canvas.drawBitmap(mBitmap,(mXOrigin-BALL_SIZE/2)+mBall.mPosX, (mYOrigin-BALL_SIZE/2)-mBall.mPosY,null);
-        //checkvalues to see if the ball image touches the basket image
-        Integer xPos=Math.round((mXOrigin-BALL_SIZE/2)+mBall.mPosX);
-        Integer YPos=Math.round((mYOrigin-BALL_SIZE/2)-mBall.mPosY);
-        Integer Xbasket= Math.round(((mXOrigin-BASKET_SIZE/2)-20));
-        Integer Ybasket= Math.round(((mYOrigin-BASKET_SIZE/2)-755));
+//        Matrix matrix = new Matrix();
+//        matrix.postRotate(mBall.mAngle);
+//        Bitmap tempBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
+
+            canvas.drawBitmap(mBitmap, (mXOrigin - ballWidth / 2) + mBall.mPosX, (mYOrigin - ballHeight / 2) - mBall.mPosY, null);
+
+            //checkvalues to see if the ball image touches the basket image
+            Integer xPos = Math.round((mXOrigin - ballWidth / 2) + mBall.mPosX);
+            Integer YPos = Math.round((mYOrigin - ballHeight / 2) - mBall.mPosY);
 //add score if the ball hits the basket image
 
-        if((xPos<=Xbasket+20&&xPos>=Xbasket-20)&&(Ybasket+20>=YPos&&Ybasket-20<=YPos)&&scorekeeper)
-        {
-            System.out.println("HERE");
-            score++;
-            scorekeeper=false;
-        }
-        //sleep so the player doesn't just keep the ball in one place and indefinitely get an infinite score
-        sleep++;
-        if(sleep==100)
-        {
-            sleep=0;
-            scorekeeper=true;
+            if ((xPos <= xBasket + 80 && xPos >= xBasket - 80) && (yBasket + 80 >= YPos && yBasket - 80 <= YPos) && scorekeeper) {
+                System.out.println("HERE");
+                score++;
+                scorekeeper = false;
+                mBall.throwParticle();
+                scramble();
+            }
+            //sleep so the player doesn't just keep the ball in one place and indefinitely get an infinite score
+            sleep++;
+            if (sleep == 100) {
+                sleep = 0;
+                scorekeeper = true;
 
-        }
-        setScore(canvas);
-        invalidate();
+            }
+            setScore(canvas);
+            invalidate();
     }
 
     /**
@@ -129,7 +145,7 @@ public class SimulationView extends View implements SensorEventListener {
         titlePaint.setTypeface(Typeface.MONOSPACE);
         titlePaint.setTextAlign(Paint.Align.CENTER);
         titlePaint.setTextSize(100);
-        canvas.drawText("Score "+score, mXOrigin, mYOrigin,titlePaint);
+        canvas.drawText("Score "+score, mXOrigin, mYOrigin*2 - 50,titlePaint);
 
 
     }
@@ -145,8 +161,8 @@ public class SimulationView extends View implements SensorEventListener {
         mXOrigin = w * 0.5f;
         mYOrigin = h * 0.5f;
 
-        mHorizontalBound = (w - BALL_SIZE) * 0.5f;
-        mVerticalBound = (h - BALL_SIZE) * 0.5f;
+        mHorizontalBound = (w - ballWidth) * 0.5f;
+        mVerticalBound = (h - ballHeight) * 0.5f;
     }
 
     /**
@@ -158,23 +174,19 @@ public class SimulationView extends View implements SensorEventListener {
      */
     @Override
     public void onSensorChanged(SensorEvent event) {
-
-        if(event.sensor.getType()==Sensor.TYPE_ACCELEROMETER)
-        {
-            mSensorTimeStamp=System.nanoTime();
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            mSensorTimeStamp = System.nanoTime();
             //checks to see if it hasn't rotated
-            if (mDisplay.getRotation()==Surface.ROTATION_0) {
+            if (mDisplay.getRotation() == Surface.ROTATION_0) {
                 mSensorX = event.values[0];
                 mSensorY = event.values[1];
                 mSensorZ = event.values[2];
             }
             //checks to see if it has rotated
-            else if(mDisplay.getRotation()==Surface.ROTATION_90)
-            {
+            else if (mDisplay.getRotation() == Surface.ROTATION_90) {
                 mSensorX = event.values[1];
                 mSensorY = event.values[0];
                 mSensorZ = event.values[2];
-
             }
         }
     }
@@ -189,5 +201,32 @@ public class SimulationView extends View implements SensorEventListener {
     }
     public void stopSimulation(){
         sensorManager.unregisterListener(this);
+    }
+
+    public void end()
+    {
+        isRunning = false;
+        mBall.freeze();
+    }
+
+    public void scramble()
+    {
+        Random rand = new Random();
+        xBasket = 100 + rand.nextInt((int)mXOrigin*2 - 200);
+        yBasket = 100 + rand.nextInt((int)mYOrigin*2 - 200);
+    }
+
+    public void freeze()
+    {
+        mBall.freeze();
+    }
+    public void unFreeze()
+    {
+        mBall.unFreeze();
+    }
+
+    public int getScore()
+    {
+        return score;
     }
 }
