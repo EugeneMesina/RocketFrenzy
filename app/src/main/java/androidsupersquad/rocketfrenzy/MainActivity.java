@@ -65,7 +65,9 @@ import androidsupersquad.rocketfrenzy.MiniGame.AccGame.AccGame;
 import androidsupersquad.rocketfrenzy.MiniGame.Lottery;
 import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
 
-//import android.support.design.widget.FloatingActionButton;
+/**
+ * Created by: Christian, Jimmy, Daniel, and Eugene
+ */
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener, SensorEventListener {
 
@@ -99,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
         super.onCreate(savedInstanceState);
         context = getBaseContext();
-
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mPedometer = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
@@ -546,11 +547,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private void startGame(){
 
         Random random = new Random();
-        ran = random.nextInt(4)+1;
+        ran = random.nextInt(3)+1;
 
         new AlertDialog.Builder(this)
                 .setTitle("Game Found")
-                .setMessage("Do you want to play?" + ran)
+                .setMessage("Do you want to play?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     Intent game;
                     public void onClick(DialogInterface dialog, int which) {
@@ -571,12 +572,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                                 game = new Intent(MainActivity.this, ShakeMiniGame.class);
                                 break;
                                 //daniel's game
-                            case 4:
-
-                                game = new Intent(MainActivity.this, AccGame.class);
-                                break;
-
-
                         }
                         startActivity(game);
                         map.clear();
