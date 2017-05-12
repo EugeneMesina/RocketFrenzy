@@ -506,8 +506,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
      */
     private void bindMenuScreens() {
         menuScreens = new Fragment[5];
-        menuScreens[3] = new DailyTaskFragment();
-        menuScreens[4] = new KamikaziFragment();
+        menuScreens[3] = new KamikaziFragment();
+        menuScreens[4] = new DailyTaskFragment();
         menuScreens[2] = new ShopFragment();
         menuScreens[1] = new RocketsFragment();
         menuScreens[0] = new ProfileFragment();
@@ -633,6 +633,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private void openMenu() {
         isMenuOpen = true;
         menu[0].animate().rotation(-60);
+        System.out.println("Player Bleach "+getPlayerBleachAmount(getPlayerName()));
+        if(getPlayerBleachAmount(getPlayerName())>=100)
+        {
+            menu[4].setVisibility(View.VISIBLE);
+        }
         for(int ii = 1; ii < 6; ii++)
             menu[ii].animate().translationY(0);
     }
