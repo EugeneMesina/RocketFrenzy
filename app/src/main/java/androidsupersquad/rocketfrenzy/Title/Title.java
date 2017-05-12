@@ -1,6 +1,7 @@
 package androidsupersquad.rocketfrenzy.Title;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -28,10 +29,16 @@ public class Title extends AppCompatActivity {
     private ImageView titleBg, titleRocket, titleCloud, titleName, startImage;
     private DisplayMetrics displayMetrics;
     private int screenWidth, screenHeight;
+    private MediaPlayer music;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        music= MediaPlayer.create(this, R.raw.bg);
+        //set music to loop
+        music.setLooping(true);
+        //start service
+        music.start();
         View decorView = getWindow().getDecorView();
         int fullOption = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(fullOption);
@@ -182,12 +189,14 @@ public class Title extends AppCompatActivity {
     protected void onPause()
     {
         super.onPause();
+        music.stop();
     }
 
     @Override
     protected void onResume()
     {
        super.onResume();
+        music.start();
     }
 
 }
