@@ -53,13 +53,14 @@ import java.util.Random;
 import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
-import androidsupersquad.rocketfrenzy.Fragments.DailyTaskFragment;
+import androidsupersquad.rocketfrenzy.Fragments.HelpFragment;
 import androidsupersquad.rocketfrenzy.Fragments.KamikaziFragment;
 import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
 import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.Fragments.ProfileFragment;
 import androidsupersquad.rocketfrenzy.Fragments.RocketsFragment;
 import androidsupersquad.rocketfrenzy.Fragments.ShopFragment;
+import androidsupersquad.rocketfrenzy.MiniGame.AccGame.AccGame;
 import androidsupersquad.rocketfrenzy.MiniGame.Lottery;
 import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
 
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private Sensor mPedometer;
     private SensorManager sensorManager;
     private RocketDB db;
+    private int rocketCountOnMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         sensorManager.registerListener(MainActivity.this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
 
         db = new RocketDB(this);
+        rocketCountOnMap = 0;
 
         insertPlayer("USERNAME");
         if(getPlayerName()==null){
@@ -173,10 +176,18 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
                 map = mapboxMap;
+                map.setStyleUrl("mapbox://styles/mapbox/dark-v9");
                 mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(@NonNull Marker marker) {
-                        startGame();
+                        Log.d("DISTANCE", marker.getPosition().distanceTo(new LatLng(userLocation)) + "");
+                        //large value so it will always spawn in your reachable distance
+                        if(marker.getPosition().distanceTo(new LatLng(userLocation)) <  100) {
+                            startGame();
+                        } else {
+                            map.clear();
+                            rocketCountOnMap--;
+                        }
                         return true;
                     }
                 });
@@ -275,14 +286,14 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
                 //startActivity(toProfile);
             }
-        });*/
+        });
         menu[5].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent x = new Intent(MainActivity.this, ShakeMiniGame.class);
                 startActivity(x);
             }
-        });
+        });*/
 
         floatingActionButton = (FloatingActionButton) findViewById(R.id.location_toggle_fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -290,7 +301,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             public void onClick(View view) {
                 if (map != null) {
                     toggleGps(!map.isMyLocationEnabled());
-
                 }
             }
         });
@@ -443,7 +453,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                                 .build(); // Creates a CameraPosition from the builder
 
                         map.animateCamera(CameraUpdateFactory
-                                .newCameraPosition(position), 7000);
+                                .newCameraPosition(position), 2000);
 
                     }
                 }
@@ -505,8 +515,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
      */
     private void bindMenuScreens() {
         menuScreens = new Fragment[5];
-        menuScreens[3] = new DailyTaskFragment();
         menuScreens[4] = new KamikaziFragment();
+        menuScreens[3] = new HelpFragment();
         menuScreens[2] = new ShopFragment();
         menuScreens[1] = new RocketsFragment();
         menuScreens[0] = new ProfileFragment();
@@ -516,7 +526,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
      * Attaches onClickListeners to menu buttons
      */
     private void setOnClickListeners() {
-        for(int ii = 0; ii < menu.length - 1; ii++) {
+        for(int ii = 0; ii < menu.length; ii++) {
             if(ii != 0)
                 menu[ii].setOnClickListener(setListenerOptions(ii));
             else {
@@ -552,7 +562,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                             case 2:
                                 //lottery slot machine
 
-                                game = new Intent(MainActivity.this, ShakeMiniGame.class);
+                                game = new Intent(MainActivity.this, AccGame.class);
                                 //accgame
                                 break;
                             case 3:
@@ -562,26 +572,24 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                                 //daniel's game
                             case 4:
 
-                                game = new Intent(MainActivity.this, Lottery.class);
+                                game = new Intent(MainActivity.this, AccGame.class);
                                 break;
 
 
                         }
                         startActivity(game);
                         map.clear();
-                        finish();
+                        rocketCountOnMap--;
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         map.clear();
-
+                        rocketCountOnMap--;
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
-
-
 
     }
 
@@ -633,6 +641,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private void openMenu() {
         isMenuOpen = true;
         menu[0].animate().rotation(-60);
+        System.out.println("Player Bleach "+getPlayerBleachAmount(getPlayerName()));
+        if(getPlayerBleachAmount(getPlayerName())>=100)
+        {
+            menu[5].setVisibility(View.VISIBLE);
+        }
         for(int ii = 1; ii < 6; ii++)
             menu[ii].animate().translationY(0);
     }
@@ -688,17 +701,23 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                     @Override
                     public void run() {
                         //  img.setVisibility(View.GONE);
-                        if(userLocation!=null ) {
-                            Icon icon = IconFactory.getInstance(MainActivity.this).fromResource(R.drawable.profile);
+                        if(userLocation!=null && rocketCountOnMap < 1) {
+                            Icon icon = IconFactory.getInstance(MainActivity.this).fromResource(R.drawable.tiny_rocket);
                             final MarkerOptions gameMarker = new MarkerOptions();
+                            LatLng newLocation = new LatLng(userLocation);
+                            Random rand = new Random();
+                            double randLat = (rand.nextDouble() * 0.001) - 0.0005;
+                            double randLong = (rand.nextDouble() * 0.001) - 0.0005;
+                            newLocation.setLatitude(newLocation.getLatitude() + randLat);
+                            newLocation.setLongitude(newLocation.getLongitude() + randLong);
+                            //0.0005----
+                            Log.d("SPAWN MARKER", "user location: " + new LatLng(userLocation).toString() + "\nmarker location: " + newLocation.toString());
                             map.addMarker( new MarkerOptions()
-                                    .position(new LatLng(userLocation))
+                                    .position(newLocation)
                                     .title("Game Start")
                                     .snippet("Play Game")
                                     .icon(icon));
-
-
-
+                            rocketCountOnMap++;
                         }
                         else{
                             //do nothing

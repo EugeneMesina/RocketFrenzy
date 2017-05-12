@@ -107,7 +107,6 @@
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
-        mapbox_styleUrl="@string/mapbox_style_mapbox_streets"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible">
@@ -180,9 +179,9 @@
             android:layout_alignBottom="@+id/temp_menu_base"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/space_fab_item"
-            android:visibility="invisible"
+            android:visibility="visible"
             app:backgroundTint="@color/white"
-            app:srcCompat="@drawable/ic_my_location_24dp"
+            app:srcCompat="@drawable/mapbox_info_bg_selector"
             tools:ignore="VectorDrawableCompat" />
 
         <android.support.design.widget.FloatingActionButton

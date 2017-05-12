@@ -27,7 +27,7 @@ import androidsupersquad.rocketfrenzy.MainActivity;
 import androidsupersquad.rocketfrenzy.R;
 
 public class Lottery extends AppCompatActivity {
-    ImageButton rocket;
+    ImageButton rocket, close;
     ImageView slot1,slot2,slot3;
     Random random;
     int img1,img2,img3;
@@ -40,6 +40,8 @@ public class Lottery extends AppCompatActivity {
 
         random = new Random();
         rocket = (ImageButton) findViewById(R.id.RocketButton);
+        close = (ImageButton) findViewById(R.id.LotteryCloseButton);
+        close.setVisibility(View.INVISIBLE);
         slot1 = (ImageView)findViewById(R.id.imageView);
         slot2 = (ImageView)findViewById(R.id.imageView2);
         slot3 = (ImageView)findViewById(R.id.imageView3);
@@ -50,7 +52,6 @@ public class Lottery extends AppCompatActivity {
                 rocket.setEnabled(false);
                 slot1.setBackgroundResource(R.drawable.animate);
                 final AnimationDrawable slot1anim = (AnimationDrawable) slot1.getBackground();
-                slot1anim.start();
 
                 slot2.setBackgroundResource(R.drawable.animate);
                 final AnimationDrawable slot2anim = (AnimationDrawable) slot2.getBackground();
@@ -59,6 +60,25 @@ public class Lottery extends AppCompatActivity {
                 slot3.setBackgroundResource(R.drawable.animate);
                 final AnimationDrawable slot3anim = (AnimationDrawable) slot3.getBackground();
                 slot3anim.start();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        slot1anim.start();
+                    }
+                },0);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        slot2anim.start();
+                    }
+                },50);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        slot3anim.start();
+                    }
+                },100);
 
                 Handler handler = new Handler();
                 RotateAnimation r;
@@ -78,6 +98,13 @@ public class Lottery extends AppCompatActivity {
                         getScore();
                     }
                 },2000);
+            }
+        });
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -135,18 +162,18 @@ public class Lottery extends AppCompatActivity {
             if(getPlayerName()!=null) {
                 addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
                 addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
+                updatePlayerCoinAmount(getPlayerName(), 100, false);
             }
         }
         else if(img1 == img2 || img2 == img3 || img1==img3){
             addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
+            updatePlayerCoinAmount(getPlayerName(), 50, false);
             //some number
         }
-        else{
-            Toast.makeText(this,"Loser",Toast.LENGTH_LONG).show();
+        else {
+            Toast.makeText(this, "Loser", Toast.LENGTH_LONG).show();
         }
-        Intent x = new Intent(Lottery.this, MainActivity.class);
-        startActivity(x);
-        finish();
+        close.setVisibility(View.VISIBLE);
     }
     private String getPlayerName()
     {
@@ -202,5 +229,32 @@ public class Lottery extends AppCompatActivity {
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
 
+    private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        int newCoinAmount = 0;
+        ContentValues newValues = new ContentValues();
+        if(set) {
+            newCoinAmount = coinAmount;
+        } else {
+            int currentCoins = getPlayerCoinAmount(playerName);
+            newCoinAmount = currentCoins + coinAmount;
+        }
+        newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
+        return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
+    }
 
+    private int getPlayerCoinAmount(String playerName)
+    {
+        String where = RocketDB.USER_NAME_COLUMN + "= ?";
+        String whereArgs[] = {playerName};
+        String[] resultColumns = {RocketDB.COIN_AMOUNT_COLUMN};
+        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
+        int coin = cursor.getColumnIndex(RocketDB.COIN_AMOUNT_COLUMN);
+        cursor.moveToFirst();
+        int coinAmount = cursor.getInt(coin);
+        Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
+        return coinAmount;
+    }
 }

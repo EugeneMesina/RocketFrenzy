@@ -86,12 +86,28 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
                             .setTitle("Buy?");
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            ArrayList<ShopItems> PlayerItem=getPlayerItems(getPlayerName());
                             Integer coinAmount = getPlayerCoinAmount(getPlayerName())-currentItem.getItemCost();
                             if(currentItem.getItemName().equals("Launch Pad Bundle"))
                             {
                                 addItemToPlayer(getPlayerName(), ShopData.LaunchPad);
                                 addItemToPlayer(getPlayerName(), ShopData.LaunchPad);
                                 addItemToPlayer(getPlayerName(), ShopData.LaunchPad);
+                                updatePlayerCoinAmount(getPlayerName(), coinAmount, true);
+                                Integer amount = getPlayerCoinAmount(getPlayerName());
+                                coinCount.setText(amount.toString());
+
+                            }
+                            else if(PlayerItem.contains(currentItem)&& currentItem.getItemName().contains("Icon"))
+                            {
+                                Toast.makeText(context, "You have this Icon Already",Toast.LENGTH_SHORT).show();
+                            }
+                            else if(currentItem.equals(ShopData.Bleach))
+                            {
+                                int bleach = getPlayerBleachAmount(getPlayerName())+1;
+                                updatePlayerBleachAmount(getPlayerName(),bleach,true);
+                                updatePlayerCoinAmount(getPlayerName(), coinAmount, true);
+                                addItemToPlayer(getPlayerName(), ShopData.Bleach);
                                 updatePlayerCoinAmount(getPlayerName(), coinAmount, true);
                                 Integer amount = getPlayerCoinAmount(getPlayerName());
                                 coinCount.setText(amount.toString());
@@ -261,4 +277,33 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
             return null;
         }
     }
+    private int getPlayerBleachAmount(String playerName)
+    {
+        String where = RocketDB.USER_NAME_COLUMN + "= ?";
+        String whereArgs[] = {playerName};
+        String[] resultColumns = {RocketDB.BLEACH_AMOUNT_COLUMN};
+        Cursor cursor = context.getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
+        int bleach = cursor.getColumnIndex(RocketDB.BLEACH_AMOUNT_COLUMN);
+        cursor.moveToFirst();
+        int bleachAmount = cursor.getInt(bleach);
+        Log.d("BLEACH_INFO", "Username: " + playerName + "\nBleach amount: " + bleachAmount);
+        return bleachAmount;
+    }
+
+    private int updatePlayerBleachAmount(String playerName, int bleachAmount, boolean set)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        int newBleachAmount = 0;
+        ContentValues newValues = new ContentValues();
+        if(set) {
+            newBleachAmount = bleachAmount;
+        } else {
+            int currentBleach = getPlayerBleachAmount(playerName);
+            newBleachAmount = currentBleach + bleachAmount;
+        }
+        newValues.put(RocketDB.BLEACH_AMOUNT_COLUMN, newBleachAmount);
+        return context.getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
+    }
+
 }

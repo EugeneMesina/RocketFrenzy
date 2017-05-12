@@ -83,15 +83,19 @@ public class ProfileFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.WaterIcon:
                 profilePicture.setImageResource(R.drawable.watericon);
+                updatePlayerIconString(getPlayerName(),"Water Icon");
                 return true;
             case R.id.Horizon:
                 profilePicture.setImageResource(R.drawable.horizonicon);
+                updatePlayerIconString(getPlayerName(),ShopData.HorizonIcon.getItemName());
                 return true;
             case R.id.FireEmblem:
                 profilePicture.setImageResource(R.drawable.fireemblem);
+                updatePlayerIconString(getPlayerName(),ShopData.FireIcon.getItemName());
                 return true;
             case R.id.SkullIcon:
                 profilePicture.setImageResource(R.drawable.skullicon);
+                updatePlayerIconString(getPlayerName(),ShopData.SkullIcon.getItemName());
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -104,6 +108,13 @@ public class ProfileFragment extends Fragment {
         profilePicture = (ImageView) view.findViewById(R.id.ProfilePicture);
         registerForContextMenu(profilePicture);
         TextView coins = (TextView) view.findViewById(R.id.CoinAmount);
+        coins.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                updatePlayerCoinAmount(getPlayerName(), 1000, false);
+                return true;
+            }
+        });
         Typeface myCustomFont = Typeface.createFromAsset(view.getContext().getAssets(),"fonts/TwoLines.ttf");
         userName.setTypeface(myCustomFont);
         //coins.setTypeface(myCustomFont);
@@ -114,6 +125,24 @@ public class ProfileFragment extends Fragment {
         System.out.println(coinAmount);
         final EditText rename = (EditText) view.findViewById(R.id.NameChange);
         rename.setTypeface(myCustomFont);
+        ImageView Icon = (ImageView) view.findViewById(R.id.ProfilePicture);
+        String currentIcon = getPlayerIconString(getPlayerName());
+        if(currentIcon.equals("Water Icon"))
+        {
+            Icon.setImageResource(R.drawable.watericon);
+        }
+        else if(currentIcon.equals(ShopData.FireIcon.getItemName()))
+        {
+            Icon.setImageResource(R.drawable.fireemblem);
+        }
+        else if(currentIcon.equals(ShopData.HorizonIcon.getItemName()))
+        {
+            Icon.setImageResource(R.drawable.horizonicon);
+        }
+        else if(currentIcon.equals(ShopData.SkullIcon.getItemName()))
+        {
+            Icon.setImageResource(R.drawable.skullicon);
+        }
         rename.setOnKeyListener(new View.OnKeyListener() {
            public boolean onKey(View v,int keyCode, KeyEvent event)
            {
@@ -214,5 +243,42 @@ public class ProfileFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    private String getPlayerIconString(String playerName)
+    {
+        String where = RocketDB.USER_NAME_COLUMN + "= ?";
+        String whereArgs[] = {playerName};
+        String[] resultColumns = {RocketDB.PLAYER_ICON_COLUMN};
+        Cursor cursor = getActivity().getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
+        int icon = cursor.getColumnIndex(RocketDB.PLAYER_ICON_COLUMN);
+        cursor.moveToFirst();
+        String iconString = cursor.getString(icon);
+        Log.d("ICON_INFO", "Username: " + playerName + "\nIcon string: " + iconString);
+        return iconString;
+    }
+
+    private int updatePlayerIconString(String playerName, String newIconString)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        ContentValues newValues = new ContentValues();
+        newValues.put(RocketDB.PLAYER_ICON_COLUMN, newIconString);
+        return getActivity().getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
+    }
+
+    private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        int newCoinAmount = 0;
+        ContentValues newValues = new ContentValues();
+        if(set) {
+            newCoinAmount = coinAmount;
+        } else {
+            int currentCoins = getPlayerCoinAmount(playerName);
+            newCoinAmount = currentCoins + coinAmount;
+        }
+        newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
+        return getActivity().getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
 }

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ import androidsupersquad.rocketfrenzy.tyrantgit.explosionfield.ExplosionField;
 
 public class RocketLaunch extends AppCompatActivity {
     private ImageView img , img2;
+    private ImageButton close;
     private TextView tx;
     private Context context;
     private Random random;
@@ -43,7 +45,8 @@ public class RocketLaunch extends AppCompatActivity {
         img2.setVisibility(View.GONE);
         Resources res = getResources();
         img.setImageResource(R.drawable.rocketdraft);
-
+        close = (ImageButton) findViewById(R.id.RocketLaunchCloseButton);
+        close.setVisibility(View.INVISIBLE);
         Display display = getWindowManager().getDefaultDisplay();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -55,6 +58,12 @@ public class RocketLaunch extends AppCompatActivity {
         animation.setDuration(2000);
         context = this.context;
         final Activity activity =this;
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         img.startAnimation(animation);
         new Handler().postDelayed(new Runnable() {
@@ -90,10 +99,7 @@ public class RocketLaunch extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-            Intent x = new Intent(RocketLaunch.this, MainActivity.class);
-            startActivity(x);
-            finish();
-
+                close.setVisibility(View.VISIBLE);
             }
         }, 5000);
 
