@@ -79,6 +79,7 @@ public class AccGame extends AppCompatActivity  {
                         updatePlayerCoinAmount(getPlayerName(), score * 100, false);
                         won.setText("You won "+score*100+ " coins!");
                         won.setVisibility(View.VISIBLE);
+                        close.setVisibility(View.VISIBLE);
                     }
                 }.start();
             }
