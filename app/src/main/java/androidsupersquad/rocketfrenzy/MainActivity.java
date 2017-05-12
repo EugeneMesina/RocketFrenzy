@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private Sensor mPedometer;
     private SensorManager sensorManager;
     private RocketDB db;
+    private int rocketCountOnMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         sensorManager.registerListener(MainActivity.this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
 
         db = new RocketDB(this);
+        rocketCountOnMap = 0;
 
         insertPlayer("USERNAME");
         if(getPlayerName()==null){
@@ -177,7 +179,14 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(@NonNull Marker marker) {
-                        startGame();
+                        Log.d("DISTANCE", marker.getPosition().distanceTo(new LatLng(userLocation)) + "");
+                        //large value so it will always spawn in your reachable distance
+                        if(marker.getPosition().distanceTo(new LatLng(userLocation)) <  100) {
+                            startGame();
+                        } else {
+                            map.clear();
+                            rocketCountOnMap--;
+                        }
                         return true;
                     }
                 });
@@ -570,12 +579,13 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                         }
                         startActivity(game);
                         map.clear();
+                        rocketCountOnMap--;
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         map.clear();
-
+                        rocketCountOnMap--;
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -693,8 +703,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                     @Override
                     public void run() {
                         //  img.setVisibility(View.GONE);
-                        if(userLocation!=null ) {
-                            Icon icon = IconFactory.getInstance(MainActivity.this).fromResource(R.drawable.profile);
+                        if(userLocation!=null && rocketCountOnMap < 1) {
+                            Icon icon = IconFactory.getInstance(MainActivity.this).fromResource(R.drawable.tiny_rocket);
                             final MarkerOptions gameMarker = new MarkerOptions();
                             LatLng newLocation = new LatLng(userLocation);
                             Random rand = new Random();
@@ -709,9 +719,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                                     .title("Game Start")
                                     .snippet("Play Game")
                                     .icon(icon));
-
-
-
+                            rocketCountOnMap++;
                         }
                         else{
                             //do nothing

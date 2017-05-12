@@ -162,10 +162,12 @@ public class Lottery extends AppCompatActivity {
             if(getPlayerName()!=null) {
                 addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
                 addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
+                updatePlayerCoinAmount(getPlayerName(), 100, false);
             }
         }
         else if(img1 == img2 || img2 == img3 || img1==img3){
             addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
+            updatePlayerCoinAmount(getPlayerName(), 50, false);
             //some number
         }
         else {
@@ -227,5 +229,32 @@ public class Lottery extends AppCompatActivity {
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
 
+    private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        int newCoinAmount = 0;
+        ContentValues newValues = new ContentValues();
+        if(set) {
+            newCoinAmount = coinAmount;
+        } else {
+            int currentCoins = getPlayerCoinAmount(playerName);
+            newCoinAmount = currentCoins + coinAmount;
+        }
+        newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
+        return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
+    }
 
+    private int getPlayerCoinAmount(String playerName)
+    {
+        String where = RocketDB.USER_NAME_COLUMN + "= ?";
+        String whereArgs[] = {playerName};
+        String[] resultColumns = {RocketDB.COIN_AMOUNT_COLUMN};
+        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
+        int coin = cursor.getColumnIndex(RocketDB.COIN_AMOUNT_COLUMN);
+        cursor.moveToFirst();
+        int coinAmount = cursor.getInt(coin);
+        Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
+        return coinAmount;
+    }
 }

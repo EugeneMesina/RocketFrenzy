@@ -87,6 +87,7 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
                                         this.cancel();
                                         if(getPlayerName()!=null) {
                                             addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
+                                            updatePlayerCoinAmount(getPlayerName(), 200, false);
                                         }
 
                                     }
@@ -207,5 +208,32 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
 
+    private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        int newCoinAmount = 0;
+        ContentValues newValues = new ContentValues();
+        if(set) {
+            newCoinAmount = coinAmount;
+        } else {
+            int currentCoins = getPlayerCoinAmount(playerName);
+            newCoinAmount = currentCoins + coinAmount;
+        }
+        newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
+        return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
+    }
 
+    private int getPlayerCoinAmount(String playerName)
+    {
+        String where = RocketDB.USER_NAME_COLUMN + "= ?";
+        String whereArgs[] = {playerName};
+        String[] resultColumns = {RocketDB.COIN_AMOUNT_COLUMN};
+        Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, resultColumns, where, whereArgs, null);
+        int coin = cursor.getColumnIndex(RocketDB.COIN_AMOUNT_COLUMN);
+        cursor.moveToFirst();
+        int coinAmount = cursor.getInt(coin);
+        Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
+        return coinAmount;
+    }
 }

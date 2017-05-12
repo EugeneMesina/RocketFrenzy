@@ -108,6 +108,13 @@ public class ProfileFragment extends Fragment {
         profilePicture = (ImageView) view.findViewById(R.id.ProfilePicture);
         registerForContextMenu(profilePicture);
         TextView coins = (TextView) view.findViewById(R.id.CoinAmount);
+        coins.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                updatePlayerCoinAmount(getPlayerName(), 1000, false);
+                return true;
+            }
+        });
         Typeface myCustomFont = Typeface.createFromAsset(view.getContext().getAssets(),"fonts/TwoLines.ttf");
         userName.setTypeface(myCustomFont);
         //coins.setTypeface(myCustomFont);
@@ -256,6 +263,22 @@ public class ProfileFragment extends Fragment {
         String[] whereArgs = {playerName};
         ContentValues newValues = new ContentValues();
         newValues.put(RocketDB.PLAYER_ICON_COLUMN, newIconString);
+        return getActivity().getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
+    }
+
+    private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
+    {
+        String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
+        String[] whereArgs = {playerName};
+        int newCoinAmount = 0;
+        ContentValues newValues = new ContentValues();
+        if(set) {
+            newCoinAmount = coinAmount;
+        } else {
+            int currentCoins = getPlayerCoinAmount(playerName);
+            newCoinAmount = currentCoins + coinAmount;
+        }
+        newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
         return getActivity().getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
 }
