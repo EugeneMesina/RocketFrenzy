@@ -27,7 +27,10 @@ import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
 import androidsupersquad.rocketfrenzy.R;
 
-
+/**
+ * Created by Jimmy Chao(Lazer)
+ * Shake Mini Game that is activated to reward player rocket/coins
+ */
 public class ShakeMiniGame extends AppCompatActivity implements SensorEventListener {
     //initialize game
     private SensorManager sensorManager;
