@@ -60,6 +60,7 @@ import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.Fragments.ProfileFragment;
 import androidsupersquad.rocketfrenzy.Fragments.RocketsFragment;
 import androidsupersquad.rocketfrenzy.Fragments.ShopFragment;
+import androidsupersquad.rocketfrenzy.MiniGame.AccGame.AccGame;
 import androidsupersquad.rocketfrenzy.MiniGame.Lottery;
 import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
 
@@ -300,7 +301,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             public void onClick(View view) {
                 if (map != null) {
                     toggleGps(!map.isMyLocationEnabled());
-
                 }
             }
         });
@@ -453,7 +453,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                                 .build(); // Creates a CameraPosition from the builder
 
                         map.animateCamera(CameraUpdateFactory
-                                .newCameraPosition(position), 7000);
+                                .newCameraPosition(position), 2000);
 
                     }
                 }
@@ -562,7 +562,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                             case 2:
                                 //lottery slot machine
 
-                                game = new Intent(MainActivity.this, ShakeMiniGame.class);
+                                game = new Intent(MainActivity.this, AccGame.class);
                                 //accgame
                                 break;
                             case 3:
@@ -572,7 +572,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                                 //daniel's game
                             case 4:
 
-                                game = new Intent(MainActivity.this, Lottery.class);
+                                game = new Intent(MainActivity.this, AccGame.class);
                                 break;
 
 
