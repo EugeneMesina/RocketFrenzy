@@ -1,26 +1,16 @@
 package androidsupersquad.rocketfrenzy.MiniGame.AccGame;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import androidsupersquad.rocketfrenzy.Data.RocketData;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.R;
@@ -34,10 +24,12 @@ public class AccGame extends AppCompatActivity  {
     private PowerManager.WakeLock mWakeLock;
     private SimulationView simulationView;
     CountDownTimer timers;
-    private TextView counter;
+    private TextView counter,won;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.accgame);
         //set wake lock
         PowerManager mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
@@ -57,6 +49,8 @@ public class AccGame extends AppCompatActivity  {
         gameOver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                won = (TextView)findViewById(R.id.winAccgame);
+                won.setVisibility(View.INVISIBLE);
                 gameOver.setVisibility(View.INVISIBLE);
                 simulationView.unFreeze();
                 timers = new CountDownTimer(30000, 1000) {
@@ -74,6 +68,8 @@ public class AccGame extends AppCompatActivity  {
                         gameOver.setVisibility(View.VISIBLE);
                         int score = simulationView.getScore();
                         updatePlayerCoinAmount(getPlayerName(), score * 100, false);
+                        won.setText("You won "+score*100+ " coins!");
+                        won.setVisibility(View.VISIBLE);
                     }
                 }.start();
             }

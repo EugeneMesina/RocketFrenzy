@@ -53,5 +53,17 @@
         android:scaleType="centerCrop"
         android:src="@drawable/cancel"
         tools:ignore="ContentDescription" />
+    <TextView
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        android:layout_centerInParent="true"
+        android:id="@+id/winrocket"
+        android:textSize= "25sp"
+        android:textStyle="bold"
+        android:text="You Won!"
+        />
+
 </RelativeLayout>
 
