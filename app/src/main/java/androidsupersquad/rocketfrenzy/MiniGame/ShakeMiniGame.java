@@ -1,7 +1,6 @@
 package androidsupersquad.rocketfrenzy.MiniGame;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
@@ -26,14 +25,13 @@ import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
-import androidsupersquad.rocketfrenzy.MainActivity;
 import androidsupersquad.rocketfrenzy.R;
 
 
 public class ShakeMiniGame extends AppCompatActivity implements SensorEventListener {
     private SensorManager sensorManager;
     RelativeLayout view;
-    TextView Shake,Counter;
+    TextView Shake,Counter, won;
     ImageButton close;
     ProgressBar PGShake;
     boolean Register,start,win,isRunning;
@@ -46,6 +44,8 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
         Counter = (TextView) findViewById(R.id.SGCounter);
         close = (ImageButton) findViewById(R.id.ShakeCloseButton);
         close.setVisibility(View.INVISIBLE);
+        won = (TextView)findViewById(R.id.winrocket);
+        won.setVisibility(View.INVISIBLE);
         view = (RelativeLayout) findViewById(R.id.SGView);
         PGShake =(ProgressBar) findViewById(R.id.progressBar);
         Shake =(TextView) findViewById(R.id.ShakeTV);
@@ -88,6 +88,8 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
                                         if(getPlayerName()!=null) {
                                             addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
                                             updatePlayerCoinAmount(getPlayerName(), 200, false);
+                                            won.setText("You won 1 Rocket & 200 Coins!");
+                                            won.setVisibility(View.VISIBLE);
                                         }
 
                                     }

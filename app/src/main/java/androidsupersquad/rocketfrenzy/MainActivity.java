@@ -2,7 +2,6 @@ package androidsupersquad.rocketfrenzy;
 
 
 import android.Manifest;
-import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -65,7 +64,6 @@ import androidsupersquad.rocketfrenzy.MiniGame.AccGame.AccGame;
 import androidsupersquad.rocketfrenzy.MiniGame.Lottery;
 import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
 
-//import android.support.design.widget.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener, SensorEventListener {
 
@@ -113,52 +111,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
            insertPlayer("USERNAME");
         }
 
-        /*-------------------------begin testing-------------------------//
-        Log.d("SENT", "START");
-        PlayerDeleteTask task = new PlayerDeleteTask();
-        task.execute();
-        //----------------- MUST RUN THIS FIRST TIME TO INSERT PLAYER -----------------//
-        insertPlayer("USERNAME");
-        //----------------- MUST RUN THIS FIRST TIME TO INSERT PLAYER -----------------//
-
-        //PlayerDeleteTask task = new PlayerDeleteTask();
-        //task.execute();
-        ShopItems item = new ShopItems("item", 0, "it's an item", 100);
-        RocketLaunch rocket = new RocketLaunch("rocket", 0, "it's a rocket");
-        updatePlayerUsername("JOE", "USERNAME");
-//        ArrayList<ShopItems> shopList = new ArrayList<ShopItems>();
-//        shopList.add(item);
-//        byte[] temp = ByteArrayConverter.ObjectToByteArray(shopList);
-
-
-        //addItemToPlayer("USERNAME", item);
-        //removeAllItemsFromPlayer("USERNAME");
-        updatePlayerCoinAmount("USERNAME", 30, true);
-        updatePlayerBleachAmount("USERNAME", 5, true);
-        //removeAllRocketsFromPlayer("USERNAME");
-        //addRocketToPlayer("USERNAME", rocket);
-        //addItemToPlayer("USERNAME", item);
-        removeItemFromPlayer("USERNAME",item);
-        removeRocketFromPlayer("USERNAME", rocket);
-        removeRocketFromPlayer("USERNAME", rocket);
-
-        PlayerQueryTask query = new PlayerQueryTask();
-        query.execute();
-//        ArrayList<ShopItems> newShopList = (ArrayList<ShopItems>) ByteArrayConverter.ByteArrayToObject(temp);
-//        ShopItems newItem = newShopList.get(0);
-        //Log.d("name,0,it's an item, 10", newItem.getItemName() + "," + newItem.getItemImage() + "," + newItem.getItemDescription() + "," + newItem.getItemCost() + "======");
-
-        updatePlayerCoinAmount("USERNAME", 5, false);
-        updatePlayerBleachAmount("USERNAME", -2, false);
-
-        getPlayerCoinAmount("USERNAME");
-        getPlayerBleachAmount("USERNAME");
-        getPlayerItems("USERNAME");
-        getPlayerName();
-        //-------------------------done testing-------------------------*/
-
-
-        //Begin.setOnClickListener(this);
 
         // Mapbox access token is configured here. This needs to be called either in your application
         // object or in the same activity which contains the mapview.
@@ -196,12 +148,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             }
         });
 
-//        Begin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//            }
-//        });
-
         createMenu();
         fragmentHolder = (FrameLayout) findViewById(R.id.fragmentHolder);
         fragmentManager = getSupportFragmentManager();
@@ -220,81 +166,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 transaction.commit();
                 fragmentManager.popBackStack();
                 fragmentManager.executePendingTransactions();
-                //fragmentManager.popBackStack();
-                //fragmentManager.popBackStackImmediate();
                 Log.d("POPPED FROM BACKSTACK", "BACKSTACK COUNT: " + fragmentManager.getBackStackEntryCount());
-                //transaction.detach(getSupportFragmentManager().findFragmentByTag("PROFILE"));
-                //fragmentHolder.setVisibility(View.GONE);
-            }
-        });
-        /*
-        menu[0].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Toast.makeText(AccGame.this, "Inside menu[0] onClick", Toast.LENGTH_SHORT).show();
-                if(isMenuOpen) {
-                    //Toast.makeText(AccGame.this, "isMenuOpen is true", Toast.LENGTH_SHORT).show();
-                    closeMenu();
-                } else {
-                    //Toast.makeText(AccGame.this, "isMenuOpen is false", Toast.LENGTH_SHORT).show();
-                    openMenu();
-                }
-            }
-        });
-        menu[1].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Close Menu
-                closeMenu();
-                //Reinstantiate transaction
-                transaction = getSupportFragmentManager().beginTransaction();
-                //Set holder to visible even though alpha = 0
-                fragmentHolder.setVisibility(View.VISIBLE);
-                //Fade in when loading frame
-                fragmentHolder.animate().alpha(1F);
-                //Only the current panel is clickable
-                fragmentHolder.setClickable(true);
-                //Adds Profile Fragment
-                transaction.add(R.id.fragmentHolder, new ProfileFragment(), Integer.toString(getFragmentCount()));
-                //Adds Profile Fragment ID to backStack
-                transaction.addToBackStack(Integer.toString(getFragmentCount()));
-                //Finish Changes
-                transaction.commit();
-                //Execute commits
-                fragmentManager.executePendingTransactions();
-                //transaction.commit();
-                //Log.d("ADDED TO BACKSTACK", "BACKSTACK COUNT: " + fragmentManager.getBackStackEntryCount());
-            }
-        });
-        menu[2].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(AccGame.this, "TODO: Go to inventory", Toast.LENGTH_LONG).show();
-                //startActivity(toProfile);
-            }
-        });
-        menu[3].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(AccGame.this, "TODO: Go to shop", Toast.LENGTH_LONG).show();
-                //startActivity(toProfile);
-            }
-        });
-        menu[4].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(AccGame.this, "TODO: Go to Daily Tasks", Toast.LENGTH_LONG).show();
 
-                //startActivity(toProfile);
             }
         });
-        menu[5].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent x = new Intent(MainActivity.this, ShakeMiniGame.class);
-                startActivity(x);
-            }
-        });*/
 
         floatingActionButton = (FloatingActionButton) findViewById(R.id.location_toggle_fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {

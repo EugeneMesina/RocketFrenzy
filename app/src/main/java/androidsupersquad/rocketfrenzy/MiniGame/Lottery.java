@@ -1,7 +1,6 @@
 package androidsupersquad.rocketfrenzy.MiniGame;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,12 +23,12 @@ import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
-import androidsupersquad.rocketfrenzy.MainActivity;
 import androidsupersquad.rocketfrenzy.R;
 
 public class Lottery extends AppCompatActivity {
     ImageButton rocket, close;
     ImageView slot1,slot2,slot3;
+    TextView won;
     Random random;
     int img1,img2,img3;
 
@@ -37,7 +37,6 @@ public class Lottery extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lottery);
-
         random = new Random();
         rocket = (ImageButton) findViewById(R.id.RocketButton);
         close = (ImageButton) findViewById(R.id.LotteryCloseButton);
@@ -45,12 +44,15 @@ public class Lottery extends AppCompatActivity {
         slot1 = (ImageView)findViewById(R.id.imageView);
         slot2 = (ImageView)findViewById(R.id.imageView2);
         slot3 = (ImageView)findViewById(R.id.imageView3);
-
+        won = (TextView)findViewById(R.id.win);
+        won.setVisibility(View.INVISIBLE);
         rocket.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+
                 rocket.setEnabled(false);
                 slot1.setBackgroundResource(R.drawable.animate);
+
                 final AnimationDrawable slot1anim = (AnimationDrawable) slot1.getBackground();
 
                 slot2.setBackgroundResource(R.drawable.animate);
@@ -163,11 +165,15 @@ public class Lottery extends AppCompatActivity {
                 addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
                 addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
                 updatePlayerCoinAmount(getPlayerName(), 100, false);
+                won.setText("You Won 2 Rockets & 100 Gold ");
+                won.setVisibility(View.VISIBLE);
             }
         }
         else if(img1 == img2 || img2 == img3 || img1==img3){
             addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
             updatePlayerCoinAmount(getPlayerName(), 50, false);
+            won.setText("You Won 1 Rocket & 50 Gold ");
+            won.setVisibility(View.VISIBLE);
             //some number
         }
         else {
