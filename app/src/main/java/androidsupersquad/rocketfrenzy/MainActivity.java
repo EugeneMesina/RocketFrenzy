@@ -68,11 +68,6 @@ import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
  * Created by: Christian, Jimmy, Daniel, and Eugene
  */
 
-/**
- * Created by: Christian, Jimmy, Daniel, and Eugene
- */
-
-
 public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener, SensorEventListener {
 
     private MapView mapView;
