@@ -13,6 +13,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private SensorManager sensorManager;
     private RocketDB db;
     private int rocketCountOnMap;
-
+    MediaPlayer music;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -109,7 +110,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         mPedometer = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         sensorManager.registerListener(MainActivity.this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
-
+        music= MediaPlayer.create(this, R.raw.bg);
+        //set music to loop
+        music.setLooping(true);
+        //start service
+        music.start();
         db = new RocketDB(this);
         rocketCountOnMap = 0;
 
@@ -249,12 +254,14 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     protected void onStop() {
         super.onStop();
         mapView.onStop();
+        music.stop();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
+        music.start();
         sensorManager.unregisterListener(this);
     }
 
