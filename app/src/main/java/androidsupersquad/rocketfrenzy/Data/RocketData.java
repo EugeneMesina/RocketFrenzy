@@ -11,9 +11,9 @@ import androidsupersquad.rocketfrenzy.R;
 
 public class RocketData {
     /**Static Premade Rockets**/
-    public static Rocket ApolloRocket = new Rocket("Apollo", R.drawable.apollorocket, "Heck");
-    public static Rocket HorizonRocket=new Rocket("Horizon",R.drawable.horizonrocket, "Heck");
-    public static Rocket KamakaziRocket=new Rocket("Something",R.drawable.kamakazirocket, "Heck");
+    public static Rocket ApolloRocket = new Rocket("Apollo", R.drawable.tiny_rocket, "Heck");
+    public static Rocket HorizonRocket=new Rocket("Horizon",R.drawable.tiny_rocket_2, "Heck");
+    public static Rocket KamakaziRocket=new Rocket("Something",R.drawable.tiny_rocket_3, "Heck");
 
     /**
      * Reward System
