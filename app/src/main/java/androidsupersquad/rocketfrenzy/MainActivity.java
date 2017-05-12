@@ -65,7 +65,9 @@ import androidsupersquad.rocketfrenzy.MiniGame.AccGame.AccGame;
 import androidsupersquad.rocketfrenzy.MiniGame.Lottery;
 import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
 
-//import android.support.design.widget.FloatingActionButton;
+/**
+ * Created by: Christian, Jimmy, Daniel, and Eugene
+ */
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener, SensorEventListener {
 
