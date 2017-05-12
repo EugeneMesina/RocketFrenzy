@@ -95,7 +95,10 @@ public class AccGame extends AppCompatActivity  {
         //unregister listener
         simulationView.stopSimulation();
     }
-
+    //database methods
+    /*
+    gets and returns player name from databse
+     */
     private String getPlayerName()
     {
         Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
@@ -107,7 +110,10 @@ public class AccGame extends AppCompatActivity  {
         Log.d("PLAYER_NAME_INFO", "Username: " + name);
         return name;
     }
-
+    /*
+      gives coins to player
+      returns int
+       */
     private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -123,7 +129,9 @@ public class AccGame extends AppCompatActivity  {
         newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
-
+    /*
+    get coin amount returns int
+     */
     private int getPlayerCoinAmount(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
