@@ -41,6 +41,5 @@
     <string name="InventoryButton">This menu item displays the rockets and shop items you bought all in one list. You can click a button to launch a rocket from your inventory but make sure you have a launch pad to launch it!</string>
     <string name="ShakeGame">The Shake Game: shake your phone to fill up the progress bar before the timer reaches 0. Earn a rocket and coins if you win! Earn coins if you lose!</string>
     <string name="LotteryGame">The Lottery Game: press the icon in the middle of the screen and try your luck! Match 3 in a row to earn a rocket and coins! Earn just coins if unmatched triplets! </string>
-    <string name="WackAMole">Wack A Mole: Wack the moles that pop up! Wack all to earn a rocket and coins! If you miss one earn just coins instead!</string>
     <string name="AsteroidGame">Asteroid Game: Get the asteroid in the worm hole! Get it in the worm hole earn a rocket and coins! If not earn just coins!</string>
 </resources>

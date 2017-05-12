@@ -1,7 +1,5 @@
 package androidsupersquad.rocketfrenzy.Data;
 
-import android.content.res.Resources;
-
 import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.R;
 
@@ -10,6 +8,7 @@ import androidsupersquad.rocketfrenzy.R;
  */
 
 public class ShopData {
+        /**Pre-made Shop Items**/
         public static ShopItems LaunchPad =new ShopItems("Launch Pad",R.drawable.launchpad, "The launch pad allows you to launch rockets that you own. Works on any types of rockets.",50);
         public static ShopItems LaunchPadBundle =new ShopItems("Launch Pad Bundle",R.drawable.launchpadbundle,"A pack of 3 launch pads that will allows you to launch more rockets!",100);
         public static ShopItems HorizonIcon =new ShopItems("Horizon Icon",R.drawable.horizonicon,"A nice looking icon of the horizon. Change up your profile now! ",500);

@@ -9,24 +9,39 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import androidsupersquad.rocketfrenzy.R;
 
+/**
+ * Created by Jimmy Chao (Lazer)
+ * This is the Help Fragment
+ * This provides the basic rules of the game
+ * UI information
+ * and Game Objectives
+ */
 public class HelpFragment extends Fragment{
 
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
         super.onActivityCreated(savedInstanceState);
-        final RelativeLayout ObjectiveHelp= (RelativeLayout) getActivity().findViewById(R.id.ObjectiveHelp);
-        final RelativeLayout GameHelp= (RelativeLayout) getActivity().findViewById(R.id.GameHelp);
-        final RelativeLayout MenuHelp= (RelativeLayout) getActivity().findViewById(R.id.MenuHelp);
-        Button ObjectiveB =(Button) getActivity().findViewById(R.id.Objectives);
+        //Get UI elements from the layout
+        final ScrollView ObjectiveHelp= (ScrollView) getActivity().findViewById(R.id.ObjectiveSV);
+        final ScrollView MenuHelp= (ScrollView) getActivity().findViewById(R.id.MenuSV);
+        final RelativeLayout ObjectiveHelpL= (RelativeLayout) getActivity().findViewById(R.id.ObjectiveHelp);
+        final RelativeLayout GameHelpL= (RelativeLayout) getActivity().findViewById(R.id.GameHelp);
+        final RelativeLayout MenuHelpL= (RelativeLayout) getActivity().findViewById(R.id.MenuHelp);
+        final Button ObjectiveB =(Button) getActivity().findViewById(R.id.Objectives);
         Button  GameHelpB=(Button) getActivity().findViewById(R.id.Games);
         Button MenuB =(Button) getActivity().findViewById(R.id.Menu_Buttons);
+        //Sets OnclickListener for the buttons to show Objectives/Game Rules/UI Navigations Description
         ObjectiveB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ObjectiveHelp.setVisibility(View.VISIBLE);
-                GameHelp.setVisibility(View.INVISIBLE);
+                ObjectiveHelpL.setVisibility(View.VISIBLE);
+                GameHelpL.setVisibility(View.INVISIBLE);
+                MenuHelpL.setVisibility(View.INVISIBLE);
                 MenuHelp.setVisibility(View.INVISIBLE);
             }
         });
@@ -34,7 +49,9 @@ public class HelpFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 ObjectiveHelp.setVisibility(View.INVISIBLE);
-                GameHelp.setVisibility(View.VISIBLE);
+                ObjectiveHelpL.setVisibility(View.INVISIBLE);
+                GameHelpL.setVisibility(View.VISIBLE);
+                MenuHelpL.setVisibility(View.INVISIBLE);
                 MenuHelp.setVisibility(View.INVISIBLE);
             }
         });
@@ -42,7 +59,9 @@ public class HelpFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 ObjectiveHelp.setVisibility(View.INVISIBLE);
-                GameHelp.setVisibility(View.INVISIBLE);
+                ObjectiveHelpL.setVisibility(View.INVISIBLE);
+                GameHelpL.setVisibility(View.INVISIBLE);
+                MenuHelpL.setVisibility(View.VISIBLE);
                 MenuHelp.setVisibility(View.VISIBLE);
             }
         });

@@ -1,7 +1,6 @@
 package androidsupersquad.rocketfrenzy.MiniGame;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.hardware.Sensor;
@@ -26,14 +25,17 @@ import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
-import androidsupersquad.rocketfrenzy.MainActivity;
 import androidsupersquad.rocketfrenzy.R;
 
-
+/**
+ * Created by Jimmy Chao(Lazer)
+ * Shake Mini Game that is activated to reward player rocket/coins
+ */
 public class ShakeMiniGame extends AppCompatActivity implements SensorEventListener {
+    //initialize game
     private SensorManager sensorManager;
     RelativeLayout view;
-    TextView Shake,Counter;
+    TextView Shake,Counter, won;
     ImageButton close;
     ProgressBar PGShake;
     boolean Register,start,win,isRunning;
@@ -42,10 +44,13 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setting game variables to layout file
         setContentView(R.layout.activity_shake_mini_game);
         Counter = (TextView) findViewById(R.id.SGCounter);
         close = (ImageButton) findViewById(R.id.ShakeCloseButton);
         close.setVisibility(View.INVISIBLE);
+        won = (TextView)findViewById(R.id.winrocket);
+        won.setVisibility(View.INVISIBLE);
         view = (RelativeLayout) findViewById(R.id.SGView);
         PGShake =(ProgressBar) findViewById(R.id.progressBar);
         Shake =(TextView) findViewById(R.id.ShakeTV);
@@ -53,14 +58,15 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
         Shake.setTypeface(myCustomFont);
         isRunning=true;
         start=true;
-       // Counter.setTypeface(myCustomFont);
         Register=false;
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+                //finishes activity and leaves
             }
         });
+        //setting on click listener on the view
         view.setOnClickListener(
                 new View.OnClickListener()
                 {
@@ -72,26 +78,32 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
                             Counter.setText("GO");
                             win=false;
                             timers = new CountDownTimer(10000, 1000) {
-
+                            //count down timer
                                 public void onTick(long millisUntilFinished) {
                                     Long timeleft = (millisUntilFinished / 1000);
                                     Counter.setGravity(Gravity.CENTER);
                                     Counter.setText(timeleft.toString());
+                                    //ticks changes the time on screen
                                 }
 
                                 public void onFinish() {
                                     isRunning = false;
                                     if(win)
                                     {
+                                        //finishes win
                                         Counter.setText("You Won");
                                         this.cancel();
                                         if(getPlayerName()!=null) {
                                             addRocketToPlayer(getPlayerName(), RocketData.giveRocket());
                                             updatePlayerCoinAmount(getPlayerName(), 200, false);
+                                            won.setText("You won 1 Rocket & 200 Coins!");
+                                            //win 1 random rocket and 200 coins
+                                            won.setVisibility(View.VISIBLE);
                                         }
 
                                     }
                                     else {
+                                        //lose
                                         Counter.setText("Game Over");
                                         this.cancel();
 
@@ -107,6 +119,9 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
 
 
     }
+    /*
+    onDestroy life activity method
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -116,6 +131,9 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
 
 
     }
+    /*
+    onSensorChange to retrieve sensor data
+     */
     @Override
     public void onSensorChanged(SensorEvent event)
     {
@@ -135,9 +153,14 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
             }
         }
     }
-
+    /*
+    accuracy change not needed to be read
+     */
     public void onAccuracyChanged(Sensor sensor,int accuracy){}
     @Override
+    /*
+    onResume life activity, registers listener
+     */
     protected void onResume()
     {
         super.onResume();
@@ -146,6 +169,9 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
 
         }
     }
+    /*
+   onPause life activity, unregisters listener
+    */
     @Override
     protected void onPause()
     {
@@ -154,6 +180,10 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
             sensorManager.unregisterListener(this);
         }
     }
+    //database methods
+    /*
+    gets and returns player name from databse
+     */
     private String getPlayerName()
     {
         Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
@@ -166,7 +196,9 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
         return name;
     }
 
-
+    /*
+    gets player rockets and returns array list of rockets
+     */
     private ArrayList<Rocket> getPlayerRockets(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -190,7 +222,10 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
             return null;
         }
     }
-
+    /*
+    adds rockets to player
+    returns int
+     */
 
     private int addRocketToPlayer(String playerName, Rocket rocket)
     {
@@ -207,7 +242,10 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
         values.put(RocketDB.ROCKETS_OWNED_COLUMN, bytes);
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
-
+    /*
+    gives coins to player
+    returns int
+     */
     private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -223,7 +261,9 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
         newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
-
+    /*
+    get coin amount returns int
+     */
     private int getPlayerCoinAmount(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -237,3 +277,5 @@ public class ShakeMiniGame extends AppCompatActivity implements SensorEventListe
         return coinAmount;
     }
 }
+
+

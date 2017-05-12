@@ -2,7 +2,7 @@ package androidsupersquad.rocketfrenzy.Fragments.Models;
 import java.io.Serializable;
 /**
  * These are items in the shop
- * Created by Lazer on 4/7/2017.
+ * Created by Jimmy Chao (Lazer) on 4/7/2017.
  */
 public class ShopItems implements Serializable
 {

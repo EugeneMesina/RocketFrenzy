@@ -10,7 +10,10 @@ import android.view.ViewGroup;
 
 import androidsupersquad.rocketfrenzy.R;
 
-
+/**
+ * Created by Jimmy Chao (Lazer)
+ * A Easter Egg Fragment that shows only when the player has 100 Bleach Items in their inventory
+ */
 public class KamikaziFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

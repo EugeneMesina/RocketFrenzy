@@ -30,7 +30,7 @@ import java.util.List;
  * This is the Custom Expandable List Adapter
  * that will hold our custom information about a shop
  * item and inflate our custom layouts
- * Created by Lazer on 4/28/2017.
+ * Created by Jimmy Chao (Lazer) on 4/28/2017.
  */
 public class ShopExpandableAdapter extends BaseExpandableListAdapter {
    //The current context the ExpandableListView is in
@@ -75,7 +75,7 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         Button cost = (Button) convertView.findViewById(R.id.BuyButton);
         cost.setText(((Integer)currentItem.getItemCost()).toString());
         //TODO: For Eugene Uncomment this Line To Give Yourself A bunch of Gold
-        //updatePlayerCoinAmount(getPlayerName(), 10000, true);
+        updatePlayerCoinAmount(getPlayerName(), 10000, true);
         cost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -201,6 +201,10 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+    /**
+     * DataBase Method to Retrieve the UserName
+     * @return UserName
+     */
     private String getPlayerName()
     {
         Cursor cursor = context.getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
@@ -211,6 +215,10 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         Log.d("PLAYER_NAME_INFO", "Username: " + name);
         return name;
     }
+    /**
+     * DataBase Method to get Player's Coin Amount
+     * @return UserName
+     */
     private int getPlayerCoinAmount(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -223,7 +231,10 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
         return coinAmount;
     }
-
+    /**
+     * DataBase Method to Update Player's Coin Amount
+     * @return UserName
+     */
     private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -239,6 +250,12 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
         return context.getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
+    /**
+     * DataBase Method to Add an Item from the Player Inventory
+     * @param playerName: Username
+     * @param item: Item Name
+     * @return list of new items
+     */
     private int addItemToPlayer(String playerName, ShopItems item)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -254,6 +271,11 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         values.put(RocketDB.ITEMS_OWNED_COLUMN, bytes);
         return context.getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
+    /**
+     * DataBase Method to get all player's items
+     * @param playerName: UserName
+     * @return inventory items
+     */
     private ArrayList<ShopItems> getPlayerItems(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -277,6 +299,12 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
             return null;
         }
     }
+
+    /**
+     * DataBase Method to get the number of bleach they bought
+     * @param playerName: UserName
+     * @return: Bleach Count
+     */
     private int getPlayerBleachAmount(String playerName)
     {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -289,7 +317,11 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         Log.d("BLEACH_INFO", "Username: " + playerName + "\nBleach amount: " + bleachAmount);
         return bleachAmount;
     }
-
+    /**
+     * DataBase Method to update the number of bleach they bought
+     * @param playerName: UserName
+     * @return: Bleach Count
+     */
     private int updatePlayerBleachAmount(String playerName, int bleachAmount, boolean set)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
