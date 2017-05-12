@@ -2,13 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="androidsupersquad.rocketfrenzy">
 
-    <uses-sdk android:minSdkVersion="15" />
+    <uses-sdk android:minSdkVersion="19" />
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:screenOrientation="portrait"
@@ -18,21 +19,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Title.Title" android:screenOrientation="portrait">
+
+        </activity>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait">
         </activity>
 
         <provider android:name="androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider"
             android:authorities="androidsupersquad.rocketfrenzy.DataBase"
             android:exported="true">
         </provider>
-
-
         <activity
             android:name=".MiniGame.ShakeMiniGame"
             android:parentActivityName=".MainActivity"
@@ -49,6 +49,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".MiniGame.AccGame.AccGame"
+
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
         </activity>
