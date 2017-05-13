@@ -20,44 +20,65 @@ import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.R;
 
 /**
- * Created by Jimmy Chao(Lazer)
  * Inventory Fragment to display all the user's inventory items
+ *
+ * Created by: Jimmy Chao(Lazer)
  */
 public class RocketsFragment extends Fragment {
-    //The Array of Rockets/ShopItems the player owns
-    ArrayList rockets;
+    /** The player's list of rockets */
+    private ArrayList rockets;
+
     //Empty Constructor for the fragment
     public RocketsFragment() {
     }
-    public void onActivityCreated(Bundle savedInstanceState){
+
+    /**
+     * Called when activity is created
+     *
+     * @param savedInstanceState saved data
+     */
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //get all player's rockets
-        rockets=getPlayerRockets(getPlayerName());
+        rockets = getPlayerRockets(getPlayerName());
         //get all player's Shop Items
         rockets.addAll(getPlayerItems(getPlayerName()));
         GridView inventory = (GridView) getActivity().findViewById(R.id.Inventory);
-        inventory.setAdapter(new RocketGridAdapter(getActivity(),rockets));
+        inventory.setAdapter(new RocketGridAdapter(getActivity(), rockets));
     }
+
+    /**
+     * Creates the fragment view
+     *
+     * @param inflater The inflater used to inflate the fragment
+     * @param container The fragment layout to inflate
+     * @param savedInstanceState saved data
+     * @return The fragment view
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_rockets, container, false);
     }
-    //Refreshes the view with the newly removed launch pad and rocket
-    public void onResume()
-    {
+
+    /**
+     * Ran when app is resumed
+     */
+    public void onResume() {
         super.onResume();
-        rockets=getPlayerRockets(getPlayerName());
+        //Refreshes the view with the newly removed launch pad and rocket
+        rockets = getPlayerRockets(getPlayerName());
         rockets.addAll(getPlayerItems(getPlayerName()));
         GridView inventory = (GridView) getActivity().findViewById(R.id.Inventory);
-        inventory.setAdapter(new RocketGridAdapter(getActivity(),rockets));
+        inventory.setAdapter(new RocketGridAdapter(getActivity(), rockets));
     }
+
     /**
      * DataBase Method to Retrieve the UserName
+     *
      * @return UserName
      */
-    private String getPlayerName()
-    {
+    private String getPlayerName() {
         Cursor cursor = getActivity().getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
         int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
         cursor.moveToFirst();
@@ -66,13 +87,14 @@ public class RocketsFragment extends Fragment {
         Log.d("PLAYER_NAME_INFO", "Username: " + name);
         return name;
     }
+
     /**
      * DataBase Method to get all player's items
+     *
      * @param playerName: UserName
      * @return inventory items
      */
-    private ArrayList<ShopItems> getPlayerItems(String playerName)
-    {
+    private ArrayList<ShopItems> getPlayerItems(String playerName) {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
         String whereArgs[] = {playerName};
         String[] resultColumns = {RocketDB.ITEMS_OWNED_COLUMN};
@@ -88,19 +110,19 @@ public class RocketsFragment extends Fragment {
             }
             Log.d("ITEM_INFO", itemString);
             return itemArray;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: null");
             return null;
         }
     }
+
     /**
      * DataBase Method to get all the player's current rockets
-     * @param playerName: UserName
-     * @return Player's Rockets
+     *
+     * @param playerName UserName
+     * @return The list of rockets owned by the player
      */
-    private ArrayList<Rocket> getPlayerRockets(String playerName)
-    {
+    private ArrayList<Rocket> getPlayerRockets(String playerName) {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
         String whereArgs[] = {playerName};
         String[] resultColumns = {RocketDB.ROCKETS_OWNED_COLUMN};
@@ -116,8 +138,7 @@ public class RocketsFragment extends Fragment {
             }
             Log.d("ROCKET_INFO", rocketString);
             return rocketArray;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.d("ROCKET_INFO", "Username: " + playerName + "\nRocketLaunch names: null");
             return null;
         }

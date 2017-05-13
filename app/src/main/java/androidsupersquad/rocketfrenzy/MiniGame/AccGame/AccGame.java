@@ -17,23 +17,41 @@ import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.R;
 
 /**
- * Jimmy Chao
- * 012677182
+ * Minigame driving a rocket around to hit planets. Rewards the player with coins.
+ * <p>
+ * Created by Jimmy Chao (Lazer)
  */
-public class AccGame extends AppCompatActivity  {
-    private static final String TAG="androidsupersquad.rocketfrenzy.MiniGame.AccGame.AccGame";
+public class AccGame extends AppCompatActivity {
+
+    /** The string tag for debugging */
+    private static final String TAG = "androidsupersquad.rocketfrenzy.MiniGame.AccGame.AccGame";
+    /** PowerManager used to keep display on */
     private PowerManager.WakeLock mWakeLock;
+    /** Custom View used for this game */
     private SimulationView simulationView;
-    CountDownTimer timers;
-    private TextView counter,won;
-    MediaPlayer music;
+    /** Count down timer */
+    private CountDownTimer timers;
+    /**
+     * The TextViews display the following:
+     *  1) The amount of time the player has left
+     *  2) The amount of coins the player won
+     */
+    private TextView counter, won;
+    /** Music handler */
+    private MediaPlayer music;
+
+    /**
+     * onCreate method
+     *
+     * @param savedInstanceState saved data
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.accgame);
-        music= MediaPlayer.create(this, R.raw.agm);
+        music = MediaPlayer.create(this, R.raw.agm);
         //set music to loop
         music.setLooping(true);
         //start service
@@ -42,7 +60,7 @@ public class AccGame extends AppCompatActivity  {
         PowerManager mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
         mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, TAG);
         //register/unregister sensor listener
-        simulationView=(SimulationView) findViewById(R.id.view);
+        simulationView = (SimulationView) findViewById(R.id.view);
         simulationView.freeze();
         counter = (TextView) findViewById(R.id.AsteroidCounter);
         final ImageButton close = (ImageButton) findViewById(R.id.AccGameCloseButton);
@@ -58,7 +76,7 @@ public class AccGame extends AppCompatActivity  {
         gameOver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                won = (TextView)findViewById(R.id.winAccgame);
+                won = (TextView) findViewById(R.id.winAccgame);
                 won.setVisibility(View.INVISIBLE);
                 gameOver.setVisibility(View.INVISIBLE);
                 simulationView.unFreeze();
@@ -77,7 +95,7 @@ public class AccGame extends AppCompatActivity  {
                         gameOver.setVisibility(View.VISIBLE);
                         int score = simulationView.getScore();
                         updatePlayerCoinAmount(getPlayerName(), score * 100, false);
-                        won.setText("You won "+score*100+ " coins!");
+                        won.setText("You won " + score * 100 + " coins!");
                         won.setVisibility(View.VISIBLE);
                         close.setVisibility(View.VISIBLE);
                     }
@@ -90,8 +108,7 @@ public class AccGame extends AppCompatActivity  {
      * Runs when activity resumes
      */
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         //get wakelock
         music.start();
@@ -105,8 +122,7 @@ public class AccGame extends AppCompatActivity  {
      * Runs when activity is paused
      */
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         super.onPause();
         music.stop();
         //release wakelock
@@ -120,8 +136,7 @@ public class AccGame extends AppCompatActivity  {
      *
      * @return the current player's name
      */
-    private String getPlayerName()
-    {
+    private String getPlayerName() {
         Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
         int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
         cursor.moveToFirst();
@@ -137,16 +152,15 @@ public class AccGame extends AppCompatActivity  {
      *
      * @param playerName specified player
      * @param coinAmount amount to change
-     * @param set if true, will set the amount to coin amount, if false, will add amount to coin amount
+     * @param set        if true, will set the amount to coin amount, if false, will add amount to coin amount
      * @return result of update
      */
-    private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
-    {
+    private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set) {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
         String[] whereArgs = {playerName};
         int newCoinAmount = 0;
         ContentValues newValues = new ContentValues();
-        if(set) {
+        if (set) {
             newCoinAmount = coinAmount;
         } else {
             int currentCoins = getPlayerCoinAmount(playerName);
@@ -162,8 +176,7 @@ public class AccGame extends AppCompatActivity  {
      * @param playerName specified player
      * @return the player's coin amount
      */
-    private int getPlayerCoinAmount(String playerName)
-    {
+    private int getPlayerCoinAmount(String playerName) {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
         String whereArgs[] = {playerName};
         String[] resultColumns = {RocketDB.COIN_AMOUNT_COLUMN};

@@ -9,11 +9,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * Created by Christian Blydt-Hansen
- *
  * Converts Object to byte steams and vice versa
  * to be able to store serializable objects into
  * the database using BLOBs
+ *
+ * <p>Created by Christian Blydt-Hansen</p>
  */
 public class ByteArrayConverter {
     /**
@@ -22,8 +22,7 @@ public class ByteArrayConverter {
      * @param o Object to be converted
      * @return byte array represention of the o
      */
-    public static byte[] ObjectToByteArray(Object o)
-    {
+    public static byte[] ObjectToByteArray(Object o) {
         ByteArrayOutputStream baos = null;
         ObjectOutputStream oos = null;
         //attempt to convert
@@ -33,8 +32,7 @@ public class ByteArrayConverter {
             oos.writeObject(o);
             byte[] bList = baos.toByteArray();
             return bList;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.d("ERROR", "CANNOT CONVERT TO BYTE ARRAY");
             e.printStackTrace();
             return null;
@@ -43,9 +41,8 @@ public class ByteArrayConverter {
                 //close streams
                 baos.close();
                 oos.close();
-            } catch (IOException e)
-            {
-                Log.d("IO EXCEPTION ERROR","OBJECT TO BYTE");
+            } catch (IOException e) {
+                Log.d("IO EXCEPTION ERROR", "OBJECT TO BYTE");
             }
         }
     }
@@ -56,8 +53,7 @@ public class ByteArrayConverter {
      * @param list byte array to be converted
      * @return an Object representation of list
      */
-    public static Object ByteArrayToObject(byte[] list)
-    {
+    public static Object ByteArrayToObject(byte[] list) {
         ByteArrayInputStream bais = null;
         ObjectInputStream ois = null;
         //attempt to convert
@@ -66,19 +62,17 @@ public class ByteArrayConverter {
             ois = new ObjectInputStream(bais);
             Object o = ois.readObject();
             return o;
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.d("ERROR", "CANNOT CONVERT TO OBJECT");
             e.printStackTrace();
             return null;
         } finally {
-            try
-            {
+            try {
                 //close streams
                 bais.close();
                 ois.close();
-            } catch (IOException e)
-            {
-                Log.d("IO EXCEPTION ERROR","BYTE TO OBJECT");
+            } catch (IOException e) {
+                Log.d("IO EXCEPTION ERROR", "BYTE TO OBJECT");
 
             }
         }

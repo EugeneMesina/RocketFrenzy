@@ -1,4 +1,5 @@
 package androidsupersquad.rocketfrenzy.Fragments;
+
 import androidsupersquad.rocketfrenzy.Data.ShopData;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
@@ -22,19 +23,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  This is the Shop Menu where it will display to the user
- *  different shop items they can buy
- *  Created by Jimmy Chao (Lazer)
+ * This is the Shop Menu where it will display to the user
+ * different shop items they can buy
+ *
+ * Created by: Jimmy Chao (Lazer)
  */
 public class ShopFragment extends Fragment {
-    //Data Structure to hold all shop items
+    /** Used to hold all of the ShopItems */
     private ArrayList<ShopItems> Items;
+
     /**
      * Fragment Constructor that creates all the items in the shop
      */
-    public ShopFragment() {}
-    public void CreateItemList()
-    {
+    public ShopFragment() {
+    }
+
+    /**
+     * Creates the list of shop items
+     */
+    public void CreateItemList() {
         //Create new ArrayList to hold existing items or add items
         Items = new ArrayList<ShopItems>();
         Items.add(ShopData.LaunchPad);
@@ -44,30 +51,35 @@ public class ShopFragment extends Fragment {
         Items.add(ShopData.SkullIcon);
         Items.add(ShopData.Bleach);
     }
+
     /**
-     * Sets teh Expandable List View Adapter with specific
-     * Group Layout
-     * Child Layout
+     * Ran when activity is created
+     *
      * @param savedInstanceState
      */
-    public void onActivityCreated(Bundle savedInstanceState){
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         CreateItemList();
         TextView coins = (TextView) getActivity().findViewById(R.id.ShopCoinAmount);
-        Integer coinsamount= getPlayerCoinAmount(getPlayerName());
+        Integer coinsamount = getPlayerCoinAmount(getPlayerName());
         coins.setText(coinsamount.toString());
-        //get Expandable List View
+        /** get Expandable List View with layout:
+          * Group Layout
+          * Child Layout
+          */
         ExpandableListView listView = (ExpandableListView) getActivity().findViewById(R.id.ShopList);
         //Set it's adapter to the custom Adapter
-        listView.setAdapter(new ShopExpandableAdapter(getActivity(),Items));
+        listView.setAdapter(new ShopExpandableAdapter(getActivity(), Items));
     }
 
     /**
      * Inflates the fragment with the specific layout in the resource file
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
+     *
+     * @param inflater Inflater used to inflate fragments
+     * @param container The container to inflate
+     * @param savedInstanceState data saved
+     *
+     * @return The inflated fragment
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,12 +87,14 @@ public class ShopFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_shop, container, false);
     }
+
     /**
      * DataBase Method to get Player's Coin Amount
-     * @return UserName
+     *
+     * @param playerName The user's name
+     * @return The user's amount of coins
      */
-    private int getPlayerCoinAmount(String playerName)
-    {
+    private int getPlayerCoinAmount(String playerName) {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
         String whereArgs[] = {playerName};
         String[] resultColumns = {RocketDB.COIN_AMOUNT_COLUMN};
@@ -91,12 +105,13 @@ public class ShopFragment extends Fragment {
         Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
         return coinAmount;
     }
+
     /**
      * DataBase Method to Retrieve the UserName
+     *
      * @return UserName
      */
-    private String getPlayerName()
-    {
+    private String getPlayerName() {
         Cursor cursor = getActivity().getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
         int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
         cursor.moveToFirst();

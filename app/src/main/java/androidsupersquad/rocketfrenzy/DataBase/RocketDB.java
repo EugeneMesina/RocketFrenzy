@@ -8,10 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
 /**
- * Created by Christian Blydt-Hansen
- *
  * This class creates the database which stores elements
  * of the game and of the user
+ * <p>
+ * Created by: Christian Blydt-Hansen
  */
 
 public class RocketDB extends SQLiteOpenHelper {
@@ -62,13 +62,13 @@ public class RocketDB extends SQLiteOpenHelper {
     /**
      * Ran when the database is upgraded
      *
-     * @param db database to be upgraded
+     * @param db         database to be upgraded
      * @param oldVersion old database version
      * @param newVersion new database version
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if(oldVersion != newVersion) {
+        if (oldVersion != newVersion) {
             db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE); //drop current table
             onCreate(db); //create new one
         }
@@ -80,8 +80,7 @@ public class RocketDB extends SQLiteOpenHelper {
      * @param values player attributes to be inserted
      * @return result of insert
      */
-    public long insertPlayer(ContentValues values)
-    {
+    public long insertPlayer(ContentValues values) {
         SQLiteDatabase db = getWritableDatabase();
         return db.insert(DATABASE_TABLE, null, values);
     }
@@ -89,14 +88,13 @@ public class RocketDB extends SQLiteOpenHelper {
     /**
      * Updates certain values in the database
      *
-     * @param uri Uri
-     * @param values updates attributes
-     * @param selection specifies WHERE clause
+     * @param uri           Uri
+     * @param values        updates attributes
+     * @param selection     specifies WHERE clause
      * @param selectionArgs replaces "?" in WHERE clause
      * @return
      */
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs)
-    {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = getWritableDatabase();
         return db.update(DATABASE_TABLE, values, selection, selectionArgs);
     }
@@ -108,7 +106,7 @@ public class RocketDB extends SQLiteOpenHelper {
      */
     public Cursor getAllPlayers() {
         SQLiteDatabase db = getReadableDatabase();
-        return db.query(DATABASE_TABLE, new String[] {USER_NAME_COLUMN, COIN_AMOUNT_COLUMN, ROCKETS_OWNED_COLUMN, ITEMS_OWNED_COLUMN, BLEACH_AMOUNT_COLUMN, PLAYER_ICON_COLUMN}, null, null, null, null, null);
+        return db.query(DATABASE_TABLE, new String[]{USER_NAME_COLUMN, COIN_AMOUNT_COLUMN, ROCKETS_OWNED_COLUMN, ITEMS_OWNED_COLUMN, BLEACH_AMOUNT_COLUMN, PLAYER_ICON_COLUMN}, null, null, null, null, null);
     }
 
     /**
@@ -116,8 +114,7 @@ public class RocketDB extends SQLiteOpenHelper {
      *
      * @return result of the deletion
      */
-    public int deleteAllInformation()
-    {
+    public int deleteAllInformation() {
         SQLiteDatabase db = getWritableDatabase();
         return db.delete(DATABASE_TABLE, null, null);
     }

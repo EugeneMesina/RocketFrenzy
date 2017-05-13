@@ -40,23 +40,34 @@ import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.Fragments.Models.ShopItems;
 import androidsupersquad.rocketfrenzy.R;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
+
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 /**
- * Created by Jimmy Chao (Lazer)
  * This Fragment shows the User's Profile with
- * their favorite icon
- * their username
- * and their coin count
+ * their favorite icon, their username, and their coin count
+ * <p>
+ * Created by: Jimmy Chao (Lazer)
  */
 public class ProfileFragment extends Fragment {
-    //The icon they are using
-    ImageView profilePicture;
-    //Fragment OnCreate Method
+    /** Current profile icon the player is using */
+    private ImageView profilePicture;
+
+    /**
+     * onCreate method
+     *
+     * @param savedInstanceState saved data
+     */
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Ran when activity is created
+     *
+     * @param savedInstanceState saved data
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -64,8 +75,9 @@ public class ProfileFragment extends Fragment {
 
     /**
      * The Custom Context Menu to allow player to change icon
-     * @param menu the menu
-     * @param v the view
+     *
+     * @param menu     the menu
+     * @param v        the view
      * @param menuInfo menu info
      */
     @Override
@@ -77,28 +89,26 @@ public class ProfileFragment extends Fragment {
         //get the Items the player owns
         ArrayList<ShopItems> Icons = getPlayerItems(getPlayerName());
         //Searches through player items to see what icons they own to show in the context menu
-        if(Icons.contains(ShopData.HorizonIcon))
-        {
+        if (Icons.contains(ShopData.HorizonIcon)) {
             MenuItem HIcon = menu.findItem(R.id.Horizon);
             HIcon.setVisible(true);
         }
-        if(Icons.contains(ShopData.FireIcon))
-        {
-           MenuItem FIcon =menu.findItem(R.id.FireEmblem);
+        if (Icons.contains(ShopData.FireIcon)) {
+            MenuItem FIcon = menu.findItem(R.id.FireEmblem);
             FIcon.setVisible(true);
         }
-        if(Icons.contains(ShopData.SkullIcon))
-        {
-           MenuItem SIcon= menu.findItem(R.id.SkullIcon);
-                   SIcon.setVisible(true);
+        if (Icons.contains(ShopData.SkullIcon)) {
+            MenuItem SIcon = menu.findItem(R.id.SkullIcon);
+            SIcon.setVisible(true);
         }
 
     }
 
     /**
      * Set Onclick listener for each context menu item
-     * @param item
-     * @return
+     *
+     * @param item The item selected
+     * @return Whether the item was clicked or not
      */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -107,24 +117,33 @@ public class ProfileFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.WaterIcon:
                 profilePicture.setImageResource(R.drawable.watericon);
-                updatePlayerIconString(getPlayerName(),"Water Icon");
+                updatePlayerIconString(getPlayerName(), "Water Icon");
                 return true;
             case R.id.Horizon:
                 profilePicture.setImageResource(R.drawable.horizonicon);
-                updatePlayerIconString(getPlayerName(),ShopData.HorizonIcon.getItemName());
+                updatePlayerIconString(getPlayerName(), ShopData.HorizonIcon.getItemName());
                 return true;
             case R.id.FireEmblem:
                 profilePicture.setImageResource(R.drawable.fireemblem);
-                updatePlayerIconString(getPlayerName(),ShopData.FireIcon.getItemName());
+                updatePlayerIconString(getPlayerName(), ShopData.FireIcon.getItemName());
                 return true;
             case R.id.SkullIcon:
                 profilePicture.setImageResource(R.drawable.skullicon);
-                updatePlayerIconString(getPlayerName(),ShopData.SkullIcon.getItemName());
+                updatePlayerIconString(getPlayerName(), ShopData.SkullIcon.getItemName());
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
+
+    /**
+     * Creates the fragment view
+     *
+     * @param inflater The inflater used to inflate the fragment
+     * @param container The fragment layout to inflate
+     * @param savedInstanceState saved data
+     * @return The fragment view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -134,55 +153,46 @@ public class ProfileFragment extends Fragment {
         final EditText rename = (EditText) view.findViewById(R.id.NameChange);
         ImageView Icon = (ImageView) view.findViewById(R.id.ProfilePicture);
         profilePicture = (ImageView) view.findViewById(R.id.ProfilePicture);
-        Integer coinAmount=getPlayerCoinAmount(getPlayerName());
+        Integer coinAmount = getPlayerCoinAmount(getPlayerName());
         //Set the Context menu to ImageView (OnLongClick)
         registerForContextMenu(profilePicture);
         //Create Custom Font for the user name
-        Typeface myCustomFont = Typeface.createFromAsset(view.getContext().getAssets(),"fonts/TwoLines.ttf");
+        Typeface myCustomFont = Typeface.createFromAsset(view.getContext().getAssets(), "fonts/TwoLines.ttf");
         userName.setTypeface(myCustomFont);
         //coins.setTypeface(myCustomFont);
         userName.setText(getPlayerName());
         //Center the text
         userName.setGravity(Gravity.CENTER);
         //Set the coin amount
-        coins.setText(coinAmount.toString() );
+        coins.setText(coinAmount.toString());
         rename.setTypeface(myCustomFont);
         //Find the icon the player is using currently
         String currentIcon = getPlayerIconString(getPlayerName());
-        if(currentIcon.equals("Water Icon"))
-        {
+        if (currentIcon.equals("Water Icon")) {
             Icon.setImageResource(R.drawable.watericon);
-        }
-        else if(currentIcon.equals(ShopData.FireIcon.getItemName()))
-        {
+        } else if (currentIcon.equals(ShopData.FireIcon.getItemName())) {
             Icon.setImageResource(R.drawable.fireemblem);
-        }
-        else if(currentIcon.equals(ShopData.HorizonIcon.getItemName()))
-        {
+        } else if (currentIcon.equals(ShopData.HorizonIcon.getItemName())) {
             Icon.setImageResource(R.drawable.horizonicon);
-        }
-        else if(currentIcon.equals(ShopData.SkullIcon.getItemName()))
-        {
+        } else if (currentIcon.equals(ShopData.SkullIcon.getItemName())) {
             Icon.setImageResource(R.drawable.skullicon);
         }
         //Set the rename editbox to update the username on Enter key press
         rename.setOnKeyListener(new View.OnKeyListener() {
-           public boolean onKey(View v,int keyCode, KeyEvent event)
-           {
-               if(event.getAction()==KeyEvent.ACTION_DOWN&&(keyCode==KeyEvent.KEYCODE_ENTER))
-               {
-                   InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
-                   imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-                   //Hide the Edit View after user is done
-                   rename.setVisibility(View.INVISIBLE);
-                   String newName= rename.getText().toString();
-                   updatePlayerUsername(getPlayerName(),newName);
-                   userName.setText(newName);
-                   userName.setGravity(Gravity.CENTER);
-                   return true;
-               }
-               return false;
-           }
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    //Hide the Edit View after user is done
+                    rename.setVisibility(View.INVISIBLE);
+                    String newName = rename.getText().toString();
+                    updatePlayerUsername(getPlayerName(), newName);
+                    userName.setText(newName);
+                    userName.setGravity(Gravity.CENTER);
+                    return true;
+                }
+                return false;
+            }
         });
         //Set On Click Listener for the Username text view to pop up a dialogue to ask if they want to change their username
         //Set the edit view box to visible if they do
@@ -208,13 +218,14 @@ public class ProfileFragment extends Fragment {
         });
         return view;
     }
+
     /**
      * DataBase Method to get all player's items
+     *
      * @param playerName: UserName
      * @return inventory items
      */
-    private ArrayList<ShopItems> getPlayerItems(String playerName)
-    {
+    private ArrayList<ShopItems> getPlayerItems(String playerName) {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
         String whereArgs[] = {playerName};
         String[] resultColumns = {RocketDB.ITEMS_OWNED_COLUMN};
@@ -230,18 +241,18 @@ public class ProfileFragment extends Fragment {
             }
             Log.d("ITEM_INFO", itemString);
             return itemArray;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: null");
             return null;
         }
     }
+
     /**
      * DataBase Method to get Player's Coin Amount
+     *
      * @return UserName
      */
-    private int getPlayerCoinAmount(String playerName)
-    {
+    private int getPlayerCoinAmount(String playerName) {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
         String whereArgs[] = {playerName};
         String[] resultColumns = {RocketDB.COIN_AMOUNT_COLUMN};
@@ -252,12 +263,13 @@ public class ProfileFragment extends Fragment {
         Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
         return coinAmount;
     }
+
     /**
      * DataBase Method to Retrieve the UserName
+     *
      * @return UserName
      */
-    private String getPlayerName()
-    {
+    private String getPlayerName() {
         Cursor cursor = getActivity().getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
         int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
         cursor.moveToFirst();
@@ -266,28 +278,31 @@ public class ProfileFragment extends Fragment {
         Log.d("PLAYER_NAME_INFO", "Username: " + name);
         return name;
     }
+
     /**
      * DataBase Method to update the UserName
+     *
      * @return UserName
      */
-    private int updatePlayerUsername(String playerName, String newName)
-    {
+    private int updatePlayerUsername(String playerName, String newName) {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
         String[] whereArgs = {playerName};
         ContentValues newValues = new ContentValues();
         newValues.put(RocketDB.USER_NAME_COLUMN, newName);
         return getActivity().getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
     /**
      * DataBase Method to Retrieve the Icon Name
+     *
      * @return User Icon
      */
-    private String getPlayerIconString(String playerName)
-    {
+    private String getPlayerIconString(String playerName) {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
         String whereArgs[] = {playerName};
         String[] resultColumns = {RocketDB.PLAYER_ICON_COLUMN};
@@ -298,12 +313,13 @@ public class ProfileFragment extends Fragment {
         Log.d("ICON_INFO", "Username: " + playerName + "\nIcon string: " + iconString);
         return iconString;
     }
+
     /**
      * DataBase Method to Update the Icon Name
+     *
      * @return User Icon
      */
-    private int updatePlayerIconString(String playerName, String newIconString)
-    {
+    private int updatePlayerIconString(String playerName, String newIconString) {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
         String[] whereArgs = {playerName};
         ContentValues newValues = new ContentValues();

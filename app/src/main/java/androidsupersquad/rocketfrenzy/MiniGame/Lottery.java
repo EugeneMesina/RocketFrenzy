@@ -14,7 +14,6 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -25,18 +24,31 @@ import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
 import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.Fragments.Models.Rocket;
 import androidsupersquad.rocketfrenzy.R;
-//Lottery Game Class - Eugene MEsina
-public class Lottery extends AppCompatActivity {
-    //Initializing Game Variables
-    ImageButton rocket, close;
-    ImageView slot1,slot2,slot3;
-    TextView won;
-    Random random;
-    int img1,img2,img3;
-/*
- onCreate Method Life Cycle Method
+
+/**
+ * Lottery Game Class
+ *
+ * Created by: Eugene Mesina
  */
+public class Lottery extends AppCompatActivity {
+
+    /** rocket represents the icon in the center of the screen, close is the close button*/
+    ImageButton rocket, close;
+    /** The three slot images */
+    ImageView slot1,slot2,slot3;
+    /** Text showing whether the player won or not */
+    TextView won;
+    /** A random used to determine which */
+    Random random;
+    /** Used to determine which number */
+    int img1,img2,img3;
+    /** Used to handle music in the game */
     MediaPlayer music;
+
+    /**
+     * onCreate Method Life Cycle Method
+     * @param savedInstanceState saved info
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,14 +141,14 @@ public class Lottery extends AppCompatActivity {
             }
         });
     }
-    /*
-    set images and numbers based on randomizer
+    /**
+     * set images and numbers based on randomizer
      */
     public void setImages(){
         img1 = random.nextInt(3) +1;
         img2 = random.nextInt(3) +1;
         img3 = random.nextInt(3) +1;
-        switch (img1){
+        switch (img1) {
             case 1:
                 slot1.setBackgroundResource(R.drawable.slotone);
                 break;
@@ -180,9 +192,8 @@ public class Lottery extends AppCompatActivity {
 
 
     }
-    /*
-    get score from randomizer
-    and determines winning conditions
+    /**
+     * Get score from randomizer and determines winning conditions
      */
     public void getScore(){
         if(img1 == img2 && img2 == img3){
@@ -210,9 +221,11 @@ public class Lottery extends AppCompatActivity {
         }
         close.setVisibility(View.VISIBLE);
     }
-    //database methods
-    /*
-    gets and returns player name from databse
+
+    /******** DATABASE METHODS ********/
+
+    /**
+     * Gets and returns player name from databse
      */
     private String getPlayerName()
     {
@@ -226,8 +239,11 @@ public class Lottery extends AppCompatActivity {
         return name;
     }
 
-    /*
-    gets player rockets and returns array list of rockets
+    /**
+     * Gets the rockets owned by the player
+     *
+     * @param playerName The name of the player
+     * @return An ArrayList of rockets owned by the player
      */
     private ArrayList<Rocket> getPlayerRockets(String playerName)
     {
@@ -252,11 +268,14 @@ public class Lottery extends AppCompatActivity {
             return null;
         }
     }
-    /*
-    adds rockets to player
-    returns int
-     */
 
+    /**
+     * Adds a rocket to the player inventory
+     *
+     * @param playerName The player name to add rocket to
+     * @param rocket The type of rocket
+     * @return The number of rows updated
+     */
     private int addRocketToPlayer(String playerName, Rocket rocket)
     {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
@@ -272,9 +291,14 @@ public class Lottery extends AppCompatActivity {
         values.put(RocketDB.ROCKETS_OWNED_COLUMN, bytes);
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
-    /*
-    gives coins to player
-    returns int
+
+    /**
+     * Used to update the amount of coins a playe rhas
+     *
+     * @param playerName The player's name
+     * @param coinAmount The amount of coins the player owns
+     * @param set Whether the player has any coins or not
+     * @return The new amount of coins the player has
      */
     private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
     {
@@ -291,8 +315,11 @@ public class Lottery extends AppCompatActivity {
         newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
-    /*
-    get coin amount returns int
+
+    /**
+     * Gets the player's amount of coins
+     * @param playerName The player's name
+     * @return The amount of coins the player has
      */
     private int getPlayerCoinAmount(String playerName)
     {
@@ -306,8 +333,9 @@ public class Lottery extends AppCompatActivity {
         Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
         return coinAmount;
     }
-    /*
-    pause the activity
+
+    /**
+     * Pauses the activity
      */
     @Override
     protected void onPause()
@@ -316,8 +344,8 @@ public class Lottery extends AppCompatActivity {
         music.stop();
     }
 
-    /*
-    resume the activity
+    /**
+     * Resumes the activity
      */
     @Override
     protected void onResume()

@@ -22,6 +22,8 @@ import androidsupersquad.rocketfrenzy.MainActivity;
 import androidsupersquad.rocketfrenzy.R;
 
 /**
+ * Title screen
+ *
  * Created by Daniel on 5/11/2017.
  */
 
@@ -37,6 +39,7 @@ public class Title extends AppCompatActivity {
     private DisplayMetrics displayMetrics;
     /** Screen Width and Screen Height */
     private int screenWidth, screenHeight;
+    /** Used to handle the music */
     private MediaPlayer music;
 
     /**
@@ -188,6 +191,9 @@ public class Title extends AppCompatActivity {
         startImage.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * When the activity is paused
+     */
     @Override
     protected void onPause()
     {
@@ -195,6 +201,9 @@ public class Title extends AppCompatActivity {
         music.stop();
     }
 
+    /**
+     * When the activity is resumed
+     */
     @Override
     protected void onResume()
     {

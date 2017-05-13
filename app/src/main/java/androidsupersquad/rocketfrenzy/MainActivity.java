@@ -71,30 +71,46 @@ import androidsupersquad.rocketfrenzy.MiniGame.ShakeMiniGame;
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener,View.OnClickListener, SensorEventListener {
 
+    /** Embeddable Map */
     private MapView mapView;
+    /** Allows for Interaction with MapBox */
     private MapboxMap map;
+    /** The user's geographic location */
     private Location userLocation;
-    //private com.getbase.floatingactionbutton.FloatingActionsMenu menu;
+    /** Floating action buttons for the menu */
     private FloatingActionButton menu[];
-    private FloatingActionButton floatingActionButton, fab_cancel;
+    /** Floating action button for exiting out of fragment */
+    private FloatingActionButton fab_cancel;
+    /** Floating action button used to find current GPS location */
+    private FloatingActionButton floatingActionButton;
+    /** Helps to find location */
     private LocationEngine locationEngine;
+    /** Listener for Location */
     private LocationEngineListener locationEngineListener;
+    /** Helps to request permissions at run time */
     private PermissionsManager permissionsManager;
-    private ArrayList<Marker> alMarkerGT;
-    private Marker marker;
+    /** Used to help manage fragments */
     private FragmentManager fragmentManager;
+    /** Used to perform fragment operations */
     private FragmentTransaction transaction;
+    /** Boolean check for whether the menu is open or not */
     private boolean isMenuOpen = true;
-    private float stdY[] = new float[5];
+    /** A layout on top of the MainActivity used to hold fragments */
     private FrameLayout fragmentHolder;
+    /** The different fragments the game has */
     private Fragment[] menuScreens;
+    /** Random integer used to determine which minigame to start */
     private int ran;
+    /** The current application contex */
     private Context context;
+    /** Gets current step count */
     private Sensor mPedometer;
+    /** Used to manage sensors */
     private SensorManager sensorManager;
+    /** The database */
     private RocketDB db;
+    /** Integer representing the current amount of rockets spawned on the map */
     private int rocketCountOnMap;
-    //MediaPlayer music;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

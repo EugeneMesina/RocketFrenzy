@@ -14,14 +14,19 @@ import android.widget.ScrollView;
 import androidsupersquad.rocketfrenzy.R;
 
 /**
- * Created by Jimmy Chao (Lazer)
  * This is the Help Fragment
- * This provides the basic rules of the game
- * UI information
- * and Game Objectives
+ * This provides the basic rules of the game, UI information, and Game Objectives
+ *
+ * Created by: Jimmy Chao (Lazer)
  */
 public class HelpFragment extends Fragment{
 
+    /**
+     * Called for final instantiation
+     *
+     * @param savedInstanceState the saved data
+     */
+    @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
@@ -67,6 +72,14 @@ public class HelpFragment extends Fragment{
         });
     }
 
+    /**
+     * Creates the fragment view
+     *
+     * @param inflater The inflater used to inflate the fragment
+     * @param container The fragment layout to inflate
+     * @param savedInstanceState saved data
+     * @return The fragment view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

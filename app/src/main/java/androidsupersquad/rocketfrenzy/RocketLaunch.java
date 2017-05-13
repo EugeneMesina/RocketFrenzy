@@ -28,19 +28,28 @@ import androidsupersquad.rocketfrenzy.DataBase.RocketDB;
 import androidsupersquad.rocketfrenzy.tyrantgit.explosionfield.ExplosionField;
 
 public class RocketLaunch extends AppCompatActivity {
-    private ImageView img , img2;
+    /** img is the rocket, img2 is the coin */
+    private ImageView img, img2;
+    /** Close Button */
     private ImageButton close;
+    /** Shows the amount of coins gained */
     private TextView tx;
+    /** The current context */
     private Context context;
+    /** Random used to determine amount of coins gained */
     private Random random;
 
+    /**
+     * Runs this block when activity is created
+     * @param savedInstanceState any saved data
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rocket);
-        tx = (TextView)findViewById(R.id.coinsamount);
-        img2 =(ImageView)findViewById(R.id.coins);
-        img = (ImageView)findViewById(R.id.rocket);
+        tx = (TextView) findViewById(R.id.coinsamount);
+        img2 = (ImageView) findViewById(R.id.coins);
+        img = (ImageView) findViewById(R.id.rocket);
         tx.setVisibility(View.GONE);
         img2.setVisibility(View.GONE);
         Resources res = getResources();
@@ -54,10 +63,10 @@ public class RocketLaunch extends AppCompatActivity {
         int width = displayMetrics.widthPixels;
         random = new Random();
 
-        TranslateAnimation animation = new TranslateAnimation(width+1000,0,height+1000,0);
+        TranslateAnimation animation = new TranslateAnimation(width + 1000, 0, height + 1000, 0);
         animation.setDuration(2000);
         context = this.context;
-        final Activity activity =this;
+        final Activity activity = this;
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +78,6 @@ public class RocketLaunch extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-              //  img.setVisibility(View.GONE);
                 ExplosionField explosionField = ExplosionField.attach2Window(activity);
                 explosionField.explode(findViewById(R.id.rocket));
 
@@ -80,8 +88,6 @@ public class RocketLaunch extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
-
                 img2.setVisibility(View.VISIBLE);
                 tx.setVisibility(View.VISIBLE);
                 startCountAnimation();
@@ -92,8 +98,6 @@ public class RocketLaunch extends AppCompatActivity {
                 r.setDuration(2000);
                 r.setRepeatCount(0);
                 img2.startAnimation(r);
-
-
             }
         }, 3000);
         new Handler().postDelayed(new Runnable() {
@@ -104,13 +108,15 @@ public class RocketLaunch extends AppCompatActivity {
         }, 5000);
 
 
+    }
 
-
-        }
+    /**
+     * Animates the coin counter increasing by 1 until the new amount is reached from 0
+     */
     private void startCountAnimation() {
-        int max = random.nextInt(100)+1;
-        Integer newAmount=getPlayerCoinAmount(getPlayerName())+max;
-        updatePlayerCoinAmount(getPlayerName(),newAmount,true);
+        int max = random.nextInt(100) + 1;
+        Integer newAmount = getPlayerCoinAmount(getPlayerName()) + max;
+        updatePlayerCoinAmount(getPlayerName(), newAmount, true);
         ValueAnimator animator = ValueAnimator.ofInt(0, max);
         animator.setDuration(2000);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -120,8 +126,12 @@ public class RocketLaunch extends AppCompatActivity {
         });
         animator.start();
     }
-    private String getPlayerName()
-    {
+
+    /**
+     * Gets the palyer name from the database
+     * @return The player's name
+     */
+    private String getPlayerName() {
         Cursor cursor = getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
         int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
         cursor.moveToFirst();
@@ -131,8 +141,13 @@ public class RocketLaunch extends AppCompatActivity {
         Log.d("PLAYER_NAME_INFO", "Username: " + name);
         return name;
     }
-    private int getPlayerCoinAmount(String playerName)
-    {
+
+    /**
+     * Gets the player's amount of coins
+     * @param playerName The player's name
+     * @return The amount of coins the player has
+     */
+    private int getPlayerCoinAmount(String playerName) {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
         String whereArgs[] = {playerName};
         String[] resultColumns = {RocketDB.COIN_AMOUNT_COLUMN};
@@ -144,13 +159,20 @@ public class RocketLaunch extends AppCompatActivity {
         return coinAmount;
     }
 
-    private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
-    {
+    /**
+     * Used to update the amount of coins a playe rhas
+     *
+     * @param playerName The player's name
+     * @param coinAmount The amount of coins the player owns
+     * @param set Whether the player has any coins or not
+     * @return The new amount of coins the player has
+     */
+    private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set) {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
         String[] whereArgs = {playerName};
         int newCoinAmount = 0;
         ContentValues newValues = new ContentValues();
-        if(set) {
+        if (set) {
             newCoinAmount = coinAmount;
         } else {
             int currentCoins = getPlayerCoinAmount(playerName);
@@ -160,5 +182,4 @@ public class RocketLaunch extends AppCompatActivity {
         return getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
 
-    }
-
+}

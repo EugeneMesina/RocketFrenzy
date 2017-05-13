@@ -1,4 +1,5 @@
 package androidsupersquad.rocketfrenzy.Fragments.Adapters;
+
 import androidsupersquad.rocketfrenzy.Data.ShopData;
 import androidsupersquad.rocketfrenzy.DataBase.ByteArrayConverter;
 import androidsupersquad.rocketfrenzy.DataBase.RocketContentProvider;
@@ -27,30 +28,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is the Custom Expandable List Adapter
- * that will hold our custom information about a shop
+ * This is the Custom Expandable List Adapter that will hold our custom information about a shop
  * item and inflate our custom layouts
- * Created by Jimmy Chao (Lazer) on 4/28/2017.
+ *
+ * Created by: Jimmy Chao (Lazer)
  */
 public class ShopExpandableAdapter extends BaseExpandableListAdapter {
-   //The current context the ExpandableListView is in
+    /** The current context the ExpandableListView is in */
     private Activity context;
-    //The shop items to display
+    /** The shop items to display */
     private ArrayList<ShopItems> ItemList;
 
     /**
      * Constructs the values passed in from the Shop Fragment
+     *
      * @param context the current context the fragment is in
-     * @param list the list of items
+     * @param list    the list of items
      */
-    public ShopExpandableAdapter(Activity context, ArrayList<ShopItems> list)
-    {
-        this.context=context;
-        ItemList= list;
+    public ShopExpandableAdapter(Activity context, ArrayList<ShopItems> list) {
+        this.context = context;
+        ItemList = list;
     }
 
     /**
      * Inflates the Description and the Buy Button of the item in the Expandable List View
+     *
      * @param groupPosition
      * @param childPosition
      * @param isLastChild
@@ -61,35 +63,33 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         //Get the current shop item to display
-        final ShopItems currentItem= (ShopItems) getChild(groupPosition,childPosition);
+        final ShopItems currentItem = (ShopItems) getChild(groupPosition, childPosition);
         //Inflate the current view with our custom view we made
-        if(convertView==null){
-            LayoutInflater inf= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inf.inflate(R.layout.shop_child_row,null);
+        if (convertView == null) {
+            LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inf.inflate(R.layout.shop_child_row, null);
         }
         //set the text to the description of the item
-        TextView description= (TextView) convertView.findViewById(R.id.Description);
+        TextView description = (TextView) convertView.findViewById(R.id.Description);
         description.setText(currentItem.getItemDescription());
-        final TextView coinCount =(TextView) context.findViewById(R.id.ShopCoinAmount);
+        final TextView coinCount = (TextView) context.findViewById(R.id.ShopCoinAmount);
         //set the cost of the item onto the button
         Button cost = (Button) convertView.findViewById(R.id.BuyButton);
-        cost.setText(((Integer)currentItem.getItemCost()).toString());
+        cost.setText(((Integer) currentItem.getItemCost()).toString());
         //TODO: For Eugene Uncomment this Line To Give Yourself A bunch of Gold
         //updatePlayerCoinAmount(getPlayerName(), 10000, true);
         cost.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                if(currentItem.getItemCost()<=getPlayerCoinAmount(getPlayerName())) {
+            public void onClick(View v) {
+                if (currentItem.getItemCost() <= getPlayerCoinAmount(getPlayerName())) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setMessage("Want to buy this item: " + currentItem.getItemName())
                             .setTitle("Buy?");
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            ArrayList<ShopItems> PlayerItem=getPlayerItems(getPlayerName());
-                            Integer coinAmount = getPlayerCoinAmount(getPlayerName())-currentItem.getItemCost();
-                            if(currentItem.getItemName().equals("Launch Pad Bundle"))
-                            {
+                            ArrayList<ShopItems> PlayerItem = getPlayerItems(getPlayerName());
+                            Integer coinAmount = getPlayerCoinAmount(getPlayerName()) - currentItem.getItemCost();
+                            if (currentItem.getItemName().equals("Launch Pad Bundle")) {
                                 addItemToPlayer(getPlayerName(), ShopData.LaunchPad);
                                 addItemToPlayer(getPlayerName(), ShopData.LaunchPad);
                                 addItemToPlayer(getPlayerName(), ShopData.LaunchPad);
@@ -97,23 +97,18 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
                                 Integer amount = getPlayerCoinAmount(getPlayerName());
                                 coinCount.setText(amount.toString());
 
-                            }
-                            else if(PlayerItem.contains(currentItem)&& currentItem.getItemName().contains("Icon"))
-                            {
-                                Toast.makeText(context, "You have this Icon Already",Toast.LENGTH_SHORT).show();
-                            }
-                            else if(currentItem.equals(ShopData.Bleach))
-                            {
-                                int bleach = getPlayerBleachAmount(getPlayerName())+1;
-                                updatePlayerBleachAmount(getPlayerName(),bleach,true);
+                            } else if (PlayerItem.contains(currentItem) && currentItem.getItemName().contains("Icon")) {
+                                Toast.makeText(context, "You have this Icon Already", Toast.LENGTH_SHORT).show();
+                            } else if (currentItem.equals(ShopData.Bleach)) {
+                                int bleach = getPlayerBleachAmount(getPlayerName()) + 1;
+                                updatePlayerBleachAmount(getPlayerName(), bleach, true);
                                 updatePlayerCoinAmount(getPlayerName(), coinAmount, true);
                                 addItemToPlayer(getPlayerName(), ShopData.Bleach);
                                 updatePlayerCoinAmount(getPlayerName(), coinAmount, true);
                                 Integer amount = getPlayerCoinAmount(getPlayerName());
                                 coinCount.setText(amount.toString());
 
-                            }
-                            else {
+                            } else {
                                 addItemToPlayer(getPlayerName(), currentItem);
                                 updatePlayerCoinAmount(getPlayerName(), coinAmount, true);
                                 Integer amount = getPlayerCoinAmount(getPlayerName());
@@ -128,10 +123,8 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
                     });
                     AlertDialog dialog = builder.create();
                     dialog.show();
-                }
-                else
-                {
-                    Toast.makeText(context,"NOT ENOUGH MINERALS",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "NOT ENOUGH MINERALS", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -142,20 +135,21 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
 
     /**
      * Inflates the Name and the Picture of the item in the Expandable List View
+     *
      * @param groupPosition
      * @param isExpanded
      * @param convertView
      * @param parent
-     * @return
+     * @return The inflated group row
      */
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         //get the item
         ShopItems currentItem = (ShopItems) getGroup(groupPosition);
         //inflate our custom view
-        if(convertView==null){
-            LayoutInflater inf= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inf.inflate(R.layout.shop_group_row,null);
+        if (convertView == null) {
+            LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inf.inflate(R.layout.shop_group_row, null);
         }
         //Set the Textview with the item name
         TextView ItemName = (TextView) convertView.findViewById(R.id.ItemName);
@@ -169,44 +163,51 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        ShopItems description= ItemList.get(groupPosition);
+        ShopItems description = ItemList.get(groupPosition);
         return description;
     }
+
     @Override
-    public long getChildId(int groupPosition, int childPosition)
-    {
+    public long getChildId(int groupPosition, int childPosition) {
         return childPosition;
     }
+
     @Override
     public int getGroupCount() {
         return ItemList.size();
     }
+
     @Override
     public int getChildrenCount(int groupPosition) {
         return 1;
     }
+
     @Override
     public Object getGroup(int groupPosition) {
         return ItemList.get(groupPosition);
     }
+
     @Override
     public long getGroupId(int groupPosition) {
         return groupPosition;
     }
+
     @Override
     public boolean hasStableIds() {
         return true;
     }
+
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
     /**
      * DataBase Method to Retrieve the UserName
+     *
      * @return UserName
      */
-    private String getPlayerName()
-    {
+    private String getPlayerName() {
         Cursor cursor = context.getContentResolver().query(RocketContentProvider.CONTENT_URI, null, null, null, null);
         int username = cursor.getColumnIndex(RocketDB.USER_NAME_COLUMN);
         cursor.moveToFirst();
@@ -215,12 +216,13 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         Log.d("PLAYER_NAME_INFO", "Username: " + name);
         return name;
     }
+
     /**
      * DataBase Method to get Player's Coin Amount
+     *
      * @return UserName
      */
-    private int getPlayerCoinAmount(String playerName)
-    {
+    private int getPlayerCoinAmount(String playerName) {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
         String whereArgs[] = {playerName};
         String[] resultColumns = {RocketDB.COIN_AMOUNT_COLUMN};
@@ -231,17 +233,18 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         Log.d("COIN_INFO", "Username: " + playerName + "\nCoin amount: " + coinAmount);
         return coinAmount;
     }
+
     /**
      * DataBase Method to Update Player's Coin Amount
+     *
      * @return UserName
      */
-    private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set)
-    {
+    private int updatePlayerCoinAmount(String playerName, int coinAmount, boolean set) {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
         String[] whereArgs = {playerName};
         int newCoinAmount = 0;
         ContentValues newValues = new ContentValues();
-        if(set) {
+        if (set) {
             newCoinAmount = coinAmount;
         } else {
             int currentCoins = getPlayerCoinAmount(playerName);
@@ -250,34 +253,35 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         newValues.put(RocketDB.COIN_AMOUNT_COLUMN, newCoinAmount);
         return context.getContentResolver().update(RocketContentProvider.CONTENT_URI, newValues, whereClause, whereArgs);
     }
+
     /**
      * DataBase Method to Add an Item from the Player Inventory
+     *
      * @param playerName: Username
-     * @param item: Item Name
+     * @param item:       Item Name
      * @return list of new items
      */
-    private int addItemToPlayer(String playerName, ShopItems item)
-    {
+    private int addItemToPlayer(String playerName, ShopItems item) {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
         String[] whereArgs = {playerName};
         ArrayList<ShopItems> currentItems = getPlayerItems(playerName);
-        if(currentItems == null)
-        {
+        if (currentItems == null) {
             currentItems = new ArrayList<ShopItems>();
         }
         currentItems.add(item);
-        byte[]bytes = ByteArrayConverter.ObjectToByteArray(currentItems);
+        byte[] bytes = ByteArrayConverter.ObjectToByteArray(currentItems);
         ContentValues values = new ContentValues();
         values.put(RocketDB.ITEMS_OWNED_COLUMN, bytes);
         return context.getContentResolver().update(RocketContentProvider.CONTENT_URI, values, whereClause, whereArgs);
     }
+
     /**
      * DataBase Method to get all player's items
+     *
      * @param playerName: UserName
      * @return inventory items
      */
-    private ArrayList<ShopItems> getPlayerItems(String playerName)
-    {
+    private ArrayList<ShopItems> getPlayerItems(String playerName) {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
         String whereArgs[] = {playerName};
         String[] resultColumns = {RocketDB.ITEMS_OWNED_COLUMN};
@@ -293,8 +297,7 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
             }
             Log.d("ITEM_INFO", itemString);
             return itemArray;
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.d("ITEM_INFO", "Username: " + playerName + "\nItem names: null");
             return null;
         }
@@ -302,11 +305,11 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
 
     /**
      * DataBase Method to get the number of bleach they bought
+     *
      * @param playerName: UserName
      * @return: Bleach Count
      */
-    private int getPlayerBleachAmount(String playerName)
-    {
+    private int getPlayerBleachAmount(String playerName) {
         String where = RocketDB.USER_NAME_COLUMN + "= ?";
         String whereArgs[] = {playerName};
         String[] resultColumns = {RocketDB.BLEACH_AMOUNT_COLUMN};
@@ -317,18 +320,19 @@ public class ShopExpandableAdapter extends BaseExpandableListAdapter {
         Log.d("BLEACH_INFO", "Username: " + playerName + "\nBleach amount: " + bleachAmount);
         return bleachAmount;
     }
+
     /**
      * DataBase Method to update the number of bleach they bought
+     *
      * @param playerName: UserName
      * @return: Bleach Count
      */
-    private int updatePlayerBleachAmount(String playerName, int bleachAmount, boolean set)
-    {
+    private int updatePlayerBleachAmount(String playerName, int bleachAmount, boolean set) {
         String whereClause = RocketDB.USER_NAME_COLUMN + "= ?";
         String[] whereArgs = {playerName};
         int newBleachAmount = 0;
         ContentValues newValues = new ContentValues();
-        if(set) {
+        if (set) {
             newBleachAmount = bleachAmount;
         } else {
             int currentBleach = getPlayerBleachAmount(playerName);

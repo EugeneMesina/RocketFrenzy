@@ -21,22 +21,50 @@ import java.util.Random;
 import androidsupersquad.rocketfrenzy.R;
 
 /**
- * Created by Jimmy Chao on 3/15/2017.
- * 012677182
+ * View used for the AccGame
+ *
+ * Created by Jimmy Chao (Lazer)
  */
 
 public class SimulationView extends View implements SensorEventListener {
-    //Setting variables and bitmaps
+
+    /** Sensor manager to handle sensors */
     private SensorManager sensorManager;
+    /** Images of the planet and rocket */
     private Bitmap mPlanet, mBitmap;
+    /** The physics for the rocket */
     private Particle mRocket;
+    /** Provides data of the current display */
     private Display mDisplay;
+    /** Size of the planet */
     private static final int PLANET_SIZE =120;
+    /**
+     * The floats represent the following:
+     *  1) The x origin of the screen
+     *  2) The y origin of the screen
+     *  3) The horizontal bound of the screen
+     *  4) The vertical bound of the screen
+     *  5) Current x position of the accelerometer
+     *  6) Current y position of the accelerometer
+     *  7) Current z position of the accelerometer
+     *
+     */
     private float mXOrigin, mYOrigin , mHorizontalBound, mVerticalBound, mSensorX, mSensorY,mSensorZ;
+    /** Last time the sensor sent an update */
     private long mSensorTimeStamp;
+    /**
+     * The ints represent the following:
+     *  1) The player's score
+     *  2) How long to sleep
+     *  3) The planet width
+     *  4) The planet Height
+     */
     int score, sleep, planetWidth, planetHeight;
+    /** Used to ensure that the score is only incremented once */
     boolean scorekeeper;
+    /** The planet's x and y coordinates */
     private int xPlanet, yPlanet;
+    /** Whether the game is running or not*/
     private boolean isRunning;
 
     /**
@@ -79,7 +107,7 @@ public class SimulationView extends View implements SensorEventListener {
         xPlanet = Math.round(((mXOrigin- PLANET_SIZE /2)-20));
         yPlanet = Math.round(((mYOrigin- PLANET_SIZE /2)-755));
 
-        sleep=0;
+        sleep = 0;
         scorekeeper=true;
     }
 
@@ -90,23 +118,23 @@ public class SimulationView extends View implements SensorEventListener {
     @Override
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
-//draw the Basket in it's static place
+            //draw the Basket in it's static place
             canvas.drawBitmap(mPlanet, xPlanet, yPlanet, null);
-//update the ball position
+            //update the ball position
             mRocket.updatePosition(mSensorX, mSensorY, mSensorZ, mSensorTimeStamp);
             mRocket.resolveCollisionWithBounds(mHorizontalBound, mVerticalBound);
-
-//        Matrix matrix = new Matrix();
-//        matrix.postRotate(mRocket.mAngle);
-//        Bitmap tempBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
-
+            /*
+            Matrix matrix = new Matrix();
+            matrix.postRotate(mRocket.mAngle);
+            Bitmap tempBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
+            */
             canvas.drawBitmap(mBitmap, (mXOrigin - planetWidth / 2) + mRocket.mPosX, (mYOrigin - planetHeight / 2) - mRocket.mPosY, null);
 
             //checkvalues to see if the ball image touches the basket image
             Integer xPos = Math.round((mXOrigin - planetWidth / 2) + mRocket.mPosX);
             Integer YPos = Math.round((mYOrigin - planetHeight / 2) - mRocket.mPosY);
-//add score if the ball hits the basket image
 
+            //add score if the ball hits the basket image
             if ((xPos <= xPlanet + 80 && xPos >= xPlanet - 80) && (yPlanet + 80 >= YPos && yPlanet - 80 <= YPos) && scorekeeper) {
                 System.out.println("HERE");
                 score++;
@@ -127,7 +155,7 @@ public class SimulationView extends View implements SensorEventListener {
 
     /**
      * This displays the score on the view
-     * @param canvas
+     * @param canvas The current display to paint on
      */
     private void setScore(Canvas canvas){
         Paint titlePaint = new Paint();
@@ -143,10 +171,10 @@ public class SimulationView extends View implements SensorEventListener {
 
     /**
      * Make the app scale to size per device
-     * @param w
-     * @param h
-     * @param oldw
-     * @param oldh
+     * @param w The new width
+     * @param h The new height
+     * @param oldw The old width
+     * @param oldh The old height
      */
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         mXOrigin = w * 0.5f;
@@ -161,7 +189,8 @@ public class SimulationView extends View implements SensorEventListener {
      * find if the sensor change is the accelerometer
      * and find if the device rotates
      * and set the x and y values accordingly
-     * @param event
+     *
+     * @param event The type of sensor and it's data
      */
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -182,15 +211,25 @@ public class SimulationView extends View implements SensorEventListener {
         }
     }
 
+    /**
+     * Unused
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
-    //register/unregister the listener
+
+    /**
+     * Registers the listener
+     */
     public void startSimulation(){
         sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_GAME);
     }
-    public void stopSimulation(){
+
+    /**
+     * Unregisters the listener
+     */
+    public void stopSimulation() {
         sensorManager.unregisterListener(this);
     }
 

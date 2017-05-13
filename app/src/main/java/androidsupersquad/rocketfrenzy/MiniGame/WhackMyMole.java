@@ -9,6 +9,9 @@ import android.view.View;
 
 import androidsupersquad.rocketfrenzy.R;
 
+/**
+ * Unused Minigame
+ */
 public class WhackMyMole extends AppCompatActivity {
 
     @Override
